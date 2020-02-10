@@ -1,7 +1,8 @@
 # User Defined
 DST/
 DataSet-Trial/
-
+GP DataSet
+*.dat
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
