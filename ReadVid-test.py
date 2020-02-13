@@ -43,9 +43,10 @@ def extractWordTimingFromVideo(filename):
 
 
 def cutVideo(videoPath,fileName,start_time,end_time):
-    with VideoFileClip(videoPath) as video:
+    with VideoFileClip(videoPath, audio=False) as video:
                 new = video.subclip(start_time, end_time)
                 new.write_videofile(fileName)
+                new.close()
 
 
 def segmentSingleVideo(videoPath, alignFilePath):
@@ -121,5 +122,5 @@ def getVideoFrames():
 
 ####################################### MAIN CODE ############################################
 dataSetPath = 'GP DataSet/'
-numberSpeakers = 1
+numberSpeakers = 20
 segmentDataSet(dataSetPath,numberSpeakers)
