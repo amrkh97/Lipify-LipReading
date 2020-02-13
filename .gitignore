@@ -2,6 +2,7 @@
 DST/
 DataSet-Trial/
 GP DataSet
+Videos-After-Extraction/
 *.dat
 # Byte-compiled / optimized / DLL files
 __pycache__/
