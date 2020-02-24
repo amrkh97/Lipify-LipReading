@@ -46,47 +46,81 @@ def cutVideo(videoPath,fileName,start_time,end_time):
                 new.close()
 
 
-def segmentSingleVideo(videoPath, alignFilePath):
+def createDataSetDirectories(speakerNumber):
+    
+    dirName = 'Videos-After-Extraction/S{}/Commands/'.format(speakerNumber)
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+    
+    dirName = 'Videos-After-Extraction/S{}/Prepositions/'.format(speakerNumber)
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+    
+    dirName = 'Videos-After-Extraction/S{}/Colors/'.format(speakerNumber)
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+    
+    dirName = 'Videos-After-Extraction/S{}/Adverb/'.format(speakerNumber)
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+    
+    dirName = 'Videos-After-Extraction/S{}/Alphabet/'.format(speakerNumber)
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+    
+    dirName = 'Videos-After-Extraction/S{}/Numbers/'.format(speakerNumber)
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+    
+    dirName = 'Videos-After-Extraction/S{}/Silence/'.format(speakerNumber)
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+    
+
+def segmentSingleVideo(videoPath, alignFilePath, speakerNumber):
     '''Segment a single video into its underlying words in their prespective folders'''    
     wordTimings = extractWordTimingFromVideo(alignFilePath)
+    
+    createDataSetDirectories(speakerNumber)
+    
     for word in wordTimings:
        
         start_time = round((float(word.start_time)/(FPS*1000)),3)
         end_time = round((float(word.end_time)/(FPS*1000)),3)
         
         if word.name in commands:
-            new_index = len(os.listdir('Videos-After-Extraction/Commands/'))
-            fileName = 'Videos-After-Extraction/Commands/{}_{}.mp4'.format(word.name, new_index)
+            new_index = len(os.listdir('Videos-After-Extraction/S{}/Commands/'.format(speakerNumber)))
+            fileName = 'Videos-After-Extraction/S{}/Commands/{}_{}.mp4'.format(speakerNumber,word.name, new_index)
             cutVideo(videoPath, fileName, start_time, end_time)
         
         if word.name in prepositions:
-            new_index = len(os.listdir('Videos-After-Extraction/Prepositions/'))
-            fileName = 'Videos-After-Extraction/Prepositions/{}_{}.mp4'.format(word.name, new_index)
+            new_index = len(os.listdir('Videos-After-Extraction/S{}/Prepositions/'.format(speakerNumber)))
+            fileName = 'Videos-After-Extraction/S{}/Prepositions/{}_{}.mp4'.format(speakerNumber,word.name, new_index)
             cutVideo(videoPath, fileName, start_time, end_time)
         
         if word.name in colors:
-            new_index = len(os.listdir('Videos-After-Extraction/Colors/'))
-            fileName = 'Videos-After-Extraction/Colors/{}_{}.mp4'.format(word.name, new_index)
+            new_index = len(os.listdir('Videos-After-Extraction/S{}/Colors/'.format(speakerNumber)))
+            fileName = 'Videos-After-Extraction/S{}/Colors/{}_{}.mp4'.format(speakerNumber,word.name, new_index)
             cutVideo(videoPath, fileName, start_time, end_time)
         
         if word.name in numbers:
-            new_index = len(os.listdir('Videos-After-Extraction/Numbers/'))
-            fileName = 'Videos-After-Extraction/Numbers/{}_{}.mp4'.format(word.name, new_index)
+            new_index = len(os.listdir('Videos-After-Extraction/S{}/Numbers/'.format(speakerNumber)))
+            fileName = 'Videos-After-Extraction/S{}/Numbers/{}_{}.mp4'.format(speakerNumber,word.name, new_index)
             cutVideo(videoPath, fileName, start_time, end_time)
         
         if word.name in adverbs:
-            new_index = len(os.listdir('Videos-After-Extraction/Adverb/'))
-            fileName = 'Videos-After-Extraction/Adverb/{}_{}.mp4'.format(word.name, new_index)
+            new_index = len(os.listdir('Videos-After-Extraction/S{}/Adverb/'.format(speakerNumber)))
+            fileName = 'Videos-After-Extraction/S{}/Adverb/{}_{}.mp4'.format(speakerNumber,word.name, new_index)
             cutVideo(videoPath, fileName, start_time, end_time)
         
         if word.name in alphabet:
-            new_index = len(os.listdir('Videos-After-Extraction/Alphabet/'))
-            fileName = 'Videos-After-Extraction/Alphabet/{}_{}.mp4'.format(word.name, new_index)
+            new_index = len(os.listdir('Videos-After-Extraction/S{}/Alphabet/'.format(speakerNumber)))
+            fileName = 'Videos-After-Extraction/S{}/Alphabet/{}_{}.mp4'.format(speakerNumber,word.name, new_index)
             cutVideo(videoPath, fileName, start_time, end_time)
         
         if word.name == 'sil':
-            new_index = len(os.listdir('Videos-After-Extraction/Silence/'))
-            fileName = 'Videos-After-Extraction/Silence/{}_{}.mp4'.format(word.name, new_index)
+            new_index = len(os.listdir('Videos-After-Extraction/S{}/Silence/'.format(speakerNumber)))
+            fileName = 'Videos-After-Extraction/S{}/Silence/{}_{}.mp4'.format(speakerNumber,word.name, new_index)
             cutVideo(videoPath, fileName, start_time, end_time)
     
 
@@ -98,7 +132,7 @@ def segmentDataSet(Path, Number_Of_Speakers):
         try:
             for j in range(len(os.listdir(videoPath.split('*')[0]))):
                 py = next(videosGen)
-                segmentSingleVideo(py,getAlignFileName(py))
+                segmentSingleVideo(py,getAlignFileName(py),i+1)
         except StopIteration:
             print("Segmented the dataset.") 
 
