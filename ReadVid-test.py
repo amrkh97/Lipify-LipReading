@@ -1,23 +1,4 @@
-'''
-import cv2
-
-
-def getVideoFrames(category, videoName):
-    vidcap = cv2.VideoCapture('Videos-After-Extraction/{}/{}.mp4'.format(category,videoName))
-    success,image = vidcap.read()
-    allFrames = []
-    allFrames.append(videoName.split('_')[0]) #Label
-    while success:
-        allFrames.append(image)
-        success,image = vidcap.read()
-    return allFrames   
-    
-#print(getVideoFrames('Alphabet','c_10596')[0])
-'''
-
 from imutils import face_utils
-import numpy as np
-import imutils
 import dlib
 import cv2
 
@@ -38,3 +19,19 @@ for (i, rect) in enumerate(rects):
 cv2.imshow("Output", image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+'''
+import cv2
+def getVideoFrames(category, videoName):
+    vidcap = cv2.VideoCapture('Videos-After-Extraction/{}/{}.mp4'.format(category,videoName))
+    success,image = vidcap.read()
+    allFrames = []
+    allFrames.append(videoName.split('_')[0]) #Label
+    while success:
+        allFrames.append(image)
+        success,image = vidcap.read()
+    return allFrames   
+
+#print(getVideoFrames('Alphabet','c_10596')[0])
+'''
+
