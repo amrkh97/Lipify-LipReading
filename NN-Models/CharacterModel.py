@@ -1,7 +1,4 @@
 import os
-import numpy as np
-import pandas as pd
-import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import Dense, Activation, Dropout, Input
 from tensorflow.keras.models import Model
@@ -30,8 +27,7 @@ class CharacterNet(object):
         self.labelPrediction = Activation('softmax', name='softmax')(self.dense_3)
 
         self.model = Model(inputs=self.inputLayer, outputs=self.labelPrediction)
-        #self.model = self.model.compile(loss='sparse_categorical_crossentropy', optimizer=self.adam, metrics=['accuracy']) 
-    
+       
     def summary(self):
         Model(inputs=self.inputLayer, outputs=self.labelPrediction).summary()
 
@@ -51,7 +47,9 @@ dummy_y = to_categorical(encoded_y,4)
 print(dummy_y)
 
 ###################################### TEST CODE ###########################################
-    
+import pandas as pd
+import tensorflow as tf
+ 
 chunk = pd.read_csv('image_label_pair.csv') #Dummy CSV for testing
 chunk = chunk.values
 X = chunk[:,:17].astype(float)
@@ -59,10 +57,9 @@ Y = chunk[:,17]
 
 C = CharacterNet(17,29)
 C.summary()
-C.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])  
-C.model.fit(X, Y, batch_size=10000, epochs=50,verbose=1)
+C.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+C.model.fit(X, Y, batch_size=10000, epochs=200,verbose=1)
 
-#Check for presence of GPU:
 print(tf.config.experimental.list_physical_devices('GPU')) # NO GPU IDENTIFIED
 
 '''

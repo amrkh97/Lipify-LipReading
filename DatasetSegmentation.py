@@ -6,7 +6,7 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 
 @dataclass()
 class WordInstance:
-    '''Class for keeping track of each word'''
+    """Class for keeping track of each word """
     name: str
     start_time: float
     end_time: float
@@ -24,14 +24,14 @@ numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine
 
 
 def getAlignFileName(Path):
-    '''Helper function to get name of the align file for a certain video'''
+    """Helper function to get name of the align file for a certain video """
     tempPath = Path.split("/")
     newPath = tempPath[0] + '/align/' + (tempPath[2].split('\\')[1]).split('.')[0] + '.align' 
     return newPath
 
 
 def extractWordTimingFromVideo(filename):
-    '''Function that extracts each align file into a list of dataclasses'''
+    """Function that extracts each align file into a list of dataclasses """
     lines = open(filename).read().splitlines()
     wordsWithTimings = []
     for line in lines:
@@ -49,7 +49,7 @@ def cutVideo(videoPath, fileName, start_time, end_time):
 
 
 def createDataSetDirectories(speakerNumber):
-    
+    """Function to create dataset segmentation directories for each individual speaker"""
     dirName = 'Videos-After-Extraction/S{}/Commands/'.format(speakerNumber)
     if not os.path.exists(dirName):
         os.makedirs(dirName)
@@ -80,7 +80,7 @@ def createDataSetDirectories(speakerNumber):
     
 
 def segmentSingleVideo(videoPath, alignFilePath, speakerNumber):
-    '''Segment a single video into its underlying words in their prespective folders'''    
+    """Segment a single video into its underlying words in their prespective folders """   
     wordTimings = extractWordTimingFromVideo(alignFilePath)
     
     createDataSetDirectories(speakerNumber)
@@ -127,7 +127,7 @@ def segmentSingleVideo(videoPath, alignFilePath, speakerNumber):
     
 
 def segmentDataSet(Path, Number_Of_Speakers):
-    '''Function responsible for segmenting the whole dataset into separate word files '''
+    """Function responsible for segmenting the whole dataset into separate word files """
     for i in range(Number_Of_Speakers):
         videoPath = Path + "video/S{}/".format(i+1) + "*.mpg"
         videosGen = glob.iglob(videoPath)
@@ -137,6 +137,7 @@ def segmentDataSet(Path, Number_Of_Speakers):
                 segmentSingleVideo(py, getAlignFileName(py), i+1)
         except StopIteration:
             print("Segmented the dataset.") 
+
 
 ####################################### MAIN CODE ############################################
 dataSetPath = 'GP DataSet/'
