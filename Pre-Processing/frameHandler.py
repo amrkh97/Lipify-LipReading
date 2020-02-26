@@ -17,7 +17,7 @@ def getCategoryMaxFrames(Number_Of_Speakers, categoryName):
     """Function to get max number of frames in a video for a certain category """
     maxNumberFrames = -1
     for i in range(Number_Of_Speakers):
-        videoPath = "Videos-After-Extraction/S{}/{}/".format(i+1, categoryName) + "*.mp4"
+        videoPath = "../Videos-After-Extraction/S{}/{}/".format(i+1, categoryName) + "*.mp4"
         videosGen = glob.iglob(videoPath)
         numberOfVideos = len(os.listdir(videoPath.split('*')[0]))
         try:
@@ -30,7 +30,7 @@ def getCategoryMaxFrames(Number_Of_Speakers, categoryName):
 
 
 def getDatasetMaxFrames(Number_Of_Speakers):
-    
+    """Function that returns a dictionary containing maximum number of frames for each category in whole dataset"""
     dataSetMaxFrames = {}
     adverbFrames = getCategoryMaxFrames(Number_Of_Speakers, "Adverb")
     alphabetFrames = getCategoryMaxFrames(Number_Of_Speakers, "Alphabet")
@@ -49,10 +49,11 @@ def getDatasetMaxFrames(Number_Of_Speakers):
     return dataSetMaxFrames
 
 
-start_time = time.time()    
-print(getDatasetMaxFrames(20))
-print("Run Time: {}".format(time.time()-start_time))
 '''
 {'Adverb': 32, 'Alphabet': 27, 'Colors': 23, 'Commands': 33, 'Numbers': 19, 'Prepositions': 23}
 '''
 
+if __name__ == "__main__":
+    start_time = time.time()
+    print(getDatasetMaxFrames(20))
+    print("Run Time: {}".format(time.time() - start_time))
