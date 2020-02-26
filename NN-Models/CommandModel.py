@@ -1,7 +1,4 @@
 import os
-import numpy as np
-import pandas as pd
-import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import Dense, Activation, Dropout, Input
 from tensorflow.keras.models import Model

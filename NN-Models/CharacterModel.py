@@ -1,7 +1,4 @@
 import os
-import numpy as np
-import pandas as pd
-import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import Dense, Activation, Dropout, Input
 from tensorflow.keras.models import Model
@@ -50,6 +47,8 @@ dummy_y = to_categorical(encoded_y,4)
 print(dummy_y)
 
 ###################################### TEST CODE ###########################################
+import pandas as pd
+import tensorflow as tf
  
 chunk = pd.read_csv('image_label_pair.csv') #Dummy CSV for testing
 chunk = chunk.values
