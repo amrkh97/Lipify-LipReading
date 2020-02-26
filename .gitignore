@@ -4,6 +4,7 @@ DataSet-Trial/
 GP DataSet
 Videos-After-Extraction/
 *.csv
+.idea
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -130,3 +131,7 @@ dmypy.json
 .pyre/
 
 .vscode/
+
+*.xml
+
+*.iml
