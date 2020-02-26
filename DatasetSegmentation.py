@@ -140,7 +140,8 @@ def segmentDataSet(Path, Number_Of_Speakers):
 
 
 ####################################### MAIN CODE ############################################
-dataSetPath = 'GP DataSet/'
-numberSpeakers = 20
-segmentDataSet(dataSetPath, numberSpeakers)
+if __name__ == "__main__":
+    dataSetPath = 'GP DataSet/'
+    numberSpeakers = 20
+    segmentDataSet(dataSetPath, numberSpeakers)
 
