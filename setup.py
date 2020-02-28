@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='Lipify-LipReading',
@@ -6,6 +6,7 @@ setup(
     url='',
     license='The MIT License (MIT)',
     author='Amr Khaled',
+    packages=find_packages,
     author_email='amrkh97@gmail.com',
     description='',
     install_requires=["tensorflow>=2.1.0",
