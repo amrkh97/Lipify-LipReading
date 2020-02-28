@@ -26,10 +26,8 @@ def getRelativeSilenceVideo(videoPath):
     videoNameList = videoPath.split('/')
     tempVidName = videoNameList[0] + '/' + videoNameList[1] + '/' + videoNameList[2] + '/Silence/sil_{}.mp4'
     vidNumber = int((vidData.identifier.split('_')[1]).split('.')[0])
-    # TODO: Derive an equation for each video and the relation with the silence videos
-    # Temporary fix for now
-    silVid[0] = tempVidName.format(vidNumber)
-    silVid[1] = tempVidName.format(vidNumber + 1)
+    silVid[0] = tempVidName.format(vidNumber * 2)
+    silVid[1] = tempVidName.format((vidNumber * 2) + 1)
     return silVid
 
 
