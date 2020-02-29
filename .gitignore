@@ -1,10 +1,12 @@
 # User Defined
 DST/
 DataSet-Trial/
+mouth-detection-v3/*.dat
 GP DataSet
 Videos-After-Extraction/
 *.csv
 .idea
+*.dat
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
