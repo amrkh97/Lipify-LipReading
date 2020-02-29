@@ -1,8 +1,11 @@
 import cv2
 import time
+import random
 from dataclasses import dataclass
 from frameHandler import getNumberFramesPerVideo
+
 FPS = 25
+random.seed(time.time())
 
 
 @dataclass()
@@ -49,15 +52,26 @@ def isExcess(videoPath):
     """Function that determines if the video has more than specified FPS"""
     if getNumberFramesPerVideo(videoPath) > FPS:
         return True
-    else:
-        return False
+    return False
 
 
 def removeExcessFrames(videoPath):
-    pass
+    """Function to remove frames randomly from a video"""
+    originalVideo = getVideoFrames(videoPath)
+    originalVideo.pop(0)  # Remove first frame by default
+
+    if len(originalVideo) > FPS:
+        originalVideo.pop()  # Remove last frame by default
+
+    while len(originalVideo) > FPS:
+        popIndex = random.randint(0, len(originalVideo))
+        originalVideo.pop(popIndex)
+
+    return originalVideo
 
 
 def addFramesAtFront(originalVid, silVid1, silVid2):
+    """Function to add silence frames at the front of the video"""
     newVideo = originalVid
     i = 0
     while len(newVideo) < FPS and i < len(silVid1):
@@ -104,14 +118,13 @@ def addFrames(videoPath, silVid1, silVid2):
 
 def manipulateVideo(videoPath):
     """Function that handles action on videos based on the number of frames"""
-    # TODO: Find a way to handle excess frames in dataset
     finalVideoList = []
     excessChecker = isExcess(videoPath)
     if excessChecker:
-        removeExcessFrames(videoPath)
+        finalVideoList = removeExcessFrames(videoPath)
     else:
         silenceVidNames = getRelativeSilenceVideo(videoPath)
-        addFrames(videoPath, silenceVidNames[0], silenceVidNames[1])
+        finalVideoList = addFrames(videoPath, silenceVidNames[0], silenceVidNames[1])
 
     return excessChecker, finalVideoList
 
@@ -119,7 +132,4 @@ def manipulateVideo(videoPath):
 if __name__ == "__main__":
     StartTime = time.time()
     videoP = '../Videos-After-Extraction/S1/Adverb/again_3.mp4'
-    silVidNames = getRelativeSilenceVideo(videoP)
-    L = addFrames(videoP, silVidNames[0], silVidNames[1])
-    print("Length Of Videos: {} Frames, {} Frames".format(len(L[0]), len(L[1])))
     print("Run Time: {} seconds.".format(time.time() - StartTime))
