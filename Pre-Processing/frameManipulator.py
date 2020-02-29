@@ -82,13 +82,16 @@ def addFramesAtFront(originalVid, silVid1, silVid2):
         newVideo.insert(i, silVid2[i - len(silVid1)])
         i += 1
 
+    i = 0
     while len(newVideo) < FPS:
-        newVideo.insert(0, silVid1[0])
+        newVideo.insert(0, silVid1[i])
+        i += 1
 
     return newVideo
 
 
 def addFramesAtEnd(originalVid, silVid1, silVid2):
+    """Function to add silence frames at the end of the video"""
     newVideo = originalVid
     i = 0
     while len(newVideo) < FPS and i < len(silVid1):
@@ -99,9 +102,32 @@ def addFramesAtEnd(originalVid, silVid1, silVid2):
         newVideo.append(silVid2[i - len(silVid1)])
         i += 1
 
+    i = 0
     while len(newVideo) < FPS:
-        newVideo.insert(0, silVid1[0])
+        newVideo.append(silVid1[i])
+        i += 1
 
+    return newVideo
+
+
+# TODO: Think of another method to handle adding frames at front and end of a video
+def addFramesAtFrontAndEnd(originalVid, silVid1, silVid2):
+    """Function that addes silence frames at both front and end of a video"""
+    newVideo = []
+    if FPS >= (len(originalVid) + len(silVid1) + len(silVid2)):
+        newVideo = silVid1 + originalVid + silVid2
+        newVideo = addFramesAtFront(newVideo, silVid1, silVid2)
+        return newVideo
+    elif FPS > (len(silVid1) + len(originalVid)):
+        newVideo = silVid1 + originalVid
+        newVideo = addFramesAtEnd(newVideo, silVid2, silVid2)
+        return newVideo
+    elif FPS > (len(silVid2) + len(originalVid)):
+        newVideo = originalVid + silVid2
+        newVideo = addFramesAtFront(newVideo, silVid1, silVid1)
+        return newVideo
+
+    newVideo = addFramesAtEnd(originalVid, silVid1, silVid2)  # Default case
     return newVideo
 
 
@@ -110,10 +136,10 @@ def addFrames(videoPath, silVid1, silVid2):
     originalVideo = getVideoFrames(videoPath)
     firstSilVideo = getVideoFrames(silVid1)
     secondSilVideo = getVideoFrames(silVid2)
-    # TODO: Create a function to add frames equally at both front and end of video
     addedAtFront = addFramesAtFront(originalVideo, firstSilVideo, secondSilVideo)
     addedAtEnd = addFramesAtEnd(originalVideo, firstSilVideo, secondSilVideo)
-    return addedAtFront, addedAtEnd
+    addedAtFrontAndEnd = addFramesAtFrontAndEnd(originalVideo, firstSilVideo, secondSilVideo)
+    return addedAtFront, addedAtEnd, addedAtFrontAndEnd
 
 
 def manipulateVideo(videoPath):
