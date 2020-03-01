@@ -1,10 +1,13 @@
+import os
 import cv2
 import time
+import glob
 import random
 from dataclasses import dataclass
 from frameHandler import getNumberFramesPerVideo
 
 FPS = 25
+FrameSize = (360, 288)
 random.seed(time.time())
 
 
@@ -41,7 +44,7 @@ def getVideoFrames(videoName):
     """Function to get frames of video in a list"""
     vidcap = cv2.VideoCapture(videoName)
     success, image = vidcap.read()
-    allFrames = []  # Get label of video
+    allFrames = []
     while success:
         allFrames.append(image)
         success, image = vidcap.read()
@@ -110,7 +113,6 @@ def addFramesAtEnd(originalVid, silVid1, silVid2):
     return newVideo
 
 
-# TODO: Think of another method to handle adding frames at front and end of a video
 def addFramesAtFrontAndEnd(originalVid, silVid1, silVid2):
     """Function that addes silence frames at both front and end of a video"""
     newVideo = []
@@ -136,26 +138,96 @@ def addFrames(videoPath, silVid1, silVid2):
     originalVideo = getVideoFrames(videoPath)
     firstSilVideo = getVideoFrames(silVid1)
     secondSilVideo = getVideoFrames(silVid2)
+
     addedAtFront = addFramesAtFront(originalVideo, firstSilVideo, secondSilVideo)
     addedAtEnd = addFramesAtEnd(originalVideo, firstSilVideo, secondSilVideo)
     addedAtFrontAndEnd = addFramesAtFrontAndEnd(originalVideo, firstSilVideo, secondSilVideo)
+
     return addedAtFront, addedAtEnd, addedAtFrontAndEnd
 
 
 def manipulateVideo(videoPath):
     """Function that handles action on videos based on the number of frames"""
     finalVideoList = []
-    excessChecker = isExcess(videoPath)
-    if excessChecker:
-        finalVideoList = removeExcessFrames(videoPath)
+    if isExcess(videoPath):
+        finalVideoList = [removeExcessFrames(videoPath), ]
     else:
         silenceVidNames = getRelativeSilenceVideo(videoPath)
         finalVideoList = addFrames(videoPath, silenceVidNames[0], silenceVidNames[1])
 
-    return excessChecker, finalVideoList
+    return finalVideoList
+
+
+def createDataSetDirectories(speakerNumber):
+    """Function to create new dataset segmentation directories for each individual speaker"""
+    dirPath = '../New-DataSet-Videos/S{}'.format(speakerNumber)
+
+    dirName = dirPath + '/Commands/'
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+
+    dirName = dirPath + '/Prepositions/'
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+
+    dirName = dirPath + '/Colors/'
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+
+    dirName = dirPath + '/Adverb/'
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+
+    dirName = dirPath + '/Alphabet/'
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+
+    dirName = dirPath + '/Numbers/'
+    if not os.path.exists(dirName):
+        os.makedirs(dirName)
+
+
+# WIP
+def saveVideoToPath(videoData, videoFrames):
+    saveDirectory = '../New-DataSet-Videos/{}/{}/'.format(videoData.speaker, videoData.category)
+    fileIndex = len(os.listdir(saveDirectory))
+    fileIdentifier = videoData.identifier.split('_')[0]
+    fileName = '{}_{}.mp4'.format(fileIdentifier, fileIndex)
+    outVideo = cv2.VideoWriter(saveDirectory + fileName, cv2.VideoWriter_fourcc(*'MP4V'), FPS, FrameSize)
+
+    for frame in videoFrames:
+        outVideo.write(frame)
+    outVideo.release()
+
+
+def adjustDataSetTo25Frames(Number_Of_Speakers):
+    """Manipulates the whole dataset videos to be 25 frames"""
+
+    categories = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
+    for i in range(Number_Of_Speakers):
+        for category in categories:
+            videoPath = "../Videos-After-Extraction/S{}/{}/".format(i + 1, category) + "*.mp4"
+            vidList = glob.glob(videoPath)
+
+            def f(x):
+                return x.replace("\\", '/')
+
+            vidList = [f(x) for x in vidList]
+
+            createDataSetDirectories(i + 1)
+
+            try:
+                for idx, j in enumerate(vidList):
+                    vidData = getVideoDataFromPath(j)
+                    adjustedVideoList = manipulateVideo(j)
+                    [saveVideoToPath(vidData, x) for x in adjustedVideoList]
+                    print("Finished Manipulating S{} -> Video {} in category {}".format(i + 1, idx + 1, category))
+            except StopIteration:
+                print("Segmented the new dataset.")
 
 
 if __name__ == "__main__":
     StartTime = time.time()
-    videoP = '../Videos-After-Extraction/S1/Adverb/again_3.mp4'
+    numberOfSpeakers = 1
+    adjustDataSetTo25Frames(numberOfSpeakers)
     print("Run Time: {} seconds.".format(time.time() - StartTime))
