@@ -1,7 +1,6 @@
 # User Defined
-DST/
-DataSet-Trial/
-GP DataSet
+GP DataSet/
+New-DataSet-Videos/
 Videos-After-Extraction/
 *.csv
 .idea
