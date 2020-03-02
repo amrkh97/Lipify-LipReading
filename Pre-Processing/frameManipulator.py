@@ -6,7 +6,7 @@ import random
 from dataclasses import dataclass
 from frameHandler import getNumberFramesPerVideo
 
-FPS = 25
+FPS = 30
 FrameSize = (360, 288)
 random.seed(time.time())
 
@@ -89,6 +89,7 @@ def addFramesAtFront(originalVid, silVid1, silVid2):
     while len(newVideo) < FPS:
         newVideo.insert(0, silVid1[i])
         i += 1
+        i = i % len(silVid1)
 
     return newVideo
 
@@ -109,6 +110,7 @@ def addFramesAtEnd(originalVid, silVid1, silVid2):
     while len(newVideo) < FPS:
         newVideo.append(silVid1[i])
         i += 1
+        i = i % len(silVid1)
 
     return newVideo
 
@@ -192,7 +194,7 @@ def saveVideoToPath(videoData, videoFrames):
     fileIndex = len(os.listdir(saveDirectory))
     fileIdentifier = videoData.identifier.split('_')[0]
     fileName = '{}_{}.mp4'.format(fileIdentifier, fileIndex)
-    outVideo = cv2.VideoWriter(saveDirectory + fileName, cv2.VideoWriter_fourcc(*'MP4V'), FPS, FrameSize)
+    outVideo = cv2.VideoWriter(saveDirectory + fileName, cv2.VideoWriter_fourcc(*'mp4v'), FPS, FrameSize)
 
     for frame in videoFrames:
         outVideo.write(frame)
@@ -220,13 +222,17 @@ def adjustDataSetTo25Frames(Number_Of_Speakers):
                     vidData = getVideoDataFromPath(j)
                     adjustedVideoList = manipulateVideo(j)
                     [saveVideoToPath(vidData, x) for x in adjustedVideoList]
-                    print("Finished Manipulating S{} -> Video {} in category {}".format(i + 1, idx + 1, category))
+                    # print("Finished Manipulating S{} -> Video {} in category {}".format(i + 1, idx + 1, category))
             except StopIteration:
                 print("Segmented the new dataset.")
+            print("Finished Segmenting Category: {}".format(category))
+
+        print("Finished Speaker Number: {}".format(i + 1))
+        print("=========================================")
 
 
 if __name__ == "__main__":
     StartTime = time.time()
-    numberOfSpeakers = 1
+    numberOfSpeakers = 20
     adjustDataSetTo25Frames(numberOfSpeakers)
     print("Run Time: {} seconds.".format(time.time() - StartTime))
