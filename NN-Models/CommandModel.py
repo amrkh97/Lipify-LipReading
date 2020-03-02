@@ -1,7 +1,8 @@
 import os
-from tensorflow.keras.optimizers import Adam
+
 from tensorflow.keras.layers import Dense, Activation, Dropout, Input
 from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 

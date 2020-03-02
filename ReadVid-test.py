@@ -1,6 +1,6 @@
-from imutils import face_utils
-import dlib
 import cv2
+import dlib
+from imutils import face_utils
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("dlib-predictor.dat")

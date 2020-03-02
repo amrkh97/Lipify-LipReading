@@ -1,6 +1,7 @@
 import glob
 import os
 from dataclasses import dataclass
+
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
 

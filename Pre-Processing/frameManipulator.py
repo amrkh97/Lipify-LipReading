@@ -1,9 +1,11 @@
-import os
-import cv2
-import time
 import glob
+import os
 import random
+import time
 from dataclasses import dataclass
+
+import cv2
+
 from frameHandler import getNumberFramesPerVideo
 
 FPS = 30
@@ -117,7 +119,6 @@ def addFramesAtEnd(originalVid, silVid1, silVid2):
 
 def addFramesAtFrontAndEnd(originalVid, silVid1, silVid2):
     """Function that addes silence frames at both front and end of a video"""
-    newVideo = []
     if FPS >= (len(originalVid) + len(silVid1) + len(silVid2)):
         newVideo = silVid1 + originalVid + silVid2
         newVideo = addFramesAtFront(newVideo, silVid1, silVid2)
@@ -190,6 +191,7 @@ def createDataSetDirectories(speakerNumber):
 
 
 def saveVideoToPath(videoData, videoFrames):
+    """Function to save frames into a video"""
     saveDirectory = '../New-DataSet-Videos/{}/{}/'.format(videoData.speaker, videoData.category)
     fileIndex = len(os.listdir(saveDirectory))
     fileIdentifier = videoData.identifier.split('_')[0]
@@ -221,8 +223,7 @@ def adjustDataSetTo25Frames(Number_Of_Speakers):
                 for idx, j in enumerate(vidList):
                     vidData = getVideoDataFromPath(j)
                     adjustedVideoList = manipulateVideo(j)
-                    [saveVideoToPath(vidData, x) for x in adjustedVideoList]
-                    # print("Finished Manipulating S{} -> Video {} in category {}".format(i + 1, idx + 1, category))
+                    _ = [saveVideoToPath(vidData, x) for x in adjustedVideoList]
             except StopIteration:
                 print("Segmented the new dataset.")
             print("Finished Segmenting Category: {}".format(category))
