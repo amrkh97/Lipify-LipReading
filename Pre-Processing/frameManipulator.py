@@ -187,7 +187,6 @@ def createDataSetDirectories(speakerNumber):
         os.makedirs(dirName)
 
 
-# WIP
 def saveVideoToPath(videoData, videoFrames):
     saveDirectory = '../New-DataSet-Videos/{}/{}/'.format(videoData.speaker, videoData.category)
     fileIndex = len(os.listdir(saveDirectory))
