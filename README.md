@@ -12,6 +12,7 @@ Lipify - A Lip Reading Application
 --> Numbers/ <br> |
 --> Prepositions/
 <br>
+
 ---
 ##### Dataset Info:
 
@@ -24,20 +25,27 @@ To Download please run the following line of code in your terminal:
 <br> where FirstSpeaker and SecondSpeaker are integers for the number of speakers to download
 <br>
 **NOTE: Speaker 21 is missing from the GRID Corpus dataset due to technical issues.
+
 ---
+
 ##### Datset Segmentation Steps:
 1. Run DatasetSegmentation.py
 2. Run Pre-Processing/frameManipulator.py
 <br>
 * After running the above files, all result videos will have 30 FPS and 1 second long.
+
 ---
+
 ##### TODOs:
+
 * ~~Dataset preprocessing module~~
 * ~~Initial Neural networks' architecture~~
 * Facial detection algorithm
 * Feature extraction module
 * Proper documentation for the whole project
 * Optimization of the networks' architectures
+
 ---
+
 #### License:
-MIT License
+[MIT License](https://github.com/amrkh97/Lipify-LipReading/blob/master/LICENSE.md)
