@@ -204,7 +204,7 @@ def saveVideoToPath(videoData, videoFrames):
 
 
 def adjustDataSetTo25Frames(Number_Of_Speakers):
-    """Manipulates the whole dataset videos to be 25 frames"""
+    """Manipulates the whole dataset videos to be 30 frames"""
 
     categories = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
     for i in range(Number_Of_Speakers):
