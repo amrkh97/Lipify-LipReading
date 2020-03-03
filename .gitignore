@@ -2,6 +2,7 @@
 GP DataSet/
 New-DataSet-Videos/
 Videos-After-Extraction/
+CNN-Training-Images/
 *.csv
 .idea
 # Byte-compiled / optimized / DLL files
