@@ -18,3 +18,4 @@ def lipDetection(frame,detector,predictor):
             mouth_roi.append((x,y))
             cv2.circle(frame,(x,y),3,(255,0,0),1)
         return frame, mouth_roi
+
