@@ -18,5 +18,5 @@ setup(
                       "tqdm",
                       "numpy>=1.18.1",
                       "pandas>=1.0.1",
-                      "python>=3.7.1"]
+                      "python>=3.7.1", 'matplotlib']
 )
