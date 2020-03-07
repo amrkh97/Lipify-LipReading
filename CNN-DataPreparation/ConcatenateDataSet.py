@@ -14,7 +14,7 @@ adverbs = ['again', 'now', 'please', 'soon']
 alphabet = [chr(x) for x in range(ord('a'), ord('z') + 1)]
 numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 categories = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
-commonCNNDataPath = '../CNN-Training-Images/'
+commonCNNDataPath = 'D:/CNN-Training-Images/'
 
 
 def getVideoFrames(videoPath):
@@ -47,7 +47,7 @@ def saveImage(image, imagePath):
 
 def createCNNDataDirectories():
     """Function to create label directories for each category for training the CNN"""
-    dirPath = '../CNN-Training-Images'
+    dirPath = 'D:/CNN-Training-Images'
     for command in commands:
         dirName = dirPath + '/Commands/{}/'.format(command)
         if not os.path.exists(dirName):
@@ -105,6 +105,7 @@ def prepareDataSetForCNN(Number_Of_Speakers):
             vidList = [f(x) for x in vidList]
             for j in vidList:
                 prepareSingleVideoForCNN(j)
+        print("Finished Speaker {}".format(i + 1))
 
 
 if "__main__" == __name__:
