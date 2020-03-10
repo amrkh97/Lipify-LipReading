@@ -83,6 +83,7 @@ def prepareSingleVideoForCNN(path):
     """Function to prepare a single video to be redy for CNN training"""
     vidData = getVideoDataFromPath(path)
     videoFrames = getVideoFrames(path)
+    # TODO: Add extracting mouth region to be saved instead of whole face
     if len(videoFrames) != 0:
         stackedImage = stackFramesToImage(videoFrames)
         videoLabel = vidData.identifier.split('_')[0]

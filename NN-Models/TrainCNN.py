@@ -9,7 +9,7 @@ from CharacterCNN import CharCNN
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 batch_size = 32
-epochs = 30
+epochs = 500
 train_dir = 'D:/CNN-Training-Images/Alphabet/'
 train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
 train_data_gen = train_image_generator.flow_from_directory(batch_size=batch_size,
@@ -27,7 +27,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath="../charCNNweights.ckp
 
 history = C.model.fit(
     train_data_gen,
-    steps_per_epoch=500,  # All Images present in characters dataset
+    steps_per_epoch=100,  # All Images present in characters dataset
     epochs=epochs,
     callbacks=[cp_callback]
 )
