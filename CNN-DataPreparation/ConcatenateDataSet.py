@@ -5,6 +5,7 @@ import time
 import cv2
 import numpy as np
 
+from extract_lips import extractLipsFromFrame
 from frameManipulator import FPS, getVideoDataFromPath
 
 commands = ['bin', 'lay', 'place', 'set']
@@ -47,34 +48,33 @@ def saveImage(image, imagePath):
 
 def createCNNDataDirectories():
     """Function to create label directories for each category for training the CNN"""
-    dirPath = 'D:/CNN-Training-Images'
     for command in commands:
-        dirName = dirPath + '/Commands/{}/'.format(command)
+        dirName = commonCNNDataPath + '/Commands/{}/'.format(command)
         if not os.path.exists(dirName):
             os.makedirs(dirName)
 
     for preposition in prepositions:
-        dirName = dirPath + '/Prepositions/{}/'.format(preposition)
+        dirName = commonCNNDataPath + '/Prepositions/{}/'.format(preposition)
         if not os.path.exists(dirName):
             os.makedirs(dirName)
 
     for color in colors:
-        dirName = dirPath + '/Colors/{}/'.format(color)
+        dirName = commonCNNDataPath + '/Colors/{}/'.format(color)
         if not os.path.exists(dirName):
             os.makedirs(dirName)
 
     for adverb in adverbs:
-        dirName = dirPath + '/Adverb/{}/'.format(adverb)
+        dirName = commonCNNDataPath + '/Adverb/{}/'.format(adverb)
         if not os.path.exists(dirName):
             os.makedirs(dirName)
 
     for letter in alphabet:
-        dirName = dirPath + '/Alphabet/{}/'.format(letter)
+        dirName = commonCNNDataPath + '/Alphabet/{}/'.format(letter)
         if not os.path.exists(dirName):
             os.makedirs(dirName)
 
     for number in numbers:
-        dirName = dirPath + '/Numbers/{}/'.format(number)
+        dirName = commonCNNDataPath + '/Numbers/{}/'.format(number)
         if not os.path.exists(dirName):
             os.makedirs(dirName)
 
@@ -83,7 +83,8 @@ def prepareSingleVideoForCNN(path):
     """Function to prepare a single video to be redy for CNN training"""
     vidData = getVideoDataFromPath(path)
     videoFrames = getVideoFrames(path)
-    # TODO: Add extracting mouth region to be saved instead of whole face
+    videoFrames = [extractLipsFromFrame(x) for x in videoFrames]
+
     if len(videoFrames) != 0:
         stackedImage = stackFramesToImage(videoFrames)
         videoLabel = vidData.identifier.split('_')[0]

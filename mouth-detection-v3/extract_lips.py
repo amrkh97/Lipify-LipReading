@@ -17,13 +17,13 @@ def extractLips(fileName):
     return inputFrame, mouthRegion, mouthROI
 
 
-def extractLipsFromFrames(inputFrame):
+def extractLipsFromFrame(inputFrame):
     """Function to extract lips from a single frame"""
     detector, predictor = initializeDlib()
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
-    return inputFrame, mouthRegion, mouthROI
+    return mouthRegion
 
 
 # ----------------------------------------------------------------------------
@@ -46,3 +46,6 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
 if "__main__" == __name__:
     filename = "../test.jpg"
     frame, mouth, mouth_roi = extractLips(filename)
+cv2.imshow("d", mouth)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
