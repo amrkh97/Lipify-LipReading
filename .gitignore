@@ -1,10 +1,15 @@
 # User Defined
 GP DataSet/
 New-DataSet-Videos/
+DST/
+DataSet-Trial/
+mouth-detection-v3/*.dat
+GP DataSet
 Videos-After-Extraction/
 CNN-Training-Images/
 *.csv
 .idea
+*.dat
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
