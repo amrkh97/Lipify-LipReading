@@ -1,5 +1,20 @@
+import time
+
 from FR import *
 from lip_detection import *
+
+
+def getVideoFrames(videoPath):
+    """Function to return a video's frames in a list
+    :type videoPath: String
+    """
+    vidcap = cv2.VideoCapture(videoPath)
+    success, image = vidcap.read()
+    allFrames = []
+    while success:
+        allFrames.append(image)
+        success, image = vidcap.read()
+    return allFrames
 
 
 # ----------------------------------------------------------------------------
@@ -23,6 +38,8 @@ def extractLipsFromFrame(inputFrame):
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
+    mouthRegion = cv2.resize(mouthRegion, (150, 100))
+
     return mouthRegion
 
 
@@ -44,8 +61,15 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
 
 
 if "__main__" == __name__:
-    filename = "../test.jpg"
-    frame, mouth, mouth_roi = extractLips(filename)
-cv2.imshow("d", mouth)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+    startTime = time.time()
+    videoPath = "../New-DataSet-Videos/S1/Adverb/again_0.mp4"
+    frames = getVideoFrames(videoPath)
+    detected = []
+    for i, frame in enumerate(frames):
+        detected.append(extractLipsFromFrame(frame))
+        cv2.imshow(str(i), detected[-1])
+
+    print("Run Time: {} Seconds".format(time.time() - startTime))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
