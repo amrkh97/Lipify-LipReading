@@ -13,6 +13,8 @@ def extractLips(fileName):
     resized = resizeImage(img)
 
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
+    if len(mouthROI) == 0:
+        return inputFrame, 0, [] 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
     return inputFrame, mouthRegion, mouthROI
 
@@ -22,6 +24,8 @@ def extractLipsFromFrames(inputFrame):
     detector, predictor = initializeDlib()
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
+    if len(mouthROI) == 0:
+        return inputFrame, 0, [] 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
     return inputFrame, mouthRegion, mouthROI
 
@@ -44,5 +48,11 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
 
 
 if "__main__" == __name__:
-    filename = "../test.jpg"
+    filename = "../test2.jpg"
     frame, mouth, mouth_roi = extractLips(filename)
+    if len(mouth_roi) != 0:
+        cv2.imshow("mouth", mouth)
+        cv2.waitKey(0)
+    else:
+        cv2.imshow("image", frame)
+        cv2.waitKey(0)
