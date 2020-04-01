@@ -1,5 +1,6 @@
 from FR import *
 from lip_detection import *
+from mouthDetection import detect
 
 
 # ----------------------------------------------------------------------------
@@ -14,7 +15,7 @@ def extractLips(fileName):
 
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
-        return inputFrame, 0, [] 
+        return inputFrame, None, None 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
     return inputFrame, mouthRegion, mouthROI
 
@@ -25,7 +26,7 @@ def extractLipsFromFrames(inputFrame):
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
-        return inputFrame, 0, [] 
+        return inputFrame, None, None 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
     return inputFrame, mouthRegion, mouthROI
 
@@ -44,15 +45,23 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
     y1 = mouthRoi[9][1]
     y1 = y1 + 10
     mouthPart = inputFrame[y0: y1, x0: x1]
+    mouthPart = cv2.resize(mouthPart, (150, 100))
     return inputFrame, mouthPart
 
 
 if "__main__" == __name__:
     filename = "../test2.jpg"
     frame, mouth, mouth_roi = extractLips(filename)
-    if len(mouth_roi) != 0:
+    if mouth_roi != None:
         cv2.imshow("mouth", mouth)
         cv2.waitKey(0)
     else:
-        cv2.imshow("image", frame)
-        cv2.waitKey(0)
+        faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+        img, status = detect(frame, faceCascade)
+        if status == False:
+            img = cv2.resize(img, (150, 100))
+            cv2.imshow("image", img)
+            cv2.waitKey(0)
+        else:
+            cv2.imshow("image", img)
+            cv2.waitKey(0)
