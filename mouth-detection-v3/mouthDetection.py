@@ -30,10 +30,9 @@ def extractMouthArea(img,y0,y1,x0,x1):
     x2=x0 + int(2*M/6)
     y2=y0 + int((5*N/7))
     # y2=y0 + int((5*N/6))
-    x3= x2+ int((2*M/6))
+    x3= x2+ int((2*M/5))
     y3= y2+int((N/5))
     # y3= y2+int((N/3))
     cv2.rectangle(img,(x2,y2),(x3,y3),(0,255,0),2)
     mouth = img[y2 : y3 , x2 : x3 ]
-    mouth = cv2.resize(mouth, (150, 100))
     return mouth

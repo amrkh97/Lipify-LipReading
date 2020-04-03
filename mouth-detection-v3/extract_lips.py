@@ -17,18 +17,19 @@ def extractLips(fileName):
     if len(mouthROI) == 0:
         return inputFrame, None, None 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
-    return inputFrame, mouthRegion, mouthROI
+    return img, mouthRegion, mouthROI
 
 
 def extractLipsFromFrames(inputFrame):
     """Function to extract lips from a single frame"""
+    img = np.copy(inputFrame)
     detector, predictor = initializeDlib()
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
         return inputFrame, None, None 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
-    return inputFrame, mouthRegion, mouthROI
+    return img, mouthRegion, mouthROI
 
 
 # ----------------------------------------------------------------------------
@@ -50,7 +51,7 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
 
 
 if "__main__" == __name__:
-    filename = "../test2.jpg"
+    filename = "../close.png"
     frame, mouth, mouth_roi = extractLips(filename)
     if mouth_roi != None:
         cv2.imshow("mouth", mouth)
@@ -63,5 +64,6 @@ if "__main__" == __name__:
             cv2.imshow("image", img)
             cv2.waitKey(0)
         else:
+            img = cv2.resize(img, (150, 100))
             cv2.imshow("image", img)
             cv2.waitKey(0)
