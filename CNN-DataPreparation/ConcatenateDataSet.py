@@ -17,7 +17,7 @@ adverbs = ['again', 'now', 'please', 'soon']
 alphabet = [chr(x) for x in range(ord('a'), ord('z') + 1)]
 numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 categories = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
-commonCNNDataPath = 'D:/CNN-Training-Images/'
+commonCNNDataPath = 'D:/CNN-Test-Images/'
 
 
 def getVideoFrames(videoPath):
@@ -191,13 +191,13 @@ def prepareDataSetForCNN(firstSpeaker, secondSpeaker):
 
 def main():
     startTime = time.time()
-    firstSpeaker = 1
-    secondSpeaker = 20
+    firstSpeaker = 23
+    secondSpeaker = 24
     createCNNDataDirectories()
     prepareDataSetForCNN(firstSpeaker, secondSpeaker)
 
     print("Finished preparing the videos in {} seconds".format(time.time() - startTime))
 
 
-if "__main__" == __name__:
+if __name__ == "__main__":
     main()
