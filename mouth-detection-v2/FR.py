@@ -15,7 +15,6 @@ def readFrame():
 # output: image
 def smoothImg(img):
     blur = cv2.bilateralFilter(img,9,75,75)
-    cv2.imshow('blur', blur)
     return blur
 #----------------------------------------------------------------------------
 # function used to sharp edges from image
@@ -24,7 +23,6 @@ def smoothImg(img):
 def sharpenEdges(img):
     kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
     sharpend = cv2.filter2D(img, -1, kernel)
-    cv2.imshow('sharped', sharpend)
     return sharpend
 #----------------------------------------------------------------------------
 # function used to resize image
@@ -42,4 +40,15 @@ def binaryImage(img):
     binary_image = cv2.cvtColor(binary_image, cv2.COLOR_BGR2GRAY)
     binary_image[binary_image>0] = 255
     return binary_image
-
+#----------------------------------------------------------------------------
+# function used to change image to binary
+# input: image
+# output: binary image
+def binaryImage2(img):
+    binary_image = np.copy(img)
+    #binary_image = cv2.cvtColor(binary_image, cv2.COLOR_BGR2GRAY)
+    binary_image[binary_image>0] = 255
+    binary_image[binary_image<0] = 0
+    binary_image = binary_image.astype(np.uint8)
+    binary_image = np.invert(binary_image)
+    return binary_image

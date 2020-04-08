@@ -38,7 +38,7 @@ def segmentSkin(img):
     holes_filled_skin_image = fill_holes(skin_image)
     holes_filled_skin_image = holes_filled_skin_image.astype(np.uint8)
     holes_filled_skin_image = cv2.cvtColor(holes_filled_skin_image,cv2.COLOR_RGB2GRAY)
-    cv2.imshow('skin_image', holes_filled_skin_image)
+    #cv2.imshow('skin_image', holes_filled_skin_image)
     return holes_filled_skin_image
 #----------------------------------------------------------------------------
 # function used to support segmentSkin function by filling holes in the skin mask from image
@@ -73,8 +73,8 @@ def extractSkin(img, skinMask):
             cv2.contourArea(c),
         ))
     cv2.drawContours(img, contours, -1, 255, 3)
-    cv2.imshow('contours', img) 
-    cv2.waitKey(0)
+    # cv2.imshow('contours', img) 
+    # cv2.waitKey(0)
     contour_info = sorted(contour_info, key=lambda c: c[2], reverse=True)
     #--------------------------
     max_contour = contour_info[0]

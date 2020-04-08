@@ -46,8 +46,6 @@ def get_box(img,RGB_img):
         masks[masks==1] = 255
         masks[masks>0] = 255
         img[masks==0] = 0
-        cv2.imshow('skin_img', img) 
-        cv2.waitKey(0)
         return bounding_boxes, img
 
 def draw_RGB_with_Rect(RGB_image,Boundary_boxes, cp):
@@ -58,6 +56,6 @@ def draw_RGB_with_Rect(RGB_image,Boundary_boxes, cp):
     y1=y+height
     x0 = x
     x1= x+width
-    cv2.rectangle(RGB_image,(x0,y0),(x1,y1),(255,0,0),2)
+    #cv2.rectangle(RGB_image,(x0,y0),(x1,y1),(255,0,0),2)
     # roi = RGB_image[y:y+height, x:x+width]
     return RGB_image,y0,y1,x0,x1
