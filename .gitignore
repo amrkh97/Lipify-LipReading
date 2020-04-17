@@ -1,9 +1,15 @@
 # User Defined
 GP DataSet/
 New-DataSet-Videos/
+DST/
+DataSet-Trial/
+mouth-detection-v3/*.dat
+GP DataSet
 Videos-After-Extraction/
+CNN-Training-Images/
 *.csv
 .idea
+*.dat
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -134,3 +140,11 @@ dmypy.json
 *.xml
 
 *.iml
+
+checkpoint
+
+*.index
+
+*.data-00000-of-00002
+
+*.data-00001-of-00002

@@ -1,6 +1,5 @@
-#preparing for download 
 mkdir "gridcorpus"
-cd "gridcorpus"
+cd "gridcorpus" || exit
 mkdir "raw" "align" "video"
 cd "raw" && mkdir "align" "video"
 

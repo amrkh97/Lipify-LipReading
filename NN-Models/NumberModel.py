@@ -9,7 +9,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
-class CharCNN(object):
+class NumbersNet(object):
     def __init__(self):
         self.Model = Sequential()
         self.build()
@@ -29,35 +29,25 @@ class CharCNN(object):
         self.Model.add(BatchNormalization(scale=False))
         self.Model.add(Activation('relu'))
         self.Model.add(Dropout(0.5))
-        self.Model.add(Dense(26, activation='softmax'))
+        self.Model.add(Dense(9, activation='softmax'))
 
     def summary(self):
         self.Model.summary()
 
 
-# WIP
-def evaluateModel(image):
-    savedModel = ''
-    charModel = CharCNN()
-    charModel.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
-    charModel.Model = tf.keras.models.load_model(savedModel)
-
-    pass
-
-
 if __name__ == "__main__":
 
     common_path = 'C:/Users/amrkh/Desktop/'
-    C = CharCNN()
+    C = NumbersNet()
     C.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
     C.Model.summary()
 
     with tf.device('/device:GPU:0'):
         batch_size = 16
-        epochs = 6
-        train_dir = common_path + 'CNN-Training-Images/Alphabet/'
-        test_dir = common_path + 'CNN-Test-Images/Alphabet/'
-        checkpoint_path = common_path + 'SavedModels/Alphabet/'
+        epochs = 3
+        train_dir = common_path + 'CNN-Training-Images/Numbers/'
+        test_dir = common_path + 'CNN-Test-Images/Numbers/'
+        checkpoint_path = common_path + 'SavedModels/Numbers/'
         train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
         train_data_gen = train_image_generator.flow_from_directory(batch_size=batch_size,
                                                                    directory=train_dir,
@@ -74,14 +64,16 @@ if __name__ == "__main__":
                                                                  class_mode='categorical',
                                                                  color_mode='grayscale')
 
-        # C.Model = tf.keras.models.load_model(checkpoint_path)
+        C.Model = tf.keras.models.load_model(checkpoint_path)
 
         history = C.Model.fit(train_data_gen,
-                              steps_per_epoch=3562,  # Number of images // Batch size
+                              steps_per_epoch=3206,  # Number of images // Batch size
                               epochs=epochs,
                               verbose=1,
                               validation_data=test_data_gen,
-                              validation_steps=187)
+                              validation_steps=168)
 
-        C.Model.save(checkpoint_path, save_format='tf')
-
+        # C.Model.save(checkpoint_path, save_format='tf')
+        # Evaluate Model:
+        # Accuracy: 72%
+        C.Model.evaluate(test_data_gen)
