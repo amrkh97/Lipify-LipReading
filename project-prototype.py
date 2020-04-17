@@ -15,6 +15,7 @@ import NumberModel
 import PrepositionModel
 from ConcatenateDataSet import getVideoFrames, extractLipsHaarCascade, stackFramesToImage
 from classLabels import getAllClassLabels
+import time
 
 
 def getTrainedModel(modelPath, modelCategory):
@@ -63,6 +64,7 @@ def predictOneVideo(classDict, videoPath):
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     AllClassLabels = getAllClassLabels()
     mylist = ['Colors_Blue.mp4', ]
     # 'Colors_Blue.mp4']  # List of video paths to predict
@@ -71,3 +73,4 @@ if __name__ == "__main__":
         result = threadPool.starmap(predictOneVideo, product([AllClassLabels, ], mylist))
 
     print(result)
+    print("Run Time: {} Seconds".format(time.time() - start_time))
