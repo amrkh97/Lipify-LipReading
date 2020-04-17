@@ -1,5 +1,6 @@
 import multiprocessing
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from collections import ChainMap
 
 
 def getClassIndex(className):
@@ -19,11 +20,13 @@ def getClassIndex(className):
 def getAllClassLabels():
     mylist = ['Adverb', 'Alphabet', 'Colors', 'Commands', 'Numbers', 'Prepositions']
     p = multiprocessing.Pool()
-
-    return p.map(getClassIndex, mylist)
+    res = p.map(getClassIndex, mylist)
+    res = dict(ChainMap(*res))
+    return res
 
 
 if __name__ == "__main__":
 
     result = getAllClassLabels()
     print(result)
+
