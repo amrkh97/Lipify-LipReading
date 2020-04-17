@@ -47,6 +47,8 @@ def predictOneVideo(classDict, videoPath):
     concatenatedImage = stackFramesToImage(videoFrames)
 
     # Image Preparation:
+    if len(concatenatedImage.shape) == 3 and concatenatedImage.shape[2] != 1:
+        concatenatedImage = cv2.cvtColor(concatenatedImage, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(concatenatedImage, (224, 224))
     img = np.array(img, dtype=np.float32)
     img = np.reshape(img, (-1, 224, 224, 1))
