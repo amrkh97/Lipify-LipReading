@@ -1,51 +1,87 @@
 import os
 
-from tensorflow.keras.layers import Dense, Activation, Dropout, Input, Conv2D, ZeroPadding2D, MaxPooling2D, Flatten
-from tensorflow.keras.models import Model
+import tensorflow as tf
+from tensorflow.keras.layers import Dense, Activation, Dropout, Input, Conv2D, \
+    MaxPooling2D, Flatten, BatchNormalization
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 class CharCNN(object):
-    def __init__(self, input_data, output_size):
-        self.input_shape = input_data  # Dimension
-        self.output_size = output_size  # Number of labels
+    def __init__(self):
+        self.Model = Sequential()
         self.build()
 
     def build(self):
-        self.input_data = Input(name='the_input', shape=self.input_shape, batch_size=32, dtype='float32')
+        self.Model.add(Input(name='the_input', shape=(224, 224, 1), batch_size=16, dtype='float32'))
+        self.Model.add(Conv2D(32, (3, 3), activation='sigmoid', name='convo2'))
+        self.Model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.Model.add(Conv2D(32, (3, 3), activation='sigmoid', name='convo3'))
+        self.Model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.Model.add(Conv2D(64, (3, 3), activation='relu', name='convo4'))
+        self.Model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.Model.add(Flatten())
 
-        # self.zero_1 = ZeroPadding2D(padding=(2, 2), name='zero_1')(self.input_data)
-        self.conv_1 = Conv2D(256, (3, 5), strides=(2, 2), activation='relu', kernel_initializer='he_normal',
-                             name='conv_1')(self.input_data)
-        self.maxp_1 = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name='max_1')(self.conv_1)
-
-        self.zero_2 = ZeroPadding2D(padding=(2, 2), name='zero_2')(self.maxp_1)
-        self.conv_2 = Conv2D(128, (3, 5), strides=(2, 2), activation='relu', kernel_initializer='he_normal',
-                             name='conv_2')(self.zero_2)
-        self.maxp_2 = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name='max_2')(self.conv_2)
-
-        self.conv_3 = Conv2D(64, (3, 5), strides=(2, 2), activation='relu', kernel_initializer='he_normal',
-                             name='conv_3')(self.maxp_2)
-        self.maxp_3 = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name='max_3')(self.conv_3)
-
-        self.resh1 = Flatten()(self.maxp_3)
-        self.dense_1 = Dense(1024, kernel_initializer='he_normal', name='dense-1')(self.resh1)
-        self.relu_1 = Activation('relu', name='Relu-2')(self.dense_1)
-        self.drop_4 = Dropout(0.5, name='Dropout-2')(self.relu_1)
-
-        self.dense_2 = Dense(self.output_size, kernel_initializer='he_normal', name='dense-2')(self.drop_4)
-        self.labelPrediction = Activation('softmax', name='softmax')(self.dense_2)
-
-        self.model = Model(inputs=self.input_data, outputs=self.labelPrediction)
+        self.Model.add(Dense(512))
+        self.Model.add(Dropout(0.5))
+        self.Model.add(BatchNormalization(scale=False))
+        self.Model.add(Activation('relu'))
+        self.Model.add(Dropout(0.5))
+        self.Model.add(Dense(26, activation='softmax'))
 
     def summary(self):
-        Model(inputs=self.input_data, outputs=self.labelPrediction).summary()
+        self.Model.summary()
 
 
-if "__main__" == __name__:
-    C = CharCNN((700, 700, 3), 26)
-    C.summary()
+# WIP
+def evaluateModel(image):
+    savedModel = ''
+    charModel = CharCNN()
+    charModel.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
+    charModel.Model = tf.keras.models.load_model(savedModel)
+
+    pass
 
 
+if __name__ == "__main__":
+
+    common_path = 'C:/Users/amrkh/Desktop/'
+    C = CharCNN()
+    C.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
+    C.Model.summary()
+
+    with tf.device('/device:GPU:0'):
+        batch_size = 16
+        epochs = 6
+        train_dir = common_path + 'CNN-Training-Images/Alphabet/'
+        test_dir = common_path + 'CNN-Test-Images/Alphabet/'
+        checkpoint_path = common_path + 'SavedModels/Alphabet/'
+        train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
+        train_data_gen = train_image_generator.flow_from_directory(batch_size=batch_size,
+                                                                   directory=train_dir,
+                                                                   shuffle=True,
+                                                                   target_size=(224, 224),
+                                                                   class_mode='categorical',
+                                                                   color_mode='grayscale')
+
+        test_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our test data
+        test_data_gen = test_image_generator.flow_from_directory(batch_size=batch_size,
+                                                                 directory=test_dir,
+                                                                 shuffle=False,
+                                                                 target_size=(224, 224),
+                                                                 class_mode='categorical',
+                                                                 color_mode='grayscale')
+
+        # C.Model = tf.keras.models.load_model(checkpoint_path)
+
+        history = C.Model.fit(train_data_gen,
+                              steps_per_epoch=3562,  # Number of images // Batch size
+                              epochs=epochs,
+                              verbose=1,
+                              validation_data=test_data_gen,
+                              validation_steps=187)
+
+        C.Model.save(checkpoint_path, save_format='tf')
 
