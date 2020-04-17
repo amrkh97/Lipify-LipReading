@@ -35,13 +35,6 @@ class NumbersNet(object):
         self.Model.summary()
 
 
-# WIP
-def evaluateModel(image):
-    savedModel = ''
-    Model = tf.keras.models.load_model(savedModel)
-    pass
-
-
 if __name__ == "__main__":
 
     common_path = 'C:/Users/amrkh/Desktop/'
@@ -72,6 +65,7 @@ if __name__ == "__main__":
                                                                  color_mode='grayscale')
 
         C.Model = tf.keras.models.load_model(checkpoint_path)
+
         history = C.Model.fit(train_data_gen,
                               steps_per_epoch=3206,  # Number of images // Batch size
                               epochs=epochs,
@@ -79,6 +73,7 @@ if __name__ == "__main__":
                               validation_data=test_data_gen,
                               validation_steps=168)
 
-        C.Model.save(checkpoint_path, save_format='tf')
-
-
+        # C.Model.save(checkpoint_path, save_format='tf')
+        # Evaluate Model:
+        # Accuracy: 72%
+        C.Model.evaluate(test_data_gen)

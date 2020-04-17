@@ -35,13 +35,6 @@ class ColorsNet(object):
         self.Model.summary()
 
 
-# WIP
-def evaluateModel(image):
-    savedModel = ''
-    Model = tf.keras.models.load_model(savedModel)
-    pass
-
-
 if __name__ == "__main__":
 
     common_path = 'C:/Users/amrkh/Desktop/'
@@ -55,6 +48,7 @@ if __name__ == "__main__":
         train_dir = common_path + 'CNN-Training-Images/Colors/'
         test_dir = common_path + 'CNN-Test-Images/Colors/'
         checkpoint_path = common_path + 'SavedModels/Colors/'
+
         train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
         train_data_gen = train_image_generator.flow_from_directory(batch_size=batch_size,
                                                                    directory=train_dir,
@@ -72,6 +66,7 @@ if __name__ == "__main__":
                                                                  color_mode='grayscale')
 
         C.Model = tf.keras.models.load_model(checkpoint_path)
+
         history = C.Model.fit(train_data_gen,
                               steps_per_epoch=3560,  # Number of images // Batch size
                               epochs=epochs,
@@ -80,5 +75,9 @@ if __name__ == "__main__":
                               validation_steps=187)
 
         # C.Model.save(checkpoint_path, save_format='tf')
+
+        # Evaluate Model:
+        # Accuracy: 88.5%
+        C.Model.evaluate(test_data_gen)
 
 
