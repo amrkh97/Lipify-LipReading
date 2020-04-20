@@ -6,7 +6,9 @@ from tensorflow.keras.layers import Dense, Activation, Dropout, Input, Conv2D, \
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+tf.autograph.set_verbosity(0)
+tf.get_logger().setLevel('ERROR')
 
 
 class CharCNN(object):
@@ -16,15 +18,15 @@ class CharCNN(object):
 
     def build(self):
         self.Model.add(Input(name='the_input', shape=(224, 224, 1), batch_size=16, dtype='float32'))
-        self.Model.add(Conv2D(32, (3, 3), activation='sigmoid', name='convo2'))
+        self.Model.add(Conv2D(32, (3, 3), activation='sigmoid', name='conv1'))
         self.Model.add(MaxPooling2D(pool_size=(2, 2)))
-        self.Model.add(Conv2D(32, (3, 3), activation='sigmoid', name='convo3'))
+        self.Model.add(Conv2D(32, (3, 3), activation='sigmoid', name='conv2'))
         self.Model.add(MaxPooling2D(pool_size=(2, 2)))
-        self.Model.add(Conv2D(64, (3, 3), activation='relu', name='convo4'))
+        self.Model.add(Conv2D(64, (3, 3), activation='relu', name='conv3'))
         self.Model.add(MaxPooling2D(pool_size=(2, 2)))
         self.Model.add(Flatten())
 
-        self.Model.add(Dense(512))
+        self.Model.add(Dense(1024))
         self.Model.add(Dropout(0.5))
         self.Model.add(BatchNormalization(scale=False))
         self.Model.add(Activation('relu'))
@@ -35,18 +37,7 @@ class CharCNN(object):
         self.Model.summary()
 
 
-# WIP
-def evaluateModel(image):
-    savedModel = ''
-    charModel = CharCNN()
-    charModel.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
-    charModel.Model = tf.keras.models.load_model(savedModel)
-
-    pass
-
-
 if __name__ == "__main__":
-
     common_path = 'C:/Users/amrkh/Desktop/'
     C = CharCNN()
     C.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
@@ -54,7 +45,7 @@ if __name__ == "__main__":
 
     with tf.device('/device:GPU:0'):
         batch_size = 16
-        epochs = 6
+        epochs = 3
         train_dir = common_path + 'CNN-Training-Images/Alphabet/'
         test_dir = common_path + 'CNN-Test-Images/Alphabet/'
         checkpoint_path = common_path + 'SavedModels/Alphabet/'
@@ -74,7 +65,7 @@ if __name__ == "__main__":
                                                                  class_mode='categorical',
                                                                  color_mode='grayscale')
 
-        # C.Model = tf.keras.models.load_model(checkpoint_path)
+        C.Model = tf.keras.models.load_model(checkpoint_path)
 
         history = C.Model.fit(train_data_gen,
                               steps_per_epoch=3562,  # Number of images // Batch size
@@ -83,5 +74,4 @@ if __name__ == "__main__":
                               validation_data=test_data_gen,
                               validation_steps=187)
 
-        C.Model.save(checkpoint_path, save_format='tf')
-
+        # C.Model.save(checkpoint_path, save_format='tf')

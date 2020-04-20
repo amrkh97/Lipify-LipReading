@@ -6,7 +6,9 @@ from tensorflow.keras.layers import Dense, Activation, Dropout, Input, Conv2D, \
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+tf.autograph.set_verbosity(0)
+tf.get_logger().setLevel('ERROR')
 
 
 class PrepositionsNet(object):
