@@ -3,6 +3,7 @@ import numpy as np
 import skimage.io as io
 from colorspace import *
 from canny import *
+from FR import *
 #----------------------------------------------------------------------------
 # function used to exract skin from image
 # input: image
@@ -40,7 +41,7 @@ def segmentSkin(img):
     holes_filled_skin_image = fill_holes(skin_image)
     holes_filled_skin_image = holes_filled_skin_image.astype(np.uint8)
     # holes_filled_skin_image = cv2.cvtColor(holes_filled_skin_image,cv2.COLOR_RGB2GRAY)
-    holes_filled_skin_image = getGrayImage(holes_filled_skin_image)
+    #holes_filled_skin_image = getGrayImage(holes_filled_skin_image)
     cv2.imshow('skin_image', holes_filled_skin_image)
     return holes_filled_skin_image
 #----------------------------------------------------------------------------
@@ -48,8 +49,15 @@ def segmentSkin(img):
 # input: skin mask
 # output: skin mask
 def fill_holes(img):
+    img = getGrayImage(img)
+    ret,thresh_img = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
-    res = cv2.morphologyEx(img,cv2.MORPH_OPEN,kernel)
+    # kernel = np.array(kernel)
+    # img = np.array(img)
+    # print(kernel)
+    res = operation(thresh_img, kernel, 1, "erosion")
+    res = operation(res, kernel, 1, "dilation")
+    #res = cv2.morphologyEx(img,cv2.MORPH_OPEN,kernel)
     return res
 #----------------------------------------------------------------------------
 # function used to exract skin from image
@@ -65,8 +73,13 @@ def extractSkin(img, skinMask):
     MASK_COLOR = (0,0,0)
     # edges = cv2.Canny(skinMask, CANNY_THRESH_1, CANNY_THRESH_2)
     edges = cannyDetection(skinMask, CANNY_THRESH_1, CANNY_THRESH_2)
-    edges = cv2.dilate(edges, None)
-    edges = cv2.erode(edges, None)
+    kernel = np.array([[1,1,1],
+                    [1,1,1],
+                    [1,1,1]])
+    edges = operation(edges, kernel, 0, "dilation")
+    edges = operation(edges, kernel, 0, "erosion")
+    # edges = cv2.dilate(edges, None)
+    # edges = cv2.erode(edges, None)
     contour_info = []
     edges = edges.astype("uint8")
     contours,_ = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
