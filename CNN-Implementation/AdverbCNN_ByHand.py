@@ -1,3 +1,4 @@
+import os
 import pickle
 
 import matplotlib.pyplot as plt
@@ -157,10 +158,15 @@ def adamGD(batch, num_classes, lr, dim, n_c, beta1, beta2, params, cost):
     return params, cost
 
 
+def checkPreTrained(file_path):
+    if os.path.exists(file_path):
+        return True
+    return False
+
+
 def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_depth=1, f=5, num_filt1=8, num_filt2=8,
           batch_size=1, num_epochs=2, save_path='params.pkl'):
-
-    m = 50  # Train on 50 examples only.
+    m = 250  # Train on 250 examples only.
     X = extract_data('../Compressed-Dataset/adverb-images-idx3-ubyte.gz', m, img_dim)
     y_dash = extract_labels('../Compressed-Dataset/adverb-labels-idx1-ubyte.gz', m).reshape(m, 1)
     X -= int(np.mean(X))
@@ -171,19 +177,23 @@ def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_dept
 
     # Initialize parameters:
     f1, f2, w3, w4 = (num_filt1, img_depth, f, f), (num_filt2, num_filt1, f, f), (128, 93312), (num_classes, 128)
-    f1 = initializeFilter(f1)
-    f2 = initializeFilter(f2)
-    w3 = initializeWeight(w3)
-    w4 = initializeWeight(w4)
-
-    b1 = np.zeros((f1.shape[0], 1))
-    b2 = np.zeros((f2.shape[0], 1))
-    b3 = np.zeros((w3.shape[0], 1))
-    b4 = np.zeros((w4.shape[0], 1))
-
-    params = [f1, f2, w3, w4, b1, b2, b3, b4]
-
+    b1, b2, b3, b4 = 0, 0, 0, 0
+    params = []
     cost = []
+    if not checkPreTrained(save_path):
+        f1 = initializeFilter(f1)
+        f2 = initializeFilter(f2)
+        w3 = initializeWeight(w3)
+        w4 = initializeWeight(w4)
+
+        b1 = np.zeros((f1.shape[0], 1))
+        b2 = np.zeros((f2.shape[0], 1))
+        b3 = np.zeros((w3.shape[0], 1))
+        b4 = np.zeros((w4.shape[0], 1))
+
+        params = [f1, f2, w3, w4, b1, b2, b3, b4]
+    else:
+        params, cost = pickle.load(open(save_path, 'rb'))
 
     for epoch in range(num_epochs):
         np.random.shuffle(train_data)
