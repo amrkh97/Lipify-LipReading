@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     with tf.device('/device:GPU:0'):
         batch_size = 16
-        epochs = 6
+        epochs = 32
         train_dir = common_path + 'CNN-Training-Images/Adverb/'
         test_dir = common_path + 'CNN-Test-Images/Adverb/'
         checkpoint_path = common_path + 'SavedModels/Adverb/'
@@ -79,6 +79,6 @@ if __name__ == "__main__":
         # C.Model.save(checkpoint_path, save_format='tf')
         
         # Evaluate Model:
-        # Accuracy: 89%
-        C.Model.evaluate(test_data_gen)
+        # Accuracy: 92.78%
+        # C.Model.evaluate(test_data_gen)
 
