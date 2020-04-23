@@ -1,6 +1,21 @@
+import time
+
 from FR import *
 from lip_detection import *
 from mouthDetection import detect
+
+
+def getVideoFrames(videoPath):
+    """Function to return a video's frames in a list
+    :type videoPath: String
+    """
+    vidcap = cv2.VideoCapture(videoPath)
+    success, image = vidcap.read()
+    allFrames = []
+    while success:
+        allFrames.append(image)
+        success, image = vidcap.read()
+    return allFrames
 
 
 # ----------------------------------------------------------------------------
@@ -20,7 +35,7 @@ def extractLips(fileName):
     return img, mouthRegion, mouthROI
 
 
-def extractLipsFromFrames(inputFrame):
+def extractLipsFromFrame(inputFrame):
     """Function to extract lips from a single frame"""
     img = np.copy(inputFrame)
     detector, predictor = initializeDlib()
@@ -29,7 +44,9 @@ def extractLipsFromFrames(inputFrame):
     if len(mouthROI) == 0:
         return inputFrame, None, None 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
-    return img, mouthRegion, mouthROI
+    mouthRegion = cv2.resize(mouthRegion, (150, 100))
+
+    return mouthRegion
 
 
 # ----------------------------------------------------------------------------
@@ -51,19 +68,15 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
 
 
 if "__main__" == __name__:
-    filename = "../close.png"
-    frame, mouth, mouth_roi = extractLips(filename)
-    if mouth_roi != None:
-        cv2.imshow("mouth", mouth)
-        cv2.waitKey(0)
-    else:
-        faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-        img, status = detect(frame, faceCascade)
-        if status == False:
-            img = cv2.resize(img, (150, 100))
-            cv2.imshow("image", img)
-            cv2.waitKey(0)
-        else:
-            img = cv2.resize(img, (150, 100))
-            cv2.imshow("image", img)
-            cv2.waitKey(0)
+
+    startTime = time.time()
+    videoPath = "../New-DataSet-Videos/S1/Adverb/again_0.mp4"
+    frames = getVideoFrames(videoPath)
+    detected = []
+    for i, frame in enumerate(frames):
+        detected.append(extractLipsFromFrame(frame))
+        cv2.imshow(str(i), detected[-1])
+
+    print("Run Time: {} Seconds".format(time.time() - startTime))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
