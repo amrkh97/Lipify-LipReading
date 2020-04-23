@@ -54,10 +54,11 @@ def nanargmax(arr):
     return idxs
 
 
-def predict(image, f1, f2, w3, w4, b1, b2, b3, b4, conv_s=1, pool_f=5, pool_s=2):
+def predict(image, f1, f2, w3, w4, b1, b2, b3, b4, conv_s=1, pool_f=2, pool_s=2):
     """
     Function to make predictions with trained weights.
     """
+
     conv1 = convolution(image, f1, b1, conv_s)
     conv1[conv1 <= 0] = 0  # ReLU activation
 
@@ -73,5 +74,4 @@ def predict(image, f1, f2, w3, w4, b1, b2, b3, b4, conv_s=1, pool_f=5, pool_s=2)
 
     out = w4.dot(z) + b4  # Dense layer
     probs = softmax(out)  # softmax activation
-
     return np.argmax(probs), np.max(probs)
