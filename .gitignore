@@ -18,7 +18,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+*.dat
 # Distribution / packaging
 .Python
 build/
