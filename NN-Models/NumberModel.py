@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     with tf.device('/device:GPU:0'):
         batch_size = 16
-        epochs = 3
+        epochs = 100
         train_dir = common_path + 'CNN-Training-Images/Numbers/'
         test_dir = common_path + 'CNN-Test-Images/Numbers/'
         checkpoint_path = common_path + 'SavedModels/Numbers/'
@@ -67,15 +67,19 @@ if __name__ == "__main__":
                                                                  color_mode='grayscale')
 
         C.Model = tf.keras.models.load_model(checkpoint_path)
-
+        callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy',
+                                                    patience=8,
+                                                    restore_best_weights=True,
+                                                    baseline=0.72)
         history = C.Model.fit(train_data_gen,
                               steps_per_epoch=3206,  # Number of images // Batch size
                               epochs=epochs,
                               verbose=1,
                               validation_data=test_data_gen,
-                              validation_steps=168)
+                              validation_steps=168,
+                              callbacks=[callback])
 
-        # C.Model.save(checkpoint_path, save_format='tf')
+        C.Model.save(checkpoint_path, save_format='tf')
         # Evaluate Model:
-        # Accuracy: 72%
+        # Accuracy: 78.05%
         C.Model.evaluate(test_data_gen)
