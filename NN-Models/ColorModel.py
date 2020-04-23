@@ -6,7 +6,9 @@ from tensorflow.keras.layers import Dense, Activation, Dropout, Input, Conv2D, \
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+tf.autograph.set_verbosity(0)
+tf.get_logger().setLevel('ERROR')
 
 
 class ColorsNet(object):
@@ -36,7 +38,6 @@ class ColorsNet(object):
 
 
 if __name__ == "__main__":
-
     common_path = 'C:/Users/amrkh/Desktop/'
     C = ColorsNet()
     C.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
@@ -44,7 +45,7 @@ if __name__ == "__main__":
 
     with tf.device('/device:GPU:0'):
         batch_size = 16
-        epochs = 1
+        epochs = 50
         train_dir = common_path + 'CNN-Training-Images/Colors/'
         test_dir = common_path + 'CNN-Test-Images/Colors/'
         checkpoint_path = common_path + 'SavedModels/Colors/'
@@ -66,18 +67,21 @@ if __name__ == "__main__":
                                                                  color_mode='grayscale')
 
         C.Model = tf.keras.models.load_model(checkpoint_path)
+        callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy',
+                                                    patience=4,
+                                                    restore_best_weights=True,
+                                                    baseline=0.9068)
 
         history = C.Model.fit(train_data_gen,
                               steps_per_epoch=3560,  # Number of images // Batch size
                               epochs=epochs,
                               verbose=1,
                               validation_data=test_data_gen,
-                              validation_steps=187)
+                              validation_steps=187,
+                              callbacks=[callback])
 
-        # C.Model.save(checkpoint_path, save_format='tf')
+        C.Model.save(checkpoint_path, save_format='tf')
 
         # Evaluate Model:
-        # Accuracy: 88.5%
-        C.Model.evaluate(test_data_gen)
-
-
+        # Accuracy: 90.68%
+        # C.Model.evaluate(test_data_gen)

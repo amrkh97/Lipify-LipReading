@@ -3,6 +3,7 @@ GP DataSet/
 New-DataSet-Videos/
 DST/
 DataSet-Trial/
+Compressed-Dataset
 mouth-detection-v3/*.dat
 GP DataSet
 Videos-After-Extraction/
@@ -148,3 +149,5 @@ checkpoint
 *.data-00000-of-00002
 
 *.data-00001-of-00002
+
+*.pkl
