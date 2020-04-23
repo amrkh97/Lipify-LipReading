@@ -38,6 +38,6 @@ if __name__ == "__main__":
     categoriesList = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
     lossPerCategory = []
     for category in categoriesList:
-        categoryAccuracy = str(round(verifyCategory(categoryName=category)*100, 2))
-        lossPerCategory.append({category: categoryAccuracy+'%'})
+        categoryAccuracy = str(round(verifyCategory(categoryName=category) * 100, 2))
+        lossPerCategory.append({category: categoryAccuracy + '%'})
     print(lossPerCategory)

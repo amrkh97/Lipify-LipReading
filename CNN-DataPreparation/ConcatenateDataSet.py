@@ -114,7 +114,7 @@ def extractLipsHaarCascade(haarDetector, frame):
         return roi_gray
 
     for (x, y, w, h) in faces:
-        roi_gray = gray[y + (2*h//3):y + h, x:x + w]
+        roi_gray = gray[y + (2 * h // 3):y + h, x:x + w]
     roi_gray = cv2.resize(roi_gray, (150, 100))
     return roi_gray
 

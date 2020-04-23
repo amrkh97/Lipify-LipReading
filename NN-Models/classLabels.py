@@ -1,6 +1,7 @@
 import multiprocessing
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from collections import ChainMap
+
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 def getClassIndex(className):
@@ -26,7 +27,5 @@ def getAllClassLabels():
 
 
 if __name__ == "__main__":
-
     result = getAllClassLabels()
     print(result)
-

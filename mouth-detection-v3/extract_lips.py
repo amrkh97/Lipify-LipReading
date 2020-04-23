@@ -2,7 +2,6 @@ import time
 
 from FR import *
 from lip_detection import *
-from mouthDetection import detect
 
 
 def getVideoFrames(videoPath):
@@ -30,7 +29,7 @@ def extractLips(fileName):
 
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
-        return inputFrame, None, None 
+        return inputFrame, None, None
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
     return img, mouthRegion, mouthROI
 
@@ -42,7 +41,7 @@ def extractLipsFromFrame(inputFrame):
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
-        return inputFrame, None, None 
+        return inputFrame, None, None
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
     mouthRegion = cv2.resize(mouthRegion, (150, 100))
 

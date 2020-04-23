@@ -38,7 +38,6 @@ class AdverbNet(object):
 
 
 if __name__ == "__main__":
-
     common_path = 'C:/Users/amrkh/Desktop/'
     C = AdverbNet()
     C.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
@@ -77,8 +76,7 @@ if __name__ == "__main__":
                               validation_steps=187)
 
         # C.Model.save(checkpoint_path, save_format='tf')
-        
+
         # Evaluate Model:
         # Accuracy: 92.78%
         # C.Model.evaluate(test_data_gen)
-

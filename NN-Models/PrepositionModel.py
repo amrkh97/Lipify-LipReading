@@ -38,7 +38,6 @@ class PrepositionsNet(object):
 
 
 if __name__ == "__main__":
-
     common_path = 'C:/Users/amrkh/Desktop/'
     C = PrepositionsNet()
     C.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
