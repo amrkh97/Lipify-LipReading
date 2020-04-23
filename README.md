@@ -1,7 +1,8 @@
-#Lipify - A Lip Reading Application
-
+Lipify - A Lip Reading Application
 ---
-#####Project Dependencies:
+
+##### Project Dependencies:
+
 
 * Python>=3.7.1
 * tensorflow>=2.1.0
@@ -14,7 +15,7 @@
 * tqdm
 
 
-######Note: All Dependencies can be found inside 'setup.py'
+Note: All Dependencies can be found inside 'setup.py'
 
 ---
 
@@ -54,7 +55,7 @@ To Download please run the following line of code in your terminal:
 
 ---
 
-#####Model Training Steps:
+##### Model Training Steps:
 * Models can be found in the directory "NN-Models"
 
 * First you will need to change the common path
