@@ -2,6 +2,7 @@ import time
 
 from FR import *
 from lip_detection import *
+from mouthDetection import detect
 
 
 def getVideoFrames(videoPath):
@@ -28,15 +29,20 @@ def extractLips(fileName):
     resized = resizeImage(img)
 
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
+    if len(mouthROI) == 0:
+        return inputFrame, None, None 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
-    return inputFrame, mouthRegion, mouthROI
+    return img, mouthRegion, mouthROI
 
 
 def extractLipsFromFrame(inputFrame):
     """Function to extract lips from a single frame"""
+    img = np.copy(inputFrame)
     detector, predictor = initializeDlib()
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI = lipDetection(resized, detector, predictor)
+    if len(mouthROI) == 0:
+        return inputFrame, None, None 
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
     mouthRegion = cv2.resize(mouthRegion, (150, 100))
 
@@ -57,6 +63,7 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
     y1 = mouthRoi[9][1]
     y1 = y1 + 10
     mouthPart = inputFrame[y0: y1, x0: x1]
+    mouthPart = cv2.resize(mouthPart, (150, 100))
     return inputFrame, mouthPart
 
 
