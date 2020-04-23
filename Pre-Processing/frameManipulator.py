@@ -203,13 +203,13 @@ def saveVideoToPath(videoData, videoFrames):
     outVideo.release()
 
 
-def adjustDataSetTo25Frames(Number_Of_Speakers):
-    """Manipulates the whole dataset videos to be 25 frames"""
+def adjustDataSetTo25Frames(Speaker_first, Speaker_second):
+    """Manipulates the whole dataset videos to be 30 frames"""
 
     categories = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
-    for i in range(Number_Of_Speakers):
+    for i in range(Speaker_first, Speaker_second):
         for category in categories:
-            videoPath = "../Videos-After-Extraction/S{}/{}/".format(i + 1, category) + "*.mp4"
+            videoPath = "../Videos-After-Extraction/S{}/{}/".format(i, category) + "*.mp4"
             vidList = glob.glob(videoPath)
 
             def f(x):
@@ -217,7 +217,7 @@ def adjustDataSetTo25Frames(Number_Of_Speakers):
 
             vidList = [f(x) for x in vidList]
 
-            createDataSetDirectories(i + 1)
+            createDataSetDirectories(i)
 
             try:
                 for idx, j in enumerate(vidList):
@@ -228,12 +228,13 @@ def adjustDataSetTo25Frames(Number_Of_Speakers):
                 print("Segmented the new dataset.")
             print("Finished Segmenting Category: {}".format(category))
 
-        print("Finished Speaker Number: {}".format(i + 1))
+        print("Finished Speaker Number: {}".format(i))
         print("=========================================")
 
 
 if __name__ == "__main__":
     StartTime = time.time()
-    numberOfSpeakers = 20
-    adjustDataSetTo25Frames(numberOfSpeakers)
+    FirstSpeaker = 23
+    SecondSpeaker = 24
+    adjustDataSetTo25Frames(FirstSpeaker, SecondSpeaker)
     print("Run Time: {} seconds.".format(time.time() - StartTime))

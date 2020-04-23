@@ -1,5 +1,24 @@
 Lipify - A Lip Reading Application
 ---
+
+##### Project Dependencies:
+
+
+* Python>=3.7.1
+* tensorflow>=2.1.0
+* opencv-python>=4.2.0
+* dlib
+* moviepy>=1.0.1
+* numpy>=1.18.1
+* Pillow
+* matplotlib
+* tqdm
+
+
+Note: All Dependencies can be found inside 'setup.py'
+
+---
+
 ##### Project's Dataset Structure:
 
 * GP DataSet/ <br> | --> align/ <br> | --> video/ <br>
@@ -36,15 +55,27 @@ To Download please run the following line of code in your terminal:
 
 ---
 
+##### Model Training Steps:
+* Models can be found in the directory "NN-Models"
+
+* First you will need to change the common path
+ value to the directory of your training data.
+
+* Run Each network to start training.
+* Early stopping was used to help stop
+ the training of the model at its optimum validation accuracy.
+
+
+---
 ##### TODOs:
 
 * ~~Dataset preprocessing module~~
 * ~~Initial Neural networks' architecture~~
-* Facial detection algorithm
+* ~~Facial detection algorithm~~
 * Feature extraction module
 * Proper documentation for the whole project
 * Optimization of the networks' architectures
-
+* Change Training Codes to take dataset location as argument
 ---
 
 #### License:
