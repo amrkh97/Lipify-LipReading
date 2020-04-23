@@ -1,6 +1,9 @@
 import multiprocessing
 from collections import ChainMap
 
+from silence_tensorflow import silence_tensorflow
+
+silence_tensorflow()
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 

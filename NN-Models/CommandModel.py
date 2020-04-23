@@ -1,5 +1,8 @@
 import os
 
+from silence_tensorflow import silence_tensorflow
+
+silence_tensorflow()
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Activation, Dropout, Input, Conv2D, \
     MaxPooling2D, Flatten, BatchNormalization
