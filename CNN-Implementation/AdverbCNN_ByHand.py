@@ -3,11 +3,15 @@ import pickle
 
 import matplotlib.pyplot as plt
 import numpy as np
+from PIL import Image
 from tqdm import tqdm
 
 from backward import maxpoolBackward, convolutionBackward
+from changeImagesToMnistFormat import compressOneImage
 from forward import categoricalCrossEntropy, convolution, maxpool, softmax
-from utils import initializeFilter, extract_labels, initializeWeight, extract_data
+from utils import initializeFilter, extract_labels, initializeWeight, extract_data, predict
+
+AdverbDict = {0: 'again', 1: 'now', 2: 'please', 3: 'soon'}
 
 
 def conv(image, label, params, conv_s, pool_f, pool_s):
@@ -165,7 +169,7 @@ def checkPreTrained(file_path):
 
 
 def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_depth=1, f=5, num_filt1=8, num_filt2=8,
-          batch_size=1, num_epochs=2, save_path='params.pkl'):
+          batch_size=1, num_epochs=10, save_path='params.pkl'):
     m = 250  # Train on 250 examples only.
     X = extract_data('../Compressed-Dataset/adverb-images-idx3-ubyte.gz', m, img_dim)
     y_dash = extract_labels('../Compressed-Dataset/adverb-labels-idx1-ubyte.gz', m).reshape(m, 1)
@@ -176,6 +180,7 @@ def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_dept
     np.random.shuffle(train_data)
 
     # Initialize parameters:
+    # 93312: 8 * 108 * 108 (After MaxPool Layer and Flatten)
     f1, f2, w3, w4 = (num_filt1, img_depth, f, f), (num_filt2, num_filt1, f, f), (128, 93312), (num_classes, 128)
     b1, b2, b3, b4 = 0, 0, 0, 0
     params = []
@@ -212,8 +217,8 @@ def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_dept
     return cost
 
 
-def trainAdverbByHandCNN(parametersSavePath):
-    cost = train(save_path=parametersSavePath)
+def trainAdverbByHandCNN(parametersSavePath, num_epochs=10):
+    cost = train(num_epochs=num_epochs, save_path=parametersSavePath)
 
     params, cost = pickle.load(open(parametersSavePath, 'rb'))
     [f1, f2, w3, w4, b1, b2, b3, b4] = params
@@ -227,5 +232,25 @@ def trainAdverbByHandCNN(parametersSavePath):
     print(params)
 
 
+def predictAdverb(image, save_path):
+    compressOneImage(image)
+
+    X = extract_data('Test-image-idx3-ubyte.gz', 1, 224)
+    X -= int(np.mean(X))
+    X /= int(np.std(X))
+    X = X.reshape(1, 224, 224)
+    os.remove('Test-image-idx3-ubyte.gz')
+
+    params, cost = pickle.load(open(save_path, 'rb'))
+    [f1, f2, w3, w4, b1, b2, b3, b4] = params
+    pred, prob = predict(X, f1, f2, w3, w4, b1, b2, b3, b4)
+    return AdverbDict[pred], prob
+
+
 if __name__ == "__main__":
-    trainAdverbByHandCNN('params.pkl')
+    trainAdverbByHandCNN('params.pkl', num_epochs=10)
+
+    image_path = 'C:/Users/amrkh/Desktop/CNN-Test-Images/Adverb/please/0.jpg'
+    image_path = Image.open(image_path)
+
+    print(predictAdverb(image_path, 'params.pkl'))
