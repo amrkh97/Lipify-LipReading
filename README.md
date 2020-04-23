@@ -40,7 +40,7 @@ To Download please run the following line of code in your terminal:
 
 * ~~Dataset preprocessing module~~
 * ~~Initial Neural networks' architecture~~
-* Facial detection algorithm
+* ~~Facial detection algorithm~~
 * Feature extraction module
 * Proper documentation for the whole project
 * Optimization of the networks' architectures
