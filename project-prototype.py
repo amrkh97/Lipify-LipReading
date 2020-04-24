@@ -1,11 +1,13 @@
 """ This file contains a small demo for our project using
   only the CNN architectures. """
 import glob
-# import os
 import time
 
 import cv2
 import numpy as np
+from silence_tensorflow import silence_tensorflow
+
+silence_tensorflow()
 import tensorflow as tf
 
 import AdverbModel
@@ -18,7 +20,7 @@ from ConcatenateDataSet import getVideoFrames, extractLipsHaarCascade, stackFram
 
 
 def getTrainedModel(modelPath, modelCategory):
-    print("Fetching model weights...")
+    # print("Fetching model weights...")
     modelDict = {'Adverb': AdverbModel.AdverbNet(),
                  'Alphabet': CharacterCNN.CharCNN(),
                  'Colors': ColorModel.ColorsNet(),
@@ -29,7 +31,7 @@ def getTrainedModel(modelPath, modelCategory):
     model = modelDict[modelCategory]
     model.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
     model.Model = tf.keras.models.load_model(modelPath + '/')
-    print("{} Model is loaded...".format(modelCategory))
+    # print("{} Model is loaded...".format(modelCategory))
     return model.Model
 
 
@@ -44,27 +46,29 @@ def predictOneVideo(classDict, videoPath):
     cnnModel = getTrainedModel(savedModelPath, categoryCNN)
 
     # Video Concatenation Operations:
-    print("Starting video preparation operations...")
+    # print("Starting video preparation operations...")
     haarDetector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     videoFrames = getVideoFrames(videoPath)[:30]
     videoFrames = [extractLipsHaarCascade(haarDetector, x) for x in videoFrames]
     concatenatedImage = stackFramesToImage(videoFrames)
 
-    # Image Preparation:
-    if len(concatenatedImage.shape) == 3 and concatenatedImage.shape[2] != 1:
-        concatenatedImage = cv2.cvtColor(concatenatedImage, cv2.COLOR_BGR2GRAY)
-    img = cv2.resize(concatenatedImage, (224, 224))
-    img = np.array(img, dtype=np.float32)
-    img = np.reshape(img, (-1, 224, 224, 1))
-    img = img / 255
+    if concatenatedImage is not None:
+        # Image Preparation:
+        if len(concatenatedImage.shape) == 3 and concatenatedImage.shape[2] != 1:
+            concatenatedImage = cv2.cvtColor(concatenatedImage, cv2.COLOR_BGR2GRAY)
+        img = cv2.resize(concatenatedImage, (224, 224))
+        img = np.array(img, dtype=np.float32)
+        img = np.reshape(img, (-1, 224, 224, 1))
+        img = img / 255
 
-    # Model Prediction:
-    print("Starting Model Prediction...")
-    modelPrediction = cnnModel.predict_classes(img)
-    print(cnnModel.predict(img))
-    dictForClass = list(dictForClass.items())
-    prediction = [item for item in dictForClass if modelPrediction[0] in item][0][0]
-
+        # Model Prediction:
+        # print("Starting Model Prediction...")
+        modelPrediction = cnnModel.predict_classes(img)
+        # print(cnnModel.predict(img))
+        dictForClass = list(dictForClass.items())
+        prediction = [item for item in dictForClass if modelPrediction[0] in item][0][0]
+    else:
+        prediction = "Error! Video {} has less than 30 frames".format(path[-1])
     return prediction
 
 
@@ -93,7 +97,6 @@ if __name__ == "__main__":
     mylist = glob.glob(receivedFilesFromServer)
     mylist.sort(key=lambda x: x.split('_')[-1])
     result = []
-
     for video in mylist:
         result.append(predictOneVideo(AllClassLabels, video))
 
