@@ -203,7 +203,7 @@ def saveVideoToPath(videoData, videoFrames):
     outVideo.release()
 
 
-def adjustDataSetTo25Frames(Speaker_first, Speaker_second):
+def adjustDataSetTo30Frames(Speaker_first, Speaker_second):
     """Manipulates the whole dataset videos to be 30 frames"""
 
     categories = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
@@ -236,5 +236,5 @@ if __name__ == "__main__":
     StartTime = time.time()
     FirstSpeaker = 23
     SecondSpeaker = 24
-    adjustDataSetTo25Frames(FirstSpeaker, SecondSpeaker)
+    adjustDataSetTo30Frames(FirstSpeaker, SecondSpeaker)
     print("Run Time: {} seconds.".format(time.time() - StartTime))
