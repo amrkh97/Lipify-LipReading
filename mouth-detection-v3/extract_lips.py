@@ -28,10 +28,10 @@ def extractLips(fileName):
 
     resized = resizeImage(img)
 
-    inputFrame, mouthROI = lipDetection(resized, detector, predictor)
+    inputFrame, mouthROI, faceCoords = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
         return inputFrame, None, None
-    inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
+    inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI, faceCoords)
     return img, mouthRegion, mouthROI
 
 
@@ -40,12 +40,12 @@ def extractLipsFromFrame(inputFrame):
     img = np.copy(inputFrame)
     detector, predictor = initializeDlib()
     resized = resizeImage(inputFrame)
-    inputFrame, mouthROI = lipDetection(resized, detector, predictor)
+    inputFrame, mouthROI, faceCoords = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
         return inputFrame, None, None
-    inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI)
+    inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI, faceCoords)
     mouthRegion = cv2.resize(mouthRegion, (150, 100))
-
+    mouthRegion = cv2.cvtColor(mouthRegion, cv2.COLOR_BGR2GRAY)
     return mouthRegion
 
 
@@ -53,15 +53,19 @@ def extractLipsFromFrame(inputFrame):
 # function used to extract lips region
 # input: frame, mouth_roi points pair vector
 # output: mouth region image
-def mouthRegionExtraction(inputFrame, mouthRoi):
-    x0 = mouthRoi[0][0]
-    x0 = x0 - 20
+def mouthRegionExtraction(inputFrame, mouthRoi, faceCoords):
+    # faceCoords = [x,y,w,h]
+    # x0 = mouthRoi[0][0]
+    # x0 = x0 - 20
+    x0 = faceCoords[0]
     y0 = mouthRoi[2][1]
     y0 = y0 - 20
-    x1 = mouthRoi[6][0]
-    x1 = x1 + 20
-    y1 = mouthRoi[9][1]
-    y1 = y1 + 20
+    x1 = faceCoords[0] + faceCoords[2]
+    # x1 = mouthRoi[6][0]
+    # x1 = x1 + 20
+    # y1 = mouthRoi[9][1]
+    # y1 = y1 + 20
+    y1 = faceCoords[1]+faceCoords[3]+20
     mouthPart = inputFrame[y0: y1, x0: x1]
     mouthPart = cv2.resize(mouthPart, (150, 100))
     return inputFrame, mouthPart
@@ -70,12 +74,13 @@ def mouthRegionExtraction(inputFrame, mouthRoi):
 if "__main__" == __name__:
 
     startTime = time.time()
-    videoPath = "../New-DataSet-Videos/S1/Adverb/again_0.mp4"
+    videoPath = "../Prototype-Test-Videos/Colors_1.mp4"
     frames = getVideoFrames(videoPath)
     detected = []
     for i, frame in enumerate(frames):
         detected.append(extractLipsFromFrame(frame))
         cv2.imshow(str(i), detected[-1])
+        #cv2.imshow(str(i), inputframe)
 
     print("Run Time: {} Seconds".format(time.time() - startTime))
     cv2.waitKey(0)
