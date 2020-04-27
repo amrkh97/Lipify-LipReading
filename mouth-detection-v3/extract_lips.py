@@ -42,7 +42,7 @@ def extractLipsFromFrame(inputFrame):
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI, faceCoords = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
-        return inputFrame, None, None
+        return []
     inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI, faceCoords)
     mouthRegion = cv2.resize(mouthRegion, (150, 100))
     mouthRegion = cv2.cvtColor(mouthRegion, cv2.COLOR_BGR2GRAY)
@@ -74,11 +74,18 @@ def mouthRegionExtraction(inputFrame, mouthRoi, faceCoords):
 if "__main__" == __name__:
 
     startTime = time.time()
-    videoPath = "../Prototype-Test-Videos/Colors_1.mp4"
+    videoPath = "../Prototype-Test-Videos/Colors_7.mp4"
     frames = getVideoFrames(videoPath)
+    # for i in range(0,len(frames)):
+    #     frames[i] = rotateImage(frames[i])
+    #     #frames[i] = resizeImage(frames[i])   
     detected = []
     for i, frame in enumerate(frames):
-        detected.append(extractLipsFromFrame(frame))
+        lips = extractLipsFromFrame(frame)
+        if len(lips) == 0:
+            print("failed to get face")
+            break
+        detected.append(lips)
         cv2.imshow(str(i), detected[-1])
         #cv2.imshow(str(i), inputframe)
 

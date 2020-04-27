@@ -28,3 +28,11 @@ def initializeDlib():
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor("../dlib-predictor.dat")
     return detector, predictor
+
+# ----------------------------------------------------------------------------
+# function used to rotate image
+# input: image
+# output: image rotated
+def rotateImage(img):
+    rotated = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+    return rotated
