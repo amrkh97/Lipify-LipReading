@@ -7,7 +7,7 @@ import numpy as np
 # input: none
 # output: image
 def readFrame():
-    img = cv2.imread('DataSet-Trial/close.png')
+    img = cv2.imread('DataSet-Trial/face2.jpg')
     return img
 
 

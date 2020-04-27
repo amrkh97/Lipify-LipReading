@@ -2,6 +2,7 @@ import time
 
 from FR import *
 from lip_detection import *
+import  numpy as np
 
 
 def getVideoFrames(videoPath):
@@ -54,13 +55,13 @@ def extractLipsFromFrame(inputFrame):
 # output: mouth region image
 def mouthRegionExtraction(inputFrame, mouthRoi):
     x0 = mouthRoi[0][0]
-    x0 = x0 - 10
+    x0 = x0 - 20
     y0 = mouthRoi[2][1]
-    y0 = y0 - 10
+    y0 = y0 - 20
     x1 = mouthRoi[6][0]
-    x1 = x1 + 10
+    x1 = x1 + 20
     y1 = mouthRoi[9][1]
-    y1 = y1 + 10
+    y1 = y1 + 20
     mouthPart = inputFrame[y0: y1, x0: x1]
     mouthPart = cv2.resize(mouthPart, (150, 100))
     return inputFrame, mouthPart
