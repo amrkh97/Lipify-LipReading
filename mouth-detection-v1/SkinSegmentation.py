@@ -23,8 +23,8 @@ def segmentSkin(img):
     Y = 0.299 * R + 0.587 * G + 0.114 * B
     Cb = (B - Y) * 0.564 + 128
     Cr = (R - Y) * 0.713 + 128
-
-    skin_one = np.zeros((len(img), len(img[0])))
+    skin_one = createMatrix(len(img), len(img[0]), 0)
+    # skin_one = np.zeros((len(img), len(img[0])))
     skin_one_h = np.logical_and(h >= 0.0, h <= 50.0)
     skin_one_s = np.logical_and(s >= 0.23, s <= 0.68)
     skin_one_rgb = np.logical_and(
@@ -32,7 +32,8 @@ def segmentSkin(img):
         np.absolute(np.array(R) - np.array(G)) > 15)
     skin_one = np.logical_and(np.logical_and(skin_one_h, skin_one_rgb), skin_one_s)
 
-    skin_two = np.zeros((len(img), len(img[0])))
+    skin_two = createMatrix(len(img), len(img[0]), 0)
+    # skin_two = np.zeros((len(img), len(img[0])))
     skin_two_rgb = np.logical_and(
         np.logical_and(np.logical_and(np.logical_and(np.logical_and(R > 95, G > 40), B > 20), R > G), R > B),
         np.absolute(np.array(R) - np.array(G)) > 15)
@@ -111,9 +112,10 @@ def extractSkin(img, skinMask):
 
     mask = np.zeros(edges.shape)
     cv2.fillConvexPoly(mask, max_contour[0], (255))
-
-    mask = cv2.dilate(mask, None, iterations=MASK_DILATE_ITER)
-    mask = cv2.erode(mask, None, iterations=MASK_ERODE_ITER)
+    mask = operation(mask, kernel, 0, "dilation")
+    mask = operation(mask, kernel, 0, "erosion")
+    # mask = cv2.dilate(mask, None, iterations=MASK_DILATE_ITER)
+    # mask = cv2.erode(mask, None, iterations=MASK_ERODE_ITER)
     # mask = cv2.GaussianBlur(mask, (BLUR, BLUR), 0)
     mask = gaussian_blur2(mask, BLUR, 0)
 

@@ -1,6 +1,14 @@
 import cv2
 import numpy as np
 
+# ----------------------------------------------------------------------------
+# function used to read a frame from file
+# input: none
+# output: image
+def readFrame():
+    img = cv2.imread('DataSet-Trial/close.png')
+    cv2.imshow('img', img)
+    return img
 
 # ----------------------------------------------------------------------------
 # function used to smooth from image
@@ -153,3 +161,33 @@ def operation(image, kernel, padding=0, operation=None):
             vertical_pos += 1
         return img_operated
     return "Operation Required"
+
+
+# -----------------------------------------------------------------------------------------
+# function that extract frames from video
+# input: video path
+# output: List Of Images
+def getVideoFrames(videoPath):
+    """Function to return a video's frames in a list
+    :type videoPath: String
+    """
+    vidcap = cv2.VideoCapture(videoPath)
+    success, image = vidcap.read()
+    allFrames = []
+    while success:
+        allFrames.append(image)
+        success, image = vidcap.read()
+    return allFrames
+
+# -----------------------------------------------------------------------------------------
+# function that Create a default value matrix
+# input: length, width, default value
+# output: matrix of default values
+def createMatrix(rowCount, colCount, data):
+    mat = []
+    for i in range(rowCount):
+        rowList = []
+        for j in range(colCount):
+            rowList.append(data)
+        mat.append(rowList)
+    return mat
