@@ -1,0 +1,13 @@
+Model,Video Name,Time Taken,Accuracy
+Dlib,Colors_7.mp4,128.7290671,100
+Dlib,Colors_6.mp4,112.8896329,100
+Dlib,Colors_2.mp4,52.39718199,100
+Dlib,Adverb_1.mp4,52.34809804,100
+HaarCascade,Colors_7.mp4,2.498553991317749,97.2972972972973
+HaarCascade,Colors_6.mp4,2.4858312606811523,78.125
+HaarCascade,Colors_2.mp4,0.7364306449890137,100.0
+HaarCascade,Adverb_1.mp4,0.5391595363616943,100.0
+SkinDetectionAFunctions,Adverb_1.mp4,6.879300594329834,36.666666666666664
+SkinDetectionAFunctions,Colors_2.mp4,6.738977432250977,90.0
+SkinDetectionAFunctions,Colors_7.mp4,17.425764799118042,14.864864864864865
+SkinDetectionAFunctions,Colors_6.mp4,15.03311800956726,54.6875
