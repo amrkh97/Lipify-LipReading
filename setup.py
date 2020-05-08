@@ -20,5 +20,6 @@ setup(
                       "pandas>=1.0.1",
                       "python>=3.7.1",
                       'matplotlib',
-                      "Pillow"]
+                      "Pillow",
+                      "pydot"]
 )
