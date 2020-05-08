@@ -20,13 +20,13 @@ import pandas as pd
 
 if __name__ == "__main__":
 
-    dirName = 'Model_Confusion_Matrix'
+    dirName = 'Project_Insights/Model_Confusion_Matrix'
     if not os.path.exists(dirName):
         os.makedirs(dirName)
 
     if not os.path.isfile('file_path'):
         df = pd.DataFrame(list())
-        df.to_csv('Model_Classification_Report.csv')
+        df.to_csv('Project_Insights/Model_Classification_Report.csv')
 
     adverb_names = ['again', 'now', 'please', 'soon']
     colors_names = ['blue', 'green', 'red', 'white']
@@ -79,7 +79,7 @@ if __name__ == "__main__":
         report = classification_report(test_data_gen.classes, y_pred,
                                        output_dict=True, target_names=target_names)
         report = pd.DataFrame(report).transpose()
-        report.to_csv('Model_Classification_Report.csv', mode='a', header=True)
+        report.to_csv('Project_Insights/Model_Classification_Report.csv', mode='a', header=True)
 
         # Save Figure to png:
         plt.figure()
@@ -88,4 +88,4 @@ if __name__ == "__main__":
 
         plt.xlabel('Predicted Labels')
         plt.ylabel('Actual Labels')
-        plt.savefig('Model_Confusion_Matrix/{}.png'.format(category))
+        plt.savefig('Project_Insights/Model_Confusion_Matrix/{}.png'.format(category))

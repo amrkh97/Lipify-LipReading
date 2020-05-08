@@ -58,7 +58,7 @@ def verifyTrainCategory(categoryName='Adverb', batch_size=16):
 if __name__ == "__main__":
     categoriesList = ['Adverb', 'Alphabet', 'Commands', 'Colors', 'Numbers', 'Prepositions']
 
-    with open('Project_Accuracy.csv', 'w', newline='') as csvfile:
+    with open('Project_Insights/Project_Accuracy.csv', 'w', newline='') as csvfile:
         filewriter = csv.writer(csvfile)
         filewriter.writerow(['Category', 'Train Accuracy', 'Test Accuracy'])
 
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         print("Category {}: Train --> {}%, Test --> {}%".format(category, categoryTrainAccuracy,
                                                                 categoryTestAccuracy))
 
-        with open('Project_Accuracy.csv', 'a', newline='') as csvfile:
+        with open('Project_Insights/Project_Accuracy.csv', 'a', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             filewriter.writerow([category, categoryTrainAccuracy, categoryTestAccuracy])
