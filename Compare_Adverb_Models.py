@@ -79,8 +79,7 @@ def evaluateAdverbCNN_VGG(test_set_path, model_path):
     return round(val_acc[1] * 100, 2)
 
 
-if __name__ == "__main__":
-    start_time = time.time()
+def validateAdverbModels():
     commonPath = 'C:/Users/amrkh/Desktop/'
     accuracyDict = {}
 
@@ -99,10 +98,16 @@ if __name__ == "__main__":
     # Adverb CNN - Numpy Implementation -:
     CNN_NP_testSet = commonPath + 'Lipify-LipReading/Compressed-Dataset/'
     CNN_NP_savedModel = commonPath + 'Lipify-LipReading/CNN-Implementation/'
-    numberOfTestExample = 10
+    numberOfTestExample = 20
     accuracyDict['Numpy'] = evaluateAdverbCNN_NP(CNN_NP_testSet, CNN_NP_savedModel, numberOfTestExample)
 
     print("Different Models Accuracy:")
     print(accuracyDict)
+    return accuracyDict
+
+
+if __name__ == "__main__":
+    start_time = time.time()
+    _ = validateAdverbModels()
     runTime = round(time.time() - start_time, 2)
     print("Run Time: {} Seconds".format(runTime))
