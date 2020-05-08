@@ -95,6 +95,6 @@ def get_box2(img, RGB_img):
         masks[masks == 1] = 255
         masks[masks > 0] = 255
         img[masks == 0] = 0
-        cv2.imshow("bounding box", img)
-        cv2.waitKey(0)
+        # cv2.imshow("bounding box", img)
+        # cv2.waitKey(0)
         return bounding_boxes, img
