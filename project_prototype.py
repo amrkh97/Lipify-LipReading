@@ -89,11 +89,8 @@ def createClassLabelsDict():
     return D
 
 
-if __name__ == "__main__":
-    start_time = time.time()
-    # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
+def prototypeProject(receivedFilesFromServer):
     AllClassLabels = createClassLabelsDict()
-    receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
     mylist = glob.glob(receivedFilesFromServer)
     mylist.sort(key=lambda x: x.split('_')[-1])
     result = []
@@ -102,6 +99,16 @@ if __name__ == "__main__":
 
     result = " ".join(result)
     print(result)
+    return result
+
+
+if __name__ == "__main__":
+    start_time = time.time()
+    # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
+    # receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
+    receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
+    result = prototypeProject(receivedFilesFromServer)
+
     predictionFilePath = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/prediction.txt'
 
     predictionFile = open(predictionFilePath, "w")  # write mode
