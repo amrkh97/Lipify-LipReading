@@ -4,14 +4,6 @@ import numpy as np
 
 
 # ----------------------------------------------------------------------------
-# function used to read a frame from file
-# input: none
-# output: image
-def readFrame():
-    img = cv2.imread('DataSet-Trial/open.png')
-    cv2.imshow('img', img)
-    return img
-# ----------------------------------------------------------------------------
 # function used to read Video and get its frames
 # input: Video Path
 # output: List of frames

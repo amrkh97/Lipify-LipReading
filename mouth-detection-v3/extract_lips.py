@@ -82,7 +82,7 @@ if "__main__" == __name__:
     #     frames[i] = rotateImage(frames[i])
     #     #frames[i] = resizeImage(frames[i])   
     detected = []
-    corrcount = 0
+    # corrcount = 0
     for i, frame in enumerate(frames):
         lips = extractLipsFromFrame(frame)
         if len(lips) == 0:
@@ -90,15 +90,15 @@ if "__main__" == __name__:
             detected.append(frame)
         else:
             detected.append(lips)
-            corrcount+=1
-        #cv2.imshow(str(i), detected[-1])
+            # corrcount+=1
+        cv2.imshow(str(i), detected[-1])
         #cv2.imshow(str(i), inputframe)
-    accuracy = (corrcount/len(frames))*100
-    with open('../Image-Processing-Test/ModelsTiming.csv', 'a', newline='') as f:
-        writer = csv.writer(f)
-        # writer.writerow(['Model', 'Video Name', 'Time Taken', 'Accuracy'])
-        vidName = videoPath.split('/')
-        writer.writerow(['Dlib', vidName[len(vidName)-1], time.time() - startTime, accuracy])
+    # accuracy = (corrcount/len(frames))*100
+    # with open('../Image-Processing-Test/ModelsTiming.csv', 'a', newline='') as f:
+    #     writer = csv.writer(f)
+    #     # writer.writerow(['Model', 'Video Name', 'Time Taken', 'Accuracy'])
+    #     vidName = videoPath.split('/')
+    #     writer.writerow(['Dlib', vidName[len(vidName)-1], time.time() - startTime, accuracy])
 
     print("Run Time: {} Seconds".format(time.time() - startTime))
     cv2.waitKey(0)

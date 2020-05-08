@@ -2,14 +2,6 @@ import cv2
 import dlib
 
 
-# ----------------------------------------------------------------------------
-# function used to read a frame from file
-# input: none
-# output: image
-def readFrame(filesname):
-    img = cv2.imread(filesname)
-    return img
-
 
 # ----------------------------------------------------------------------------
 # function used to resize image
