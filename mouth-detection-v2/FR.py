@@ -2,16 +2,22 @@ import cv2
 import numpy as np
 
 
+
 # ----------------------------------------------------------------------------
-# function used to read a frame from file
-# input: none
-# output: image
-def readFrame():
-    img = cv2.imread('DataSet-Trial/close.png')
-    cv2.imshow('img', img)
-    return img
-
-
+# function used to read Video and get its frames
+# input: Video Path
+# output: List of frames
+def getVideoFrames(videoPath):
+    """Function to return a video's frames in a list
+    :type videoPath: String
+    """
+    vidcap = cv2.VideoCapture(videoPath)
+    success, image = vidcap.read()
+    allFrames = []
+    while success:
+        allFrames.append(image)
+        success, image = vidcap.read()
+    return allFrames
 # ----------------------------------------------------------------------------
 # function used to smooth from image
 # input: image

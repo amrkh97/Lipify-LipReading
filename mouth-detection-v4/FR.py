@@ -1,16 +1,6 @@
 import cv2
 import numpy as np
 
-
-# ----------------------------------------------------------------------------
-# function used to read a frame from file
-# input: none
-# output: image
-def readFrame():
-    img = cv2.imread('DataSet-Trial/face2.jpg')
-    return img
-
-
 # ----------------------------------------------------------------------------
 # function used to smooth from image
 # input: image
