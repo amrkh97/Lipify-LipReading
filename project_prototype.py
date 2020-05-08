@@ -41,6 +41,9 @@ def predictOneVideo(classDict, videoPath):
     videoPath = videoPath.replace("\\", "/")
     path = videoPath.split('/')
     categoryCNN = path[-1].split('_')[0]
+    if categoryCNN == '':
+        return "Error! No videos were passed"
+
     savedModelPath += categoryCNN
     dictForClass = classDict[categoryCNN]
     cnnModel = getTrainedModel(savedModelPath, categoryCNN)
@@ -93,13 +96,13 @@ def prototypeProject(receivedFilesFromServer):
     AllClassLabels = createClassLabelsDict()
     mylist = glob.glob(receivedFilesFromServer)
     mylist.sort(key=lambda x: x.split('_')[-1])
-    result = []
+    resultString = []
     for video in mylist:
-        result.append(predictOneVideo(AllClassLabels, video))
+        resultString.append(predictOneVideo(AllClassLabels, video))
 
-    result = " ".join(result)
-    print(result)
-    return result
+    resultString = " ".join(resultString)
+    print(resultString)
+    return resultString
 
 
 if __name__ == "__main__":

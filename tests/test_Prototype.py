@@ -10,6 +10,11 @@ class PrototypeTestCase(unittest.TestCase):
         videosPath = "../Prototype-Test-Videos/*.mp4"
         self.assertEqual(project_prototype.prototypeProject(videosPath), result)
 
+    def test_NoVideos(self):
+        result = "Error! No videos were passed"
+        videosPath = "../Prototype-Test-Videos/"
+        self.assertEqual(project_prototype.prototypeProject(videosPath), result)
+
 
 if __name__ == '__main__':
     unittest.main()
