@@ -3,6 +3,7 @@ from canny import *
 from colorspace import *
 
 from FR import *
+from Numpy import *
 
 
 # ----------------------------------------------------------------------------
@@ -13,40 +14,77 @@ def segmentSkin(img):
     B = img[:, :, 0]
     G = img[:, :, 1]
     R = img[:, :, 2]
-
+    #----------------------------------------------------
     # hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     h, s, v = getHSV(img)
     # h=hsv[:,:,0]
     # s=hsv[:,:,1]
     # v=hsv[:,:,2]
-
+    #----------------------------------------------------
     Y = 0.299 * R + 0.587 * G + 0.114 * B
     Cb = (B - Y) * 0.564 + 128
     Cr = (R - Y) * 0.713 + 128
+    #----------------------------------------------------
     skin_one = createMatrix(len(img), len(img[0]), 0)
     # skin_one = np.zeros((len(img), len(img[0])))
-    skin_one_h = np.logical_and(h >= 0.0, h <= 50.0)
-    skin_one_s = np.logical_and(s >= 0.23, s <= 0.68)
-    skin_one_rgb = np.logical_and(
-        np.logical_and(np.logical_and(np.logical_and(np.logical_and(R > 95, G > 40), B > 20), R > G), R > B),
-        np.absolute(np.array(R) - np.array(G)) > 15)
-    skin_one = np.logical_and(np.logical_and(skin_one_h, skin_one_rgb), skin_one_s)
-
+    #----------------------------------------------------
+    # skin_one_h = np.logical_and(h >= 0.0, h <= 50.0)
+    skin_one_h = logic_and(h >= 0.0, h <= 50.0)
+    #----------------------------------------------------
+    # skin_one_s = np.logical_and(s >= 0.23, s <= 0.68)
+    skin_one_s = logic_and(s >= 0.23, s <= 0.68)
+    #----------------------------------------------------
+    # skin_one_rgb = np.logical_and(
+    #     np.logical_and(np.logical_and(np.logical_and(np.logical_and(R > 95, G > 40), B > 20), R > G), R > B),
+    #     np.absolute(np.array(R) - np.array(G)) > 15)
+    logic1 = logic_and(R > 95, G > 40)
+    logic2 = logic_and_list(logic1, B > 20)
+    logic3 = logic_and_list(logic2, R > G)
+    logic4 = logic_and_list(logic3, R > B)
+    logic5 = np.absolute(np.array(R) - np.array(G))
+    skin_one_rgb = logic_and_list(logic4 ,logic5 > 15)
+    #----------------------------------------------------
+    # skin_one = np.logical_and(np.logical_and(skin_one_h, skin_one_rgb), skin_one_s)
+    skin_one = logic_and_list(logic_and_list(skin_one_h, skin_one_rgb), skin_one_s)
+    #----------------------------------------------------
     skin_two = createMatrix(len(img), len(img[0]), 0)
     # skin_two = np.zeros((len(img), len(img[0])))
-    skin_two_rgb = np.logical_and(
-        np.logical_and(np.logical_and(np.logical_and(np.logical_and(R > 95, G > 40), B > 20), R > G), R > B),
-        np.absolute(np.array(R) - np.array(G)) > 15)
-    skin_two_YCbCr = np.logical_and(np.logical_and(np.logical_and(np.logical_and(
-        np.logical_and(np.logical_and(np.logical_and(Cr > 135, Cb > 85), Y > 80), Cr <= ((1.5862 * Cb) + 20)),
-        Cr >= ((0.3448 * Cb) + 76.2069)),
-                                                                  Cr >= ((-4.5652 * Cb) + 234.5652)),
-                                                   Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
-    skin_two = np.logical_and(skin_two_YCbCr, skin_two_rgb)
-    skin = np.logical_or(skin_one, skin_two)
+    #----------------------------------------------------
+    # skin_two_rgb = np.logical_and(
+    #     np.logical_and(np.logical_and(np.logical_and(np.logical_and(R > 95, G > 40), B > 20), R > G), R > B),
+    #     np.absolute(np.array(R) - np.array(G)) > 15)
+    logic1 = logic_and(R > 95, G > 40)
+    logic2 = logic_and_list(logic1, B > 20)
+    logic3 = logic_and_list(logic2, R > G)
+    logic4 = logic_and_list(logic3, R > B)
+    logic5 = np.absolute(np.array(R) - np.array(G))
+    skin_two_rgb = logic_and_list(logic4 ,logic5 > 15)
+    #----------------------------------------------------
+    # skin_two_YCbCr = np.logical_and(np.logical_and(np.logical_and(np.logical_and(
+    #     np.logical_and(np.logical_and(np.logical_and(Cr > 135, Cb > 85), Y > 80), Cr <= ((1.5862 * Cb) + 20)),
+    #     Cr >= ((0.3448 * Cb) + 76.2069)), Cr >= ((-4.5652 * Cb) + 234.5652)),
+    #                                                Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
+    logic1 = logic_and(Cr > 135, Cb > 85)
+    logic2 = logic_and_list(logic1, Y > 80)
+    logic3 = logic_and_list(logic2, Cr <= ((1.5862 * Cb) + 20))
+    logic4 = logic_and_list(logic3, Cr >= ((0.3448 * Cb) + 76.2069))
+    logic5 = logic_and_list(logic4, Cr >= ((-4.5652 * Cb) + 234.5652))
+    logic6 = logic_and_list(logic5, Cr <= ((-1.15 * Cb) + 301.75))
+    skin_two_YCbCr = logic_and_list(logic6 , Cr <= ((-2.2857 * Cb) + 432.85))
+    #----------------------------------------------------
+    # skin_two = np.logical_and(skin_two_YCbCr, skin_two_rgb)
+    skin_two = logic_and_list(skin_two_YCbCr, skin_two_rgb)
+    #----------------------------------------------------
+    # skin = np.logical_or(skin_one, skin_two)
+    skin = logic_or_list(skin_one, skin_two)
+    #----------------------------------------------------
     skin_image = np.copy(img)
+    #----------------------------------------------------
     skin_image[skin] = 255
-    skin_image[np.logical_not(skin)] = 0
+    #----------------------------------------------------
+    # skin_image[np.logical_not(skin)] = 0
+    skin_image[logic_not(skin)] = 0
+    #----------------------------------------------------
     holes_filled_skin_image = fill_holes(skin_image)
     holes_filled_skin_image = holes_filled_skin_image.astype(np.uint8)
     # holes_filled_skin_image = cv2.cvtColor(holes_filled_skin_image,cv2.COLOR_RGB2GRAY)

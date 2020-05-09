@@ -179,15 +179,4 @@ def getVideoFrames(videoPath):
         success, image = vidcap.read()
     return allFrames
 
-# -----------------------------------------------------------------------------------------
-# function that Create a default value matrix
-# input: length, width, default value
-# output: matrix of default values
-def createMatrix(rowCount, colCount, data):
-    mat = []
-    for i in range(rowCount):
-        rowList = []
-        for j in range(colCount):
-            rowList.append(data)
-        mat.append(rowList)
-    return mat
+
