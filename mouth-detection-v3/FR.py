@@ -2,7 +2,6 @@ import cv2
 import dlib
 
 
-
 # ----------------------------------------------------------------------------
 # function used to resize image
 # input: image, dim = (x,y)
@@ -20,6 +19,7 @@ def initializeDlib():
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor("../dlib-predictor.dat")
     return detector, predictor
+
 
 # ----------------------------------------------------------------------------
 # function used to rotate image

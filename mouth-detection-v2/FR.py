@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 
 
-
 # ----------------------------------------------------------------------------
 # function used to read Video and get its frames
 # input: Video Path
@@ -18,6 +17,8 @@ def getVideoFrames(videoPath):
         allFrames.append(image)
         success, image = vidcap.read()
     return allFrames
+
+
 # ----------------------------------------------------------------------------
 # function used to smooth from image
 # input: image

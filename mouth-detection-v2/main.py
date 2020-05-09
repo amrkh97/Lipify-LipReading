@@ -1,10 +1,11 @@
+import time
+
 from FaceDetection import *
 from SkinSegmentation import *
 
 from FR import *
 from mouthDetection import *
-import time
-import csv
+
 
 def getMouth(img):
     # img = readFrame()
@@ -43,6 +44,7 @@ def getMouth(img):
         # cv2.waitKey(0)
         return mouth_region, True
     return img, False
+
 
 # frames reading
 # function that calls (FR.py) functions that is used to inquire a filter cleared image of frame (preprossesing)

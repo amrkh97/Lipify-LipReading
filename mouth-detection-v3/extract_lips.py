@@ -1,9 +1,9 @@
 import time
 
-from FR import *
-from lip_detection import *
-import  numpy as np
-import csv
+import numpy as np
+
+from FR import initializeDlib, resizeImage
+from lip_detection import lipDetection
 
 
 def getVideoFrames(videoPath):
@@ -65,7 +65,7 @@ def mouthRegionExtraction(inputFrame, mouthRoi, faceCoords):
     # x1 = x1 + 20
     # y1 = mouthRoi[9][1]
     # y1 = y1 + 20
-    y1 = faceCoords[1]+faceCoords[3]+20
+    y1 = faceCoords[1] + faceCoords[3] + 20
     mouthPart = inputFrame[y0: y1, x0: x1]
     mouthPart = cv2.resize(mouthPart, (150, 100))
     return inputFrame, mouthPart
