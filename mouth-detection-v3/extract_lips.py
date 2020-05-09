@@ -36,10 +36,9 @@ def extractLips(fileName):
     return img, mouthRegion, mouthROI
 
 
-def extractLipsFromFrame(inputFrame):
+def extractLipsFromFrame(inputFrame, detector, predictor):
     """Function to extract lips from a single frame"""
     img = np.copy(inputFrame)
-    detector, predictor = initializeDlib()
     resized = resizeImage(inputFrame)
     inputFrame, mouthROI, faceCoords = lipDetection(resized, detector, predictor)
     if len(mouthROI) == 0:
@@ -74,32 +73,33 @@ def mouthRegionExtraction(inputFrame, mouthRoi, faceCoords):
 
 if "__main__" == __name__:
 
-    startTime = time.time()
-    # Adverb_1
-    videoPath = "../Prototype-Test-Videos/Adverb_1.mp4"
-    frames = getVideoFrames(videoPath)
-    # for i in range(0,len(frames)):
-    #     frames[i] = rotateImage(frames[i])
-    #     #frames[i] = resizeImage(frames[i])   
-    detected = []
-    # corrcount = 0
-    for i, frame in enumerate(frames):
-        lips = extractLipsFromFrame(frame)
-        if len(lips) == 0:
-            print("failed to get face")
-            detected.append(frame)
-        else:
-            detected.append(lips)
-            # corrcount+=1
-        cv2.imshow(str(i), detected[-1])
-        #cv2.imshow(str(i), inputframe)
-    # accuracy = (corrcount/len(frames))*100
-    # with open('../Image-Processing-Test/ModelsTiming.csv', 'a', newline='') as f:
-    #     writer = csv.writer(f)
-    #     # writer.writerow(['Model', 'Video Name', 'Time Taken', 'Accuracy'])
-    #     vidName = videoPath.split('/')
-    #     writer.writerow(['Dlib', vidName[len(vidName)-1], time.time() - startTime, accuracy])
-
-    print("Run Time: {} Seconds".format(time.time() - startTime))
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    for i in range(1,1000):
+        startTime = time.time()
+        # Adverb_1
+        videoPath = "../Prototype-Test-Videos/s2/s2 "+"("+str(i)+")"+".mpg"
+        frames = getVideoFrames(videoPath)
+        detector, predictor = initializeDlib()
+        # for i in range(0,len(frames)):
+        #     frames[i] = rotateImage(frames[i])
+        #     #frames[i] = resizeImage(frames[i])   
+        detected = []
+        corrcount = 0
+        for i, frame in enumerate(frames):
+            lips = extractLipsFromFrame(frame, detector, predictor)
+            if len(lips) == 0:
+                # print("failed to get face")
+                detected.append(frame)
+            else:
+                detected.append(lips)
+                corrcount+=1
+            # cv2.imshow(str(i), detected[-1])
+            # cv2.imshow(str(i), inputframe)
+        accuracy = (corrcount/len(frames))*100
+        with open('../Project_Insights/ModelsTiming.csv', 'a', newline='') as f:
+            writer = csv.writer(f)
+            # writer.writerow(['Model', 'Video Name', 'Time Taken', 'Accuracy'])
+            vidName = videoPath.split('/')
+            writer.writerow(['Dlib', vidName[len(vidName)-1], time.time() - startTime, accuracy])
+        print("Run Time: {} Seconds".format(time.time() - startTime))
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()

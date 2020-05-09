@@ -76,6 +76,8 @@ def extractSkin(img, skinMask):
     edges = cv2.erode(edges, None)
     contour_info = []
     contours, _ = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+    if len(contours) == 0:
+        return []
     cntf = []
     for c in contours:
         contour_info.append((

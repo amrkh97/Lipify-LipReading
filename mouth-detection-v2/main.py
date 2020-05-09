@@ -17,6 +17,8 @@ def getMouth(img):
     skin_mask = segmentSkin(smoothed_img)
     # remove background
     skin_img = extractSkin(smoothed_img, skin_mask)
+    if len(skin_img) == 0:
+        return img, False
     # get binary cleaned mask
     binary_cleaned_skin = binaryImage(skin_img)
     # draw box
@@ -44,31 +46,33 @@ def getMouth(img):
 
 # frames reading
 # function that calls (FR.py) functions that is used to inquire a filter cleared image of frame (preprossesing)
-startTime = time.time()
-# Adverb_1
-videoPath = "../Prototype-Test-Videos/Adverb_1.mp4"
-frames = getVideoFrames(videoPath)
-detected = []
-# corrcount = 0
-for i, frame in enumerate(frames):
-    lips, status = getMouth(frame)
-    if status == False:
-        print("failed to get face")
-        frame = resizeImage(frame, (150, 100))
-        detected.append(frame)
-    else:
-        detected.append(lips)
-        # corrcount+=1
-    cv2.imshow(str(i), detected[-1])
-    #cv2.imshow(str(i), inputframe)
-# accuracy = (corrcount/len(frames))*100
-# with open('../Image-Processing-Test/ModelsTiming.csv', 'a', newline='') as f:
-#     writer = csv.writer(f)
-#     # writer.writerow(['Model', 'Video Name', 'Time Taken', 'Accuracy'])
-#     vidName = videoPath.split('/')
-#     writer.writerow(['SkinDetectionAFunctions', vidName[len(vidName)-1], time.time() - startTime, accuracy])
+for j in range(1,301):
+    startTime = time.time()
+    # Adverb_1
+    videoPath = "../Prototype-Test-Videos/s2/s2 "+"("+str(j)+")"+".mpg"
+    frames = getVideoFrames(videoPath)
+    detected = []
+    corrcount = 0
+    for i, frame in enumerate(frames):
+        lips, status = getMouth(frame)
+        if status == False:
+            # print("failed to get face")
+            frame = resizeImage(frame, (150, 100))
+            detected.append(frame)
+        else:
+            detected.append(lips)
+            corrcount+=1
+        # cv2.imshow(str(i), detected[-1])
+        # cv2.imshow(str(i), inputframe)
 
-print("Run Time: {} Seconds".format(time.time() - startTime))
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    accuracy = (corrcount/len(frames))*100
+    with open('../Project_Insights/ModelsTiming.csv', 'a', newline='') as f:
+        writer = csv.writer(f)
+        # writer.writerow(['Model', 'Video Name', 'Time Taken', 'Accuracy'])
+        vidName = videoPath.split('/')
+        writer.writerow(['SkinDetectionAFunctions', vidName[len(vidName)-1], time.time() - startTime, accuracy])
+
+    print(" {} Run Time: {} Seconds".format(j,time.time() - startTime))
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
