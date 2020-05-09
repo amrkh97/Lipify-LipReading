@@ -17,6 +17,8 @@ def getMouth(img):
     skin_mask = segmentSkin(smoothed_img)
     # remove background
     skin_img = extractSkin(smoothed_img, skin_mask)
+    if len(skin_img) == 0:
+        return img, False
     # get binary cleaned mask
     binary_cleaned_skin = binaryImage(skin_img)
     # draw box
