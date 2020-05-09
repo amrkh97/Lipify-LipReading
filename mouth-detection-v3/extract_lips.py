@@ -1,9 +1,9 @@
 import time
 
-from FR import *
-from lip_detection import *
-import  numpy as np
-import csv
+import numpy as np
+
+from FR import initializeDlib, resizeImage
+from lip_detection import lipDetection
 
 
 def getVideoFrames(videoPath):
@@ -17,23 +17,6 @@ def getVideoFrames(videoPath):
         allFrames.append(image)
         success, image = vidcap.read()
     return allFrames
-
-
-# ----------------------------------------------------------------------------
-# function used to extract lips points
-# input: frame Name + extension
-# output: frame, mouth_roi points pair vector
-def extractLips(fileName):
-    img = readFrame(fileName)
-    detector, predictor = initializeDlib()
-
-    resized = resizeImage(img)
-
-    inputFrame, mouthROI, faceCoords = lipDetection(resized, detector, predictor)
-    if len(mouthROI) == 0:
-        return inputFrame, None, None
-    inputFrame, mouthRegion = mouthRegionExtraction(inputFrame, mouthROI, faceCoords)
-    return img, mouthRegion, mouthROI
 
 
 def extractLipsFromFrame(inputFrame):
@@ -66,7 +49,7 @@ def mouthRegionExtraction(inputFrame, mouthRoi, faceCoords):
     # x1 = x1 + 20
     # y1 = mouthRoi[9][1]
     # y1 = y1 + 20
-    y1 = faceCoords[1]+faceCoords[3]+20
+    y1 = faceCoords[1] + faceCoords[3] + 20
     mouthPart = inputFrame[y0: y1, x0: x1]
     mouthPart = cv2.resize(mouthPart, (150, 100))
     return inputFrame, mouthPart
@@ -92,7 +75,7 @@ if "__main__" == __name__:
             detected.append(lips)
             # corrcount+=1
         cv2.imshow(str(i), detected[-1])
-        #cv2.imshow(str(i), inputframe)
+        # cv2.imshow(str(i), inputframe)
     # accuracy = (corrcount/len(frames))*100
     # with open('../Image-Processing-Test/ModelsTiming.csv', 'a', newline='') as f:
     #     writer = csv.writer(f)

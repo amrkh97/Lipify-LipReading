@@ -1,10 +1,11 @@
+import time
+
 from FaceDetection import *
 from SkinSegmentation import *
 
 from FR import *
 from mouthDetection import *
-import time
-import csv
+
 
 def getMouth(img):
     # img = readFrame()
@@ -42,6 +43,7 @@ def getMouth(img):
         return mouth_region, True
     return img, False
 
+
 # frames reading
 # function that calls (FR.py) functions that is used to inquire a filter cleared image of frame (preprossesing)
 startTime = time.time()
@@ -52,7 +54,7 @@ detected = []
 # corrcount = 0
 for i, frame in enumerate(frames):
     lips, status = getMouth(frame)
-    if status == False:
+    if not status:
         print("failed to get face")
         frame = resizeImage(frame, (150, 100))
         detected.append(frame)
@@ -60,15 +62,13 @@ for i, frame in enumerate(frames):
         detected.append(lips)
         # corrcount+=1
     cv2.imshow(str(i), detected[-1])
-    #cv2.imshow(str(i), inputframe)
+    # cv2.imshow(str(i), inputframe)
 # accuracy = (corrcount/len(frames))*100
 # with open('../Image-Processing-Test/ModelsTiming.csv', 'a', newline='') as f:
 #     writer = csv.writer(f)
 #     # writer.writerow(['Model', 'Video Name', 'Time Taken', 'Accuracy'])
 #     vidName = videoPath.split('/')
 #     writer.writerow(['SkinDetectionAFunctions', vidName[len(vidName)-1], time.time() - startTime, accuracy])
-
 print("Run Time: {} Seconds".format(time.time() - startTime))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
