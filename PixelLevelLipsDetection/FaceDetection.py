@@ -61,5 +61,4 @@ def draw_RGB_with_Rect(RGB_image, Boundary_boxes, cp):
     x0 = x
     x1 = x + width
     cv2.rectangle(RGB_image, (x0, y0), (x1, y1), (255, 0, 0), 2)
-    # roi = RGB_image[y:y+height, x:x+width]
     return RGB_image, y0, y1, x0, x1
