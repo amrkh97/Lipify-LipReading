@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-from MatrixOperations import logic_and_list, logic_or_list, createMatrix, logic_not, mask_image
 from FR import operation
+from MatrixOperations import logic_and_list, logic_or_list, createMatrix, logic_not
 from canny import cannyDetection, getGrayImage, gaussian_blur2
 from colorspace import getHSV
 
@@ -15,59 +15,60 @@ def segmentSkin(img):
     B = img[:, :, 0]
     G = img[:, :, 1]
     R = img[:, :, 2]
-    #----------------------------------------------------
+    # ----------------------------------------------------
     h, s, v = getHSV(img)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     Y = 0.299 * R + 0.587 * G + 0.114 * B
     Cb = (B - Y) * 0.564 + 128
     Cr = (R - Y) * 0.713 + 128
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin_one = createMatrix(len(img), len(img[0]), 0)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin_one_h = logic_and_list(h >= 0.0, h <= 50.0)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin_one_s = logic_and_list(s >= 0.23, s <= 0.68)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     logic1 = logic_and_list(R > 95, G > 40)
     logic2 = logic_and_list(logic1, B > 20)
     logic3 = logic_and_list(logic2, R > G)
     logic4 = logic_and_list(logic3, R > B)
     logic5 = np.absolute(np.array(R) - np.array(G))
-    skin_one_rgb = logic_and_list(logic4 ,logic5 > 15)
-    #----------------------------------------------------
+    skin_one_rgb = logic_and_list(logic4, logic5 > 15)
+    # ----------------------------------------------------
     skin_one = logic_and_list(logic_and_list(skin_one_h, skin_one_rgb), skin_one_s)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin_two = createMatrix(len(img), len(img[0]), 0)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     logic1 = logic_and_list(R > 95, G > 40)
     logic2 = logic_and_list(logic1, B > 20)
     logic3 = logic_and_list(logic2, R > G)
     logic4 = logic_and_list(logic3, R > B)
     logic5 = np.absolute(np.array(R) - np.array(G))
-    skin_two_rgb = logic_and_list(logic4 ,logic5 > 15)
-    #----------------------------------------------------
+    skin_two_rgb = logic_and_list(logic4, logic5 > 15)
+    # ----------------------------------------------------
     logic1 = logic_and_list(Cr > 135, Cb > 85)
     logic2 = logic_and_list(logic1, Y > 80)
     logic3 = logic_and_list(logic2, Cr <= ((1.5862 * Cb) + 20))
     logic4 = logic_and_list(logic3, Cr >= ((0.3448 * Cb) + 76.2069))
     logic5 = logic_and_list(logic4, Cr >= ((-4.5652 * Cb) + 234.5652))
     logic6 = logic_and_list(logic5, Cr <= ((-1.15 * Cb) + 301.75))
-    skin_two_YCbCr = logic_and_list(logic6 , Cr <= ((-2.2857 * Cb) + 432.85))
-    #----------------------------------------------------
+    skin_two_YCbCr = logic_and_list(logic6, Cr <= ((-2.2857 * Cb) + 432.85))
+    # ----------------------------------------------------
     skin_two = logic_and_list(skin_two_YCbCr, skin_two_rgb)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin = logic_or_list(skin_one, skin_two)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin_image = np.copy(img)
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin_image[skin] = 255
-    #----------------------------------------------------
+    # ----------------------------------------------------
     skin_image[logic_not(skin)] = 0
-    #----------------------------------------------------
+    # ----------------------------------------------------
     holes_filled_skin_image = fill_holes(skin_image)
     holes_filled_skin_image = holes_filled_skin_image.astype(np.uint8)
     cv2.imshow('skin_image', holes_filled_skin_image)
     return holes_filled_skin_image
+
 
 # ----------------------------------------------------------------------------
 # function used to support segmentSkin function by filling holes in the skin mask from image
@@ -80,6 +81,8 @@ def fill_holes(img):
     res = operation(thresh_img, kernel, 1, "erosion")
     res = operation(res, kernel, 1, "dilation")
     return res
+
+
 # ----------------------------------------------------------------------------
 # function used to exract skin from image
 # input: image, skin mask
