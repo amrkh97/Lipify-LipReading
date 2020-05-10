@@ -1,5 +1,5 @@
 import os
-from array import *
+from array import array
 from random import shuffle
 
 from PIL import Image
