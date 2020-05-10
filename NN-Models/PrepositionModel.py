@@ -68,11 +68,11 @@ if __name__ == "__main__":
                                                                  class_mode='categorical',
                                                                  color_mode='grayscale')
 
-        C.Model = tf.keras.models.load_model(checkpoint_path)
+        # C.Model = tf.keras.models.load_model(checkpoint_path)
         callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy',
                                                     patience=8,
                                                     restore_best_weights=True,
-                                                    baseline=0.70)
+                                                    baseline=0.64)
 
         history = C.Model.fit(train_data_gen,
                               steps_per_epoch=3562,  # Number of images // Batch size
@@ -82,7 +82,7 @@ if __name__ == "__main__":
                               validation_steps=187,
                               callbacks=[callback])
 
-        # C.Model.save(checkpoint_path, save_format='tf')
+        C.Model.save(checkpoint_path, save_format='tf')
         # Evaluate Model:
-        # Accuracy: 64.64%
+        # Accuracy: 67.48%
         C.Model.evaluate(test_data_gen)
