@@ -1,4 +1,5 @@
-from FramesManipulations import *
+import cv2
+from FramesManipulations import getVideoFrames
 from HaarDetector import extractLipsHaarCascade
 
 if "__main__" == __name__:

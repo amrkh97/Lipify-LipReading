@@ -11,7 +11,7 @@ def getVideoFrames(videoPath):
     :type videoPath: String
     """
     vidcap = cv2.VideoCapture(videoPath)
-    if vidcap.isOpened() == False:
+    if not vidcap.isOpened():
         return [], False
     success, image = vidcap.read()
     allFrames = []
