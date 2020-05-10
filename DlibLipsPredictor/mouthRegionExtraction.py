@@ -1,7 +1,8 @@
+import cv2
 import numpy as np
 
 from dlibPredictor import lipDetection
-from dlibSupportFunctions import *
+from dlibSupportFunctions import resizeImage, initializeDlib, getVideoFrames
 
 
 # ----------------------------------------------------------------------------

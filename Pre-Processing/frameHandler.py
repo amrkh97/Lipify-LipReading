@@ -50,11 +50,8 @@ def getDatasetMaxFrames(Number_Of_Speakers):
     return dataSetMaxFrames
 
 
-'''
-{'Adverb': 32, 'Alphabet': 27, 'Colors': 23, 'Commands': 33, 'Numbers': 19, 'Prepositions': 23}
-'''
-
 if __name__ == "__main__":
     start_time = time.time()
     print(getDatasetMaxFrames(20))
     print("Run Time: {} Seconds.".format(time.time() - start_time))
+    # {'Adverb': 32, 'Alphabet': 27, 'Colors': 23, 'Commands': 33, 'Numbers': 19, 'Prepositions': 23}

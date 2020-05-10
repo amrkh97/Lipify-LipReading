@@ -9,7 +9,7 @@ def lipDetection(frame, detector, predictor):
     else:
         face = faces[0]
         x, y, w, h = face.left(), face.top(), face.width(), face.height()
-        faceCoords = [x,y,w,h]
+        faceCoords = [x, y, w, h]
         landmarks = predictor(gray, face)
         mouth_roi = []
         for n in range(48, 68):
