@@ -1,7 +1,7 @@
 Category,Train Accuracy,Test Accuracy
 Adverb,96.83,92.78
-Alphabet,93.22,45.42
+Alphabet,76.82,48.13
 Commands,99.95,90.47
 Colors,99.84,90.68
-Numbers,99.97,78.05
-Prepositions,93.55,64.64
+Numbers,95.74,78.61
+Prepositions,88.2,67.48
