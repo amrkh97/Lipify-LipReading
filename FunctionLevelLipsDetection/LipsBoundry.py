@@ -1,25 +1,22 @@
 import cv2
 import numpy as np
 
-from FR import binaryImage2
+from SuportFunctions import binaryImage2
 
 
+# ----------------------------------------------------------------------------
 def extractMouthArea(img, y0, y1, x0, x1):
-    # part = int((img.shape[0]*2)/3)
-    # mouth = img[part : img.shape[0] , : ]
     N = y1 - y0
     M = x1 - x0
     x2 = x0 + int(M / 3)
     y2 = y0 + int((5 * N / 8))
-    # y2=y0 + int((5*N/6))
     x3 = x2 + int((2 * M / 5))
     y3 = y2 + int((N / 2))
-    # y3= y2+int((N/3))
-    # cv2.rectangle(img,(x2,y2),(x3,y3),(0,255,0),2)
     mouth = img[y2: y3, x2: x3]
     return mouth
 
 
+# ----------------------------------------------------------------------------
 def mouthExtraction(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     R = img[:, :, 0]
@@ -30,14 +27,13 @@ def mouthExtraction(img):
     return I
 
 
+# ----------------------------------------------------------------------------
 def drawMouthContour(img):
-    # thresh, im_bw = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY) #im_bw: binary image
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
-    cv2.imshow("cont", img)
-    cv2.waitKey(0)
 
 
+# ----------------------------------------------------------------------------
 def draw_RGB_with_Rect2(RGB_image, Boundary_boxes, cp):
     ret, thresh = cv2.threshold(cp, 127, 255, 0)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -46,7 +42,6 @@ def draw_RGB_with_Rect2(RGB_image, Boundary_boxes, cp):
     y1 = y + height
     x0 = x
     x1 = x + width
-    # cv2.rectangle(RGB_image,(x0,y0),(x1,y1),(255,0,0),2)
     roi = RGB_image[y:y + height, x:x + width]
     return roi
 
@@ -95,6 +90,4 @@ def get_box2(img, RGB_img):
         masks[masks == 1] = 255
         masks[masks > 0] = 255
         img[masks == 0] = 0
-        # cv2.imshow("bounding box", img)
-        # cv2.waitKey(0)
         return bounding_boxes, img

@@ -3,11 +3,8 @@ import os
 import time
 
 import cv2
-import dlib
 import numpy as np
-from imutils import face_utils
 
-from extract_lips import mouthRegionExtraction
 from frameManipulator import FPS, getVideoDataFromPath
 
 commands = ['bin', 'lay', 'place', 'set']
@@ -82,28 +79,6 @@ def createCNNDataDirectories():
             os.makedirs(dirName)
 
 
-def getFacePoints(detector, predictor, image):
-    """Function to get facial points using dlib"""
-    rects = detector(image, 1)
-    mouthPoints = []
-    for (i, rect) in enumerate(rects):
-        shape = predictor(image, rect)
-        shape = face_utils.shape_to_np(shape)
-        mouthPoints = shape[49:]
-    return mouthPoints
-
-
-def extractLips(detector, predictor, frame):
-    """Function to extract lips from a frame"""
-    mouthPoints = getFacePoints(detector, predictor, frame)
-    if len(mouthPoints) == 0:
-        f = cv2.resize(frame, (150, 100))
-        return f
-    inputFrame, mouthRegion = mouthRegionExtraction(frame, mouthPoints)
-    mouthRegion = cv2.resize(mouthRegion, (150, 100))
-    return mouthRegion
-
-
 def extractLipsHaarCascade(haarDetector, frame):
     """Function to extract lips from a frame"""
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -119,21 +94,6 @@ def extractLipsHaarCascade(haarDetector, frame):
     return roi_gray
 
 
-def prepareSingleVideoForCNNDLIB(path, detector, predictor):
-    """Function to prepare a single video to be redy for CNN training"""
-    vidData = getVideoDataFromPath(path)
-    videoFrames = getVideoFrames(path)
-    videoFrames = [extractLips(detector, predictor, x) for x in videoFrames]
-
-    if len(videoFrames) != 0:
-        stackedImage = stackFramesToImage(videoFrames)
-        videoLabel = vidData.identifier.split('_')[0]
-        imageSavePath = commonCNNDataPath + vidData.category + '/{}'.format(videoLabel)
-        saveImage(stackedImage, imageSavePath)
-    else:
-        print("Error in finding video with path: {}".format(path))
-
-
 def prepareSingleVideoForCNN(path, haarDetector):
     """Function to prepare a single video to be redy for CNN training"""
     vidData = getVideoDataFromPath(path)
@@ -147,24 +107,6 @@ def prepareSingleVideoForCNN(path, haarDetector):
         saveImage(stackedImage, imageSavePath)
     else:
         print("Error in finding video with path: {}".format(path))
-
-
-def prepareDataSetForCNNDLIB(firstSpeaker, secondSpeaker):
-    """Function that traverses the whole dataset and creates new directory for the CNN"""
-    detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor("../dlib-predictor.dat")
-    for i in range(firstSpeaker, secondSpeaker):
-        for category in categories:
-            videoPath = "../New-DataSet-Videos/S{}/{}/".format(i, category) + "*.mp4"
-            vidList = glob.glob(videoPath)
-
-            def f(x):
-                return x.replace("\\", '/')
-
-            vidList = [f(x) for x in vidList]
-            for j in vidList:
-                prepareSingleVideoForCNNDLIB(j, detector, predictor)
-        print("Finished Speaker {}".format(i))
 
 
 def prepareDataSetForCNN(firstSpeaker, secondSpeaker):

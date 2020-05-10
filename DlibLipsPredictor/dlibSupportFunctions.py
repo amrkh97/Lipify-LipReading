@@ -28,3 +28,22 @@ def initializeDlib():
 def rotateImage(img):
     rotated = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     return rotated
+
+
+# ----------------------------------------------------------------------------
+# function used to exctract frames from video
+# input: video
+# output: frames
+def getVideoFrames(videoPath):
+    """Function to return a video's frames in a list
+    :type videoPath: String
+    """
+    vidcap = cv2.VideoCapture(videoPath)
+    if vidcap.isOpened() == False:
+        return [], False
+    success, image = vidcap.read()
+    allFrames = []
+    while success:
+        allFrames.append(image)
+        success, image = vidcap.read()
+    return allFrames, True

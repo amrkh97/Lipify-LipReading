@@ -1,3 +1,4 @@
+#!/bin/bash
 mkdir "gridcorpus"
 cd "gridcorpus" || exit
 mkdir "raw" "align" "video"

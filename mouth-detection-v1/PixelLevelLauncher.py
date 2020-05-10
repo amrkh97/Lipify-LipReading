@@ -1,8 +1,9 @@
-from FaceDetection import *
-from SkinSegmentation import *
+import cv2
 
-from FR import *
-from mouthDetection import *
+from FR import resizeImage, readFrame, smoothImg, binaryImage
+from FaceDetection import get_box, draw_RGB_with_Rect
+from SkinSegmentation import segmentSkin, extractSkin
+from mouthDetection import extractMouthArea
 
 # frames reading
 # function that calls (FR.py) functions that is used to inquire a filter cleared image of frame (preprossesing)

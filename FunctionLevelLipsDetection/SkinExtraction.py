@@ -35,8 +35,8 @@ def segmentSkin(img):
     skin_two_YCbCr = np.logical_and(np.logical_and(np.logical_and(np.logical_and(
         np.logical_and(np.logical_and(np.logical_and(Cr > 135, Cb > 85), Y > 80), Cr <= ((1.5862 * Cb) + 20)),
         Cr >= ((0.3448 * Cb) + 76.2069)),
-                                                                  Cr >= ((-4.5652 * Cb) + 234.5652)),
-                                                   Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
+        Cr >= ((-4.5652 * Cb) + 234.5652)),
+        Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
     skin_two = np.logical_and(skin_two_YCbCr, skin_two_rgb)
     skin = np.logical_or(skin_one, skin_two)
     skin_image = np.copy(img)
@@ -45,7 +45,6 @@ def segmentSkin(img):
     holes_filled_skin_image = fill_holes(skin_image)
     holes_filled_skin_image = holes_filled_skin_image.astype(np.uint8)
     holes_filled_skin_image = cv2.cvtColor(holes_filled_skin_image, cv2.COLOR_RGB2GRAY)
-    # cv2.imshow('skin_image', holes_filled_skin_image)
     return holes_filled_skin_image
 
 
@@ -77,7 +76,7 @@ def extractSkin(img, skinMask):
     contour_info = []
     contours, _ = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
     if len(contours) == 0:
-        return []
+        return [], False
     cntf = []
     for c in contours:
         contour_info.append((
@@ -86,12 +85,9 @@ def extractSkin(img, skinMask):
             cv2.contourArea(c),
         ))
     cv2.drawContours(img, contours, -1, 255, 3)
-    # cv2.imshow('contours', img) 
-    # cv2.waitKey(0)
     contour_info = sorted(contour_info, key=lambda c: c[2], reverse=True)
     # --------------------------
     max_contour = contour_info[0]
-
     mask = np.zeros(edges.shape)
     cv2.fillConvexPoly(mask, max_contour[0], (255))
 
@@ -106,4 +102,4 @@ def extractSkin(img, skinMask):
 
     masked = (mask_stack * img) + ((1 - mask_stack) * MASK_COLOR)
     masked = (masked * 255).astype('uint8')
-    return masked
+    return masked, True
