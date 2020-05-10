@@ -21,5 +21,7 @@ setup(
                       "python>=3.7.1",
                       'matplotlib',
                       "Pillow",
-                      "pydot"]
+                      "pydot",
+                      "scikit-learn",
+                      "seaborn"]
 )
