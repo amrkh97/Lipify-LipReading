@@ -8,7 +8,6 @@ mouth-detection-v3/*.dat
 GP DataSet
 Videos-After-Extraction/
 CNN-Training-Images/
-*.csv
 .idea
 *.dat
 # Byte-compiled / optimized / DLL files
@@ -18,7 +17,6 @@ __pycache__/
 
 # C extensions
 *.so
-*.dat
 # Distribution / packaging
 .Python
 build/

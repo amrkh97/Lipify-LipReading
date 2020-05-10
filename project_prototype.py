@@ -41,6 +41,9 @@ def predictOneVideo(classDict, videoPath):
     videoPath = videoPath.replace("\\", "/")
     path = videoPath.split('/')
     categoryCNN = path[-1].split('_')[0]
+    if categoryCNN == '':
+        return "Error! No videos were passed"
+
     savedModelPath += categoryCNN
     dictForClass = classDict[categoryCNN]
     cnnModel = getTrainedModel(savedModelPath, categoryCNN)
@@ -89,19 +92,26 @@ def createClassLabelsDict():
     return D
 
 
+def prototypeProject(receivedFilesFromServer):
+    AllClassLabels = createClassLabelsDict()
+    mylist = glob.glob(receivedFilesFromServer)
+    mylist.sort(key=lambda x: x.split('_')[-1])
+    resultString = []
+    for video in mylist:
+        resultString.append(predictOneVideo(AllClassLabels, video))
+
+    resultString = " ".join(resultString)
+    print(resultString)
+    return resultString
+
+
 if __name__ == "__main__":
     start_time = time.time()
     # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
-    AllClassLabels = createClassLabelsDict()
-    receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
-    mylist = glob.glob(receivedFilesFromServer)
-    mylist.sort(key=lambda x: x.split('_')[-1])
-    result = []
-    for video in mylist:
-        result.append(predictOneVideo(AllClassLabels, video))
+    # receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
+    receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
+    result = prototypeProject(receivedFilesFromServer)
 
-    result = " ".join(result)
-    print(result)
     predictionFilePath = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/prediction.txt'
 
     predictionFile = open(predictionFilePath, "w")  # write mode

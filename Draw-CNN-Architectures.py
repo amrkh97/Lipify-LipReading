@@ -21,12 +21,12 @@ modelDict = {'Adverb': AdverbModel.AdverbNet(),
 
 def drawModel(model, fileName):
     plot_model(model, show_shapes=True, show_layer_names=False,
-               to_file='Model_Graphs/{}_CNN.png'.format(fileName))
+               to_file='Project_Insights/Model_Graphs/{}_CNN.png'.format(fileName))
 
 
 if __name__ == "__main__":
 
-    dirName = 'Model_Graphs'
+    dirName = 'Project_Insights/Model_Graphs'
     if not os.path.exists(dirName):
         os.makedirs(dirName)
 
