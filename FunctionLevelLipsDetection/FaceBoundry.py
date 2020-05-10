@@ -1,11 +1,9 @@
 import cv2
 import numpy as np
-
-
 # ----------------------------------------------------------------------------
 # function used to get box of the face from image
-# input: image
-# output: image
+# input: skin image, frame
+# output: bounding box of image
 def get_box(img, RGB_img):
     bounding_boxes = []
     masks = np.zeros(img.shape).astype("uint8")
@@ -48,8 +46,10 @@ def get_box(img, RGB_img):
         masks[masks > 0] = 255
         img[masks == 0] = 0
         return bounding_boxes, img
-
-
+# ----------------------------------------------------------------------------
+# function used to draw box on face in the frame
+# input: frame, bounding box data, cut region
+# output: frame with box drown, coord of box
 def draw_RGB_with_Rect(RGB_image, Boundary_boxes, cp):
     ret, thresh = cv2.threshold(cp, 127, 255, 0)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -58,6 +58,4 @@ def draw_RGB_with_Rect(RGB_image, Boundary_boxes, cp):
     y1 = y + height
     x0 = x
     x1 = x + width
-    # cv2.rectangle(RGB_image,(x0,y0),(x1,y1),(255,0,0),2)
-    # roi = RGB_image[y:y+height, x:x+width]
     return RGB_image, y0, y1, x0, x1

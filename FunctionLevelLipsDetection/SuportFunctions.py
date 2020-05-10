@@ -1,8 +1,5 @@
 import cv2
 import numpy as np
-
-
-
 # ----------------------------------------------------------------------------
 # function used to read Video and get its frames
 # input: Video Path
@@ -12,12 +9,14 @@ def getVideoFrames(videoPath):
     :type videoPath: String
     """
     vidcap = cv2.VideoCapture(videoPath)
+    if vidcap.isOpened() == False:
+        return [], False
     success, image = vidcap.read()
     allFrames = []
     while success:
         allFrames.append(image)
         success, image = vidcap.read()
-    return allFrames
+    return allFrames, True
 # ----------------------------------------------------------------------------
 # function used to smooth from image
 # input: image
@@ -25,18 +24,6 @@ def getVideoFrames(videoPath):
 def smoothImg(img):
     blur = cv2.bilateralFilter(img, 9, 75, 75)
     return blur
-
-
-# ----------------------------------------------------------------------------
-# function used to sharp edges from image
-# input: image
-# output: image
-def sharpenEdges(img):
-    kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
-    sharpend = cv2.filter2D(img, -1, kernel)
-    return sharpend
-
-
 # ----------------------------------------------------------------------------
 # function used to resize image
 # input: image, dim = (x,y)
@@ -44,8 +31,6 @@ def sharpenEdges(img):
 def resizeImage(img, dim=(650, 650)):
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
-
-
 # ----------------------------------------------------------------------------
 # function used to change image to binary
 # input: image
@@ -55,8 +40,6 @@ def binaryImage(img):
     binary_image = cv2.cvtColor(binary_image, cv2.COLOR_BGR2GRAY)
     binary_image[binary_image > 0] = 255
     return binary_image
-
-
 # ----------------------------------------------------------------------------
 # function used to change image to binary
 # input: image
