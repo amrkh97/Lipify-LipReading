@@ -8,9 +8,9 @@ from mouthDetection import extractMouthArea
 # frames reading
 # function that calls (FR.py) functions that is used to inquire a filter cleared image of frame (preprossesing)
 img = readFrame()
+cv2.waitKey(0)
 # resize image
 resized = resizeImage(img)
-cv2.waitKey(0)
 # smooth image to remove noise
 smoothed_img = smoothImg(resized)
 cv2.waitKey(0)

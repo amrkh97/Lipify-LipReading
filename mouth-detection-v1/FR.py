@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-
-
+from canny import getGrayImage
+import math
 # ----------------------------------------------------------------------------
 # function used to read a frame from file
 # input: none
@@ -10,29 +10,14 @@ def readFrame():
     img = cv2.imread('DataSet-Trial/close.png')
     cv2.imshow('img', img)
     return img
-
-
 # ----------------------------------------------------------------------------
 # function used to smooth from image
 # input: image
 # output: image
 def smoothImg(img):
-    blur = cv2.bilateralFilter(img, 9, 75, 75)
+    blur = cv2.bilateralFilter(img, 10, 75, 75)
     cv2.imshow('blur', blur)
     return blur
-
-
-# ----------------------------------------------------------------------------
-# function used to sharp edges from image
-# input: image
-# output: image
-def sharpenEdges(img):
-    kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
-    sharpend = cv2.filter2D(img, -1, kernel)
-    cv2.imshow('sharped', sharpend)
-    return sharpend
-
-
 # ----------------------------------------------------------------------------
 # function used to resize image
 # input: image, dim = (x,y)
@@ -40,8 +25,6 @@ def sharpenEdges(img):
 def resizeImage(img, dim=(650, 650)):
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
-
-
 # ----------------------------------------------------------------------------
 # function used to change image to binary
 # input: image
@@ -51,76 +34,12 @@ def binaryImage(img):
     binary_image = cv2.cvtColor(binary_image, cv2.COLOR_BGR2GRAY)
     binary_image[binary_image > 0] = 255
     return binary_image
-
-
-# ----------------------------------------------------------------------------
-# function used to errode image
-# input: image
-# output: image
-def erosion_filter(data, filter_size):
-    temp = []
-    indexer = filter_size // 2
-    data_final = []
-    data_final = np.zeros((len(data), len(data[0])))
-    for i in range(len(data)):
-
-        for j in range(len(data[0])):
-
-            for z in range(filter_size):
-                if i + z - indexer < 0 or i + z - indexer > len(data) - 1:
-                    for c in range(filter_size):
-                        temp.append(0)
-                else:
-                    if j + z - indexer < 0 or j + indexer > len(data[0]) - 1:
-                        temp.append(0)
-                    else:
-                        for k in range(filter_size):
-                            temp.append(data[i + z - indexer][j + k - indexer])
-
-            temp.sort()
-            data_final[i][j] = temp[0]
-            temp = []
-    return data_final
-
-
-# ----------------------------------------------------------------------------------------
-# function used to dialte image 
-# input: image
-# output: image
-def dilation_filter(data, filter_size):
-    temp = []
-    indexer = filter_size // 2
-    data_final = []
-    data_final = np.zeros((len(data), len(data[0])))
-    for i in range(len(data)):
-
-        for j in range(len(data[0])):
-
-            for z in range(filter_size):
-                if i + z - indexer < 0 or i + z - indexer > len(data) - 1:
-                    for c in range(filter_size):
-                        temp.append(0)
-                else:
-                    if j + z - indexer < 0 or j + indexer > len(data[0]) - 1:
-                        temp.append(0)
-                    else:
-                        for k in range(filter_size):
-                            temp.append(data[i + z - indexer][j + k - indexer])
-
-            temp.sort()
-            data_final[i][j] = temp[-1]
-            temp = []
-    return data_final
-
-
 # -----------------------------------------------------------------------------------------
 # function that add padding to an image
 # input: image, padding, kernal, operation type
 # output: image
 def add_padding(image, padding, value):
     return cv2.copyMakeBorder(image, padding, padding, padding, padding, cv2.BORDER_CONSTANT, value=value)
-
-
 # -----------------------------------------------------------------------------------------
 # function that does both erosion and dialition on image
 # input: image, padding, kernal, operation type
@@ -163,8 +82,6 @@ def operation(image, kernel, padding=0, operation=None):
             vertical_pos += 1
         return img_operated
     return "Operation Required"
-
-
 # -----------------------------------------------------------------------------------------
 # function that extract frames from video
 # input: video path
@@ -174,23 +91,11 @@ def getVideoFrames(videoPath):
     :type videoPath: String
     """
     vidcap = cv2.VideoCapture(videoPath)
+    if not vidcap.isOpened():
+        return [], False
     success, image = vidcap.read()
     allFrames = []
     while success:
         allFrames.append(image)
         success, image = vidcap.read()
-    return allFrames
-
-
-# -----------------------------------------------------------------------------------------
-# function that Create a default value matrix
-# input: length, width, default value
-# output: matrix of default values
-def createMatrix(rowCount, colCount, data):
-    mat = []
-    for i in range(rowCount):
-        rowList = []
-        for j in range(colCount):
-            rowList.append(data)
-        mat.append(rowList)
-    return mat
+    return allFrames, True
