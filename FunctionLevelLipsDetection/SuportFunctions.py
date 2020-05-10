@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+
+
 # ----------------------------------------------------------------------------
 # function used to read Video and get its frames
 # input: Video Path
@@ -17,6 +19,8 @@ def getVideoFrames(videoPath):
         allFrames.append(image)
         success, image = vidcap.read()
     return allFrames, True
+
+
 # ----------------------------------------------------------------------------
 # function used to smooth from image
 # input: image
@@ -24,6 +28,8 @@ def getVideoFrames(videoPath):
 def smoothImg(img):
     blur = cv2.bilateralFilter(img, 9, 75, 75)
     return blur
+
+
 # ----------------------------------------------------------------------------
 # function used to resize image
 # input: image, dim = (x,y)
@@ -31,6 +37,8 @@ def smoothImg(img):
 def resizeImage(img, dim=(650, 650)):
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
+
+
 # ----------------------------------------------------------------------------
 # function used to change image to binary
 # input: image
@@ -40,6 +48,8 @@ def binaryImage(img):
     binary_image = cv2.cvtColor(binary_image, cv2.COLOR_BGR2GRAY)
     binary_image[binary_image > 0] = 255
     return binary_image
+
+
 # ----------------------------------------------------------------------------
 # function used to change image to binary
 # input: image

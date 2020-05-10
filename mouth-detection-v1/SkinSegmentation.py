@@ -1,8 +1,9 @@
+import cv2
 import numpy as np
-from canny import *
-from colorspace import *
 
-from FR import *
+from FR import createMatrix, operation
+from canny import cannyDetection, getGrayImage, gaussian_blur2
+from colorspace import getHSV
 
 
 # ----------------------------------------------------------------------------
@@ -40,8 +41,8 @@ def segmentSkin(img):
     skin_two_YCbCr = np.logical_and(np.logical_and(np.logical_and(np.logical_and(
         np.logical_and(np.logical_and(np.logical_and(Cr > 135, Cb > 85), Y > 80), Cr <= ((1.5862 * Cb) + 20)),
         Cr >= ((0.3448 * Cb) + 76.2069)),
-                                                                  Cr >= ((-4.5652 * Cb) + 234.5652)),
-                                                   Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
+        Cr >= ((-4.5652 * Cb) + 234.5652)),
+        Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
     skin_two = np.logical_and(skin_two_YCbCr, skin_two_rgb)
     skin = np.logical_or(skin_one, skin_two)
     skin_image = np.copy(img)

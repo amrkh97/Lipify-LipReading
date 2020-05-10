@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
+
 from SuportFunctions import binaryImage2
+
 
 # ----------------------------------------------------------------------------
 def extractMouthArea(img, y0, y1, x0, x1):
@@ -12,6 +14,8 @@ def extractMouthArea(img, y0, y1, x0, x1):
     y3 = y2 + int((N / 2))
     mouth = img[y2: y3, x2: x3]
     return mouth
+
+
 # ----------------------------------------------------------------------------
 def mouthExtraction(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -21,10 +25,14 @@ def mouthExtraction(img):
     I = (((2 * G) - R - (0.5 * B)) / 4)
     I = binaryImage2(I)
     return I
+
+
 # ----------------------------------------------------------------------------
 def drawMouthContour(img):
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
+
+
 # ----------------------------------------------------------------------------
 def draw_RGB_with_Rect2(RGB_image, Boundary_boxes, cp):
     ret, thresh = cv2.threshold(cp, 127, 255, 0)
@@ -36,6 +44,8 @@ def draw_RGB_with_Rect2(RGB_image, Boundary_boxes, cp):
     x1 = x + width
     roi = RGB_image[y:y + height, x:x + width]
     return roi
+
+
 # ----------------------------------------------------------------------------
 # function used to get box of the face from image
 # input: image

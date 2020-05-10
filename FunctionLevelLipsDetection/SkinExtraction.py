@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+
+
 # ----------------------------------------------------------------------------
 # function used to exract skin from image
 # input: image
@@ -33,8 +35,8 @@ def segmentSkin(img):
     skin_two_YCbCr = np.logical_and(np.logical_and(np.logical_and(np.logical_and(
         np.logical_and(np.logical_and(np.logical_and(Cr > 135, Cb > 85), Y > 80), Cr <= ((1.5862 * Cb) + 20)),
         Cr >= ((0.3448 * Cb) + 76.2069)),
-                                                                  Cr >= ((-4.5652 * Cb) + 234.5652)),
-                                                   Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
+        Cr >= ((-4.5652 * Cb) + 234.5652)),
+        Cr <= ((-1.15 * Cb) + 301.75)), Cr <= ((-2.2857 * Cb) + 432.85))
     skin_two = np.logical_and(skin_two_YCbCr, skin_two_rgb)
     skin = np.logical_or(skin_one, skin_two)
     skin_image = np.copy(img)
@@ -44,6 +46,8 @@ def segmentSkin(img):
     holes_filled_skin_image = holes_filled_skin_image.astype(np.uint8)
     holes_filled_skin_image = cv2.cvtColor(holes_filled_skin_image, cv2.COLOR_RGB2GRAY)
     return holes_filled_skin_image
+
+
 # ----------------------------------------------------------------------------
 # function used to support segmentSkin function by filling holes in the skin mask from image
 # input: skin mask
@@ -52,6 +56,8 @@ def fill_holes(img):
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     res = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
     return res
+
+
 # ----------------------------------------------------------------------------
 # function used to exract skin from image
 # input: image, skin mask

@@ -1,9 +1,12 @@
-from FaceBoundry import *
-from SkinExtraction import *
+import cv2
+import numpy as np
 
-from SuportFunctions import *
-from LipsBoundry import *
-#-----------------------------------------------------------------
+from FaceBoundry import get_box, draw_RGB_with_Rect
+from LipsBoundry import extractMouthArea, get_box2, mouthExtraction, draw_RGB_with_Rect2
+from SkinExtraction import extractSkin, segmentSkin
+from SuportFunctions import resizeImage, smoothImg, binaryImage, getVideoFrames
+
+
 def getMouth(img):
     resized = resizeImage(img)
     # smooth image to remove noise
@@ -12,7 +15,7 @@ def getMouth(img):
     skin_mask = segmentSkin(smoothed_img)
     # remove background
     skin_img, status = extractSkin(smoothed_img, skin_mask)
-    if status == False:
+    if not status:
         return img, False
     # get binary cleaned mask
     binary_cleaned_skin = binaryImage(skin_img)
@@ -25,23 +28,23 @@ def getMouth(img):
     mouth = mouthExtraction(mouth_region)
     boundig_boxes2, croped_img2 = get_box2(mouth, mouth_region)
     all_zeros = not np.count_nonzero(croped_img2)
-    if all_zeros != True:
+    if not all_zeros:
         mouthFinal = draw_RGB_with_Rect2(mouth_region, boundig_boxes2, croped_img2)
         mouthFinal = resizeImage(mouthFinal, (150, 100))
         return mouthFinal, True
     else:
         mouth_region = resizeImage(mouth_region, (150, 100))
         return mouth_region, True
-    return img, False
-#------------------------------------------------------------------------
+
+
 if "__main__" == __name__:
     videoPath = "../Prototype-Test-Videos/Adverb_1.mp4"
     frames, status = getVideoFrames(videoPath)
-    if status == True:
+    if status:
         detected = []
         for i, frame in enumerate(frames):
             lips, status = getMouth(frame)
-            if status == False:
+            if not status:
                 print("failed to get face")
                 frame = resizeImage(frame, (150, 100))
                 detected.append(frame)
@@ -52,4 +55,3 @@ if "__main__" == __name__:
         cv2.destroyAllWindows()
     else:
         print("Failed To Get Video")
-

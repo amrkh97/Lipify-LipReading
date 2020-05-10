@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+
+
 # ----------------------------------------------------------------------------
 # function used to get box of the face from image
 # input: skin image, frame
@@ -46,6 +48,8 @@ def get_box(img, RGB_img):
         masks[masks > 0] = 255
         img[masks == 0] = 0
         return bounding_boxes, img
+
+
 # ----------------------------------------------------------------------------
 # function used to draw box on face in the frame
 # input: frame, bounding box data, cut region
