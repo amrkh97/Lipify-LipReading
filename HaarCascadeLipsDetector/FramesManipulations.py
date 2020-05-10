@@ -1,5 +1,6 @@
 import cv2
-import numpy as np
+
+
 # ----------------------------------------------------------------------------
 # function used to resize image
 # input: image, dim = (x,y)
@@ -7,6 +8,8 @@ import numpy as np
 def resizeImage(img, dim=(650, 650)):
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
+
+
 # ----------------------------------------------------------------------------
 # function used to extract frames from video
 # input: video
@@ -16,7 +19,7 @@ def getVideoFrames(videoPath):
     :type videoPath: String
     """
     vidcap = cv2.VideoCapture(videoPath)
-    if vidcap.isOpened() == False:
+    if not vidcap.isOpened():
         return [], False
     success, image = vidcap.read()
     allFrames = []
