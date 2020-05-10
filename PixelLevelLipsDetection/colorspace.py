@@ -42,5 +42,4 @@ def getHSV(img):
     HSV[..., 0] = H
     HSV[..., 1] = S
     HSV[..., 2] = V
-    # img = Image.fromarray(HSV)
     return H, S, V

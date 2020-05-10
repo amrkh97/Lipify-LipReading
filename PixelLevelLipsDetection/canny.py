@@ -45,25 +45,24 @@ def gaussian_kernel(size, sigma=1, verbose=False):
 
 
 def gaussian_blur1(image, kernel_size, verbose=False):
-    kernel = gaussian_kernel(kernel_size, sigma=math.sqrt(kernel_size), verbose=verbose)
+    kernel = gaussian_kernel(kernel_size, sigma=int(math.sqrt(kernel_size)), verbose=verbose)
     return convolution(image, kernel, average=True, verbose=verbose)
 
 
 def gaussian_blur2(image, kernel_size, stig, verbose=False):
-    kernel = gaussian_kernel(kernel_size, sigma=math.sqrt(kernel_size), verbose=verbose)
+    kernel = gaussian_kernel(kernel_size, sigma=int(math.sqrt(kernel_size)), verbose=verbose)
     return convolution(image, kernel, average=True, verbose=verbose)
 
 
-# --------------------------------------------------------------------------
-def sobel_edge_detection(image, filter, convert_to_degree=False, verbose=False):
-    new_image_x = convolution(image, filter, verbose)
+def sobel_edge_detection(image, filt, convert_to_degree=False, verbose=False):
+    new_image_x = convolution(image, filt, verbose)
 
     if verbose:
         plt.imshow(new_image_x, cmap='gray')
         plt.title("Horizontal Edge")
         plt.show()
 
-    new_image_y = convolution(image, np.flip(filter.T, axis=0), verbose)
+    new_image_y = convolution(image, np.flip(filt.T, axis=0), verbose)
 
     if verbose:
         plt.imshow(new_image_y, cmap='gray')
@@ -128,7 +127,6 @@ def non_max_suppression(gradient_magnitude, gradient_direction, verbose):
     return output
 
 
-# --------------------------------------------------------------
 def threshold(image, low, high, weak, verbose=False):
     output = np.zeros(image.shape)
 
@@ -148,7 +146,6 @@ def threshold(image, low, high, weak, verbose=False):
     return output
 
 
-# --------------------------------------------------------------
 def hysteresis(image, weak):
     image_row, image_col = image.shape
 
@@ -161,8 +158,7 @@ def hysteresis(image, weak):
                     row - 1, col] == 255 or top_to_bottom[
                     row + 1, col] == 255 or top_to_bottom[
                     row - 1, col - 1] == 255 or top_to_bottom[row + 1, col - 1] == 255 or top_to_bottom[
-                    row - 1, col + 1] == 255 or top_to_bottom[
-                    row + 1, col + 1] == 255:
+                    row - 1, col + 1] == 255 or top_to_bottom[row + 1, col + 1] == 255:
                     top_to_bottom[row, col] = 255
                 else:
                     top_to_bottom[row, col] = 0
@@ -176,8 +172,7 @@ def hysteresis(image, weak):
                     row - 1, col] == 255 or bottom_to_top[
                     row + 1, col] == 255 or bottom_to_top[
                     row - 1, col - 1] == 255 or bottom_to_top[row + 1, col - 1] == 255 or bottom_to_top[
-                    row - 1, col + 1] == 255 or bottom_to_top[
-                    row + 1, col + 1] == 255:
+                    row - 1, col + 1] == 255 or bottom_to_top[row + 1, col + 1] == 255:
                     bottom_to_top[row, col] = 255
                 else:
                     bottom_to_top[row, col] = 0
@@ -206,8 +201,7 @@ def hysteresis(image, weak):
                     row - 1, col] == 255 or left_to_right[
                     row + 1, col] == 255 or left_to_right[
                     row - 1, col - 1] == 255 or left_to_right[row + 1, col - 1] == 255 or left_to_right[
-                    row - 1, col + 1] == 255 or left_to_right[
-                    row + 1, col + 1] == 255:
+                    row - 1, col + 1] == 255 or left_to_right[row + 1, col + 1] == 255:
                     left_to_right[row, col] = 255
                 else:
                     left_to_right[row, col] = 0
@@ -217,9 +211,6 @@ def hysteresis(image, weak):
     final_image[final_image > 254] = 255
 
     return final_image
-
-
-# -------------------------------------------------------------------------------------------------
 
 
 def getGrayImage(img):
@@ -233,13 +224,7 @@ def getGrayImage(img):
 
 def cannyDetection(img, CANNY_THRESH_1, CANNY_THRESH_2):
     blurred_image = gaussian_blur1(img, kernel_size=9, verbose=False)
-    filter1 = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-    gradient_magnitude, gradient_direction = sobel_edge_detection(blurred_image, filter1, convert_to_degree=True,
+    filt1 = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+    gradient_magnitude, gradient_direction = sobel_edge_detection(blurred_image, filt1, convert_to_degree=True,
                                                                   verbose=True)
-    # new_image = non_max_suppression(gradient_magnitude, gradient_direction, verbose=True)
-    # weak = 10
-
-    # new_image = threshold(new_image, CANNY_THRESH_1, CANNY_THRESH_2, weak=weak, verbose=True)
-
-    # new_image = hysteresis(new_image, weak)
     return gradient_magnitude
