@@ -11,12 +11,14 @@ def getVideoFrames(videoPath):
     :type videoPath: String
     """
     vidcap = cv2.VideoCapture(videoPath)
+    if vidcap.isOpened() == False:
+        return [], False
     success, image = vidcap.read()
     allFrames = []
     while success:
         allFrames.append(image)
         success, image = vidcap.read()
-    return allFrames
+    return allFrames, True
 
 
 # ----------------------------------------------------------------------------
@@ -26,16 +28,6 @@ def getVideoFrames(videoPath):
 def smoothImg(img):
     blur = cv2.bilateralFilter(img, 9, 75, 75)
     return blur
-
-
-# ----------------------------------------------------------------------------
-# function used to sharp edges from image
-# input: image
-# output: image
-def sharpenEdges(img):
-    kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
-    sharpend = cv2.filter2D(img, -1, kernel)
-    return sharpend
 
 
 # ----------------------------------------------------------------------------
