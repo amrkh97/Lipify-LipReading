@@ -38,24 +38,20 @@ def getMouth(img):
 
 
 if "__main__" == __name__:
-    img = readFrame()
-    mouth = getMouth(img)
-    cv2.imshow("mouth", mouth)
-    cv2.waitKey(0)
-    # videoPath = "../Prototype-Test-Videos/Adverb_1.mp4"
-    # frames, status = getVideoFrames(videoPath)
-    # if status:
-    #     detected = []
-    #     for i, frame in enumerate(frames):
-    #         lips, status = getMouth(frame)
-    #         if not status:
-    #             print("failed to get face")
-    #             frame = resizeImage(frame, (150, 100))
-    #             detected.append(frame)
-    #         else:
-    #             detected.append(lips)
-    #         cv2.imshow(str(i), detected[-1])
-    #     cv2.waitKey(0)
-    #     cv2.destroyAllWindows()
-    # else:
-    #     print("Failed To Get Video")
+    videoPath = "../Prototype-Test-Videos/Adverb_1.mp4"
+    frames, status = getVideoFrames(videoPath)
+    if status:
+        detected = []
+        for i, frame in enumerate(frames):
+            lips, status = getMouth(frame)
+            if not status:
+                print("failed to get face")
+                frame = resizeImage(frame, (150, 100))
+                detected.append(frame)
+            else:
+                detected.append(lips)
+            cv2.imshow(str(i), detected[-1])
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+    else:
+        print("Failed To Get Video")
