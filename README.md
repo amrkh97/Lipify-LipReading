@@ -1,4 +1,4 @@
-Lipify - A Lip Reading Application
+# Lipify - A Lip Reading Application
 ---
 
 ##### Project Dependencies:
@@ -13,6 +13,10 @@ Lipify - A Lip Reading Application
 * Pillow
 * matplotlib
 * tqdm
+* pyDot
+* seaborn
+* scikit-learn
+* imutils>=0.5.3
 
 
 Note: All Dependencies can be found inside 'setup.py'
@@ -43,7 +47,7 @@ To Download please run the following line of code in your terminal:
 <br>`bash GridCorpus-Downloader.sh FirstSpeaker SecondSpeaker`
 <br> where FirstSpeaker and SecondSpeaker are integers for the number of speakers to download
 <br>
-**NOTE: Speaker 21 is missing from the GRID Corpus dataset due to technical issues.
+* NOTE: Speaker 21 is missing from the GRID Corpus dataset due to technical issues.
 
 ---
 
@@ -51,20 +55,22 @@ To Download please run the following line of code in your terminal:
 1. Run DatasetSegmentation.py
 2. Run Pre-Processing/frameManipulator.py
 <br>
-* After running the above files, all result videos will have 30 FPS and 1 second long.
+* After running the above files, all resultant videos will have 30 FPS and 1 second long.
+
 
 ---
-
-##### Model Training Steps:
-* Models can be found in the directory "NN-Models"
+##### CNN Models Training Steps:
+* Model codes can be found in the directory "NN-Models"
 
 * First you will need to change the common path
- value to the directory of your training data.
+ value to the directory of your training and test data.
 
 * Run Each network to start training.
 * Early stopping was used to help stop
  the training of the model at its optimum validation accuracy.
-
+ <br>
+* Resultant accuracies after training on the data can be found in:
+[Project Accuracies](https://github.com/amrkh97/Lipify-LipReading/blob/master/Project_Insights/Project_Accuracy.csv)
 
 ---
 ##### TODOs:
@@ -72,10 +78,9 @@ To Download please run the following line of code in your terminal:
 * ~~Dataset preprocessing module~~
 * ~~Initial Neural networks' architecture~~
 * ~~Facial detection algorithm~~
-* Feature extraction module
+* ~~Optimization of the networks' architectures~~
+* ~~Unittesting of project files~~
 * Proper documentation for the whole project
-* Optimization of the networks' architectures
-* Change Training Codes to take dataset location as argument
 ---
 
 #### License:
