@@ -4,7 +4,7 @@ import numpy as np
 from FaceBoundry import get_box, draw_RGB_with_Rect
 from LipsBoundry import extractMouthArea, get_box2, mouthExtraction, draw_RGB_with_Rect2
 from SkinExtraction import extractSkin, segmentSkin
-from SuportFunctions import resizeImage, smoothImg, binaryImage, getVideoFrames
+from SuportFunctions import resizeImage, smoothImg, binaryImage, getVideoFrames, readFrame
 
 
 def getMouth(img):

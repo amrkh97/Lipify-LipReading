@@ -38,6 +38,7 @@ def resizeImage(img, dim=(650, 650)):
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
 
+
 # ----------------------------------------------------------------------------
 # function used to change image to binary
 # input: image
@@ -55,9 +56,15 @@ def binaryImage(img):
 # output: binary image
 def binaryImage2(img):
     binary_image = np.copy(img)
-    # binary_image = cv2.cvtColor(binary_image, cv2.COLOR_BGR2GRAY)
     binary_image[binary_image > 0] = 255
     binary_image[binary_image < 0] = 0
     binary_image = binary_image.astype(np.uint8)
     binary_image = np.invert(binary_image)
     return binary_image
+
+
+# ----------------------------------------------------------------------------
+# dev
+def readFrame():
+    img = cv2.imread('DataSet-Trial/close.png')
+    return img
