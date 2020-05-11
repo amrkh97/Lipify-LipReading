@@ -68,7 +68,6 @@ To Download please run the following line of code in your terminal:
 * Run Each network to start training.
 * Early stopping was used to help stop
  the training of the model at its optimum validation accuracy.
- <br>
 * Resultant accuracies after training on the data can be found in:
 [Project Accuracies](https://github.com/amrkh97/Lipify-LipReading/blob/master/Project_Insights/Project_Accuracy.csv)
 
