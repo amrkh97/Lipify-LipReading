@@ -38,7 +38,9 @@ def resizeImage(img, dim=(650, 650)):
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
 
-
+def readFrame():
+    img = cv2.imread('DataSet-Trial/face3.jpg')
+    return img
 # ----------------------------------------------------------------------------
 # function used to change image to binary
 # input: image
