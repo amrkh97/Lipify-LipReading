@@ -43,6 +43,8 @@ def extractFaceSkin(img, skinMask):
     masked = (mask_stack * img) + ((1 - mask_stack) * MASK_COLOR)
     masked = (masked * 255).astype('uint8')
     return masked, True
+
+
 # ----------------------------------------------------------------------------
 # function used to get box of the face from image
 # input: skin image, frame
@@ -104,6 +106,8 @@ def draw_face_box(RGB_image, Boundary_boxes, cp):
     x0 = x
     x1 = x + width
     return RGB_image, y0, y1, x0, x1
+
+
 # ----------------------------------------------------------------------------
 def extractMouthROI(img, y0, y1, x0, x1):
     N = y1 - y0

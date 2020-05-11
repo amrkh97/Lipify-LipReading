@@ -62,10 +62,9 @@ def binaryImage2(img):
     binary_image = np.invert(binary_image)
     return binary_image
 
+
 # ----------------------------------------------------------------------------
 # dev
 def readFrame():
     img = cv2.imread('DataSet-Trial/close.png')
     return img
-
-
