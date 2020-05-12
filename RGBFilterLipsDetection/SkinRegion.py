@@ -7,15 +7,13 @@ def checkWhitePixelCount(skin_mask, regions):
     for i, region in enumerate(regions):
         part = np.copy(skin_mask[region[0]:region[1], region[2]:region[3]])
         ret, bw_part = cv2. threshold(part,127,255,cv2. THRESH_BINARY)
-        ratio = np.sum(bw_part == 255)/ np.sum(bw_part != 255)
+        ratio = np.sum(bw_part == 255)
         if ratio >= inRatio:
             inRatio = ratio
             maxIndex = i
     x1, x2, y1, y2 = regions[maxIndex]
-    cv2.rectangle(skin_mask, (x1,y1), (x2,y2), (255, 0, 0), 2)
-    cv2.imshow("face", skin_mask)
-    cv2.waitKey(0)
-    return
+    y2 = int(y2 - 0.1 * y2)
+    return x1, x2, y1, y2
 
 #---------------------------------------------------------
 def extractSkinRegions(img, skinMask):
@@ -42,5 +40,7 @@ def extractSkinRegions(img, skinMask):
             y1 = y
             y2 = y+h
             regionCheck.append((x1,x2,y1,y2))
-    checkWhitePixelCount(skinMask, regionCheck)
-    return
+    if len(regionCheck) == 0:
+        return [], False
+    x1, x2, y1, y2 = checkWhitePixelCount(skinMask, regionCheck)
+    return [y1, y2, x1, x2], True

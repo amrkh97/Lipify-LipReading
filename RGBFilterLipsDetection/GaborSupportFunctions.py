@@ -66,5 +66,5 @@ def binaryImage2(img):
 # ----------------------------------------------------------------------------
 # dev
 def readFrame():
-    img = cv2.imread('DataSet-Trial/face3.jpg')
+    img = cv2.imread('DataSet-Trial/close.png')
     return img
