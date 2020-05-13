@@ -4,6 +4,7 @@ from GaborSupportFunctions import readFrame, resizeImage, smoothImg, binaryImage
 from SkinModel import getSkin
 from SkinRegion import extractSkinRegions
 from MouthModel import  extractMouthROI
+import time
 
 def startProcess(img):
     # -----------------------------------------------
@@ -15,7 +16,7 @@ def startProcess(img):
     # -----------------------------------------------
     skin = getSkin(smoothed)
     region, status = extractSkinRegions(smoothed, skin)
-    if status == False:
+    if not status:
         frame = resizeImage(resized, (150, 100))
         return frame, False
     else:
@@ -25,6 +26,7 @@ def startProcess(img):
 # -----------------------------------------------
 if "__main__" == __name__:
     # # for i in range(1,300):
+    startTime = time.time()
     videoPath = "../Prototype-Test-Videos/Colors_2.mp4"
     # videoPath = "../Prototype-Test-Videos/s1/s1 "+"("+str(i)+")"+".mpg"
     frames, status = getVideoFrames(videoPath)
@@ -42,3 +44,5 @@ if "__main__" == __name__:
         cv2.destroyAllWindows()
     else: 
         print("Failed To Get Video")
+    print(time.time()-startTime)
+
