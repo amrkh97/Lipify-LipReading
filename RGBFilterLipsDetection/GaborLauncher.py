@@ -24,8 +24,8 @@ def startProcess(img):
         return mouthROI, True
 # -----------------------------------------------
 if "__main__" == __name__:
-    # for i in range(1,300):
-    videoPath = "../Prototype-Test-Videos/Colors_6.mp4"
+    # # for i in range(1,300):
+    videoPath = "../Prototype-Test-Videos/Colors_2.mp4"
     # videoPath = "../Prototype-Test-Videos/s1/s1 "+"("+str(i)+")"+".mpg"
     frames, status = getVideoFrames(videoPath)
     if status:
@@ -40,5 +40,5 @@ if "__main__" == __name__:
             cv2.imshow(str(i), detected[-1])
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-    else:
+    else: 
         print("Failed To Get Video")
