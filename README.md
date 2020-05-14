@@ -1,5 +1,6 @@
 # Lipify - A Lip Reading Application
-===
+
+---
 
 ##### Project Dependencies:
 
