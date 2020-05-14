@@ -1,5 +1,5 @@
 # Lipify - A Lip Reading Application
----
+===
 
 ##### Project Dependencies:
 
@@ -19,7 +19,7 @@
 * imutils>=0.5.3
 
 
-Note: All Dependencies can be found inside 'setup.py'
+Note: All Dependencies can be found inside ['setup.py'](./setup.py)
 
 ---
 
@@ -60,22 +60,38 @@ To Download please run the following line of code in your terminal:
 
 ---
 ##### CNN Models Training Steps:
-* Model codes can be found in the directory "NN-Models"
+* Model codes can be found in the directory ["NN-Models"](./NN-Models)
 
 * First you will need to change the common path
  value to the directory of your training and test data.
 
 * Run Each network to start training.
+
 * Early stopping was used to help stop
  the training of the model at its optimum validation accuracy.
+ 
 * Resultant accuracies after training on the data can be found in:
-[Project Accuracies](https://github.com/amrkh97/Lipify-LipReading/blob/master/Project_Insights/Project_Accuracy.csv)
+[Project Accuracies](./Project_Insights/Project_Accuracy.csv)
+
+
+or in the following illustration:
+![General CNN Architecture](./Project_Insights/Project_Accuracies.png)
+
+---
+
+##### CNN Architecture:
+
+All of our networks have the same architecture with the only<br>
+difference being the output layer, As shown in:
+
+![Train & Test Accuracies of each category](./Project_Insights/Model_Graphs/General_CNN.png)
+ 
 
 ---
 ##### TODOs:
 
 * ~~Dataset preprocessing module~~
-* ~~Initial Neural networks' architecture~~
+* ~~Initial Convolutional Neural networks' architecture~~
 * ~~Facial detection algorithm~~
 * ~~Optimization of the networks' architectures~~
 * ~~Unittesting of project files~~
