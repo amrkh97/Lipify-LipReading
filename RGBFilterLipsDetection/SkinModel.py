@@ -9,7 +9,6 @@ def getSkin(img):
     B = img_corrected[:, :, 2]
 
     skin = np.zeros((len(img), len(img[0])), np.int8)
-
     for i in range(img_corrected.shape[0]):
         for j in range(img_corrected.shape[1]):
             if ((R[i][j] > 95) and (G[i][j] > 40) and (B[i][j] > 20) and (

@@ -1,35 +1,51 @@
+import time
+
 import cv2
 
-from GaborSupportFunctions import readFrame, resizeImage, smoothImg, binaryImage
+from GaborSupportFunctions import resizeImage, smoothImg, getVideoFrames
+from MouthModel import extractMouthROI
 from SkinModel import getSkin
-from getFace import extractFaceSkin, get_face_box, draw_face_box, extractMouthROI
+from SkinRegion import extractSkinRegions
 
 
-def getMouth(smoothed, img, skin):
-    face, status = extractFaceSkin(smoothed, skin)
+def startProcess(img):
+    # -----------------------------------------------
+    # img = readFrame()
+    # -----------------------------------------------
+    resized = resizeImage(img)
+    # -----------------------------------------------
+    smoothed = smoothImg(resized)
+    # -----------------------------------------------
+    skin = getSkin(smoothed)
+    region, status = extractSkinRegions(smoothed, skin)
     if not status:
-        return img, False
-    # get binary cleaned mask
-    binary_cleaned_skin = binaryImage(face)
-    # draw box
-    boundig_boxes, croped_img = get_face_box(binary_cleaned_skin, img)
-    if len(boundig_boxes) == 0:
-        return img, False
-    face_image, y0, y1, x0, x1 = draw_face_box(img, boundig_boxes, croped_img)
-    mouth_region = extractMouthROI(img, y0, y1, x0, x1)
-    cv2.imshow("mouth_region", mouth_region)
-    cv2.waitKey(0)
+        frame = resizeImage(resized, (150, 100))
+        return frame, False
+    else:
+        mouthROI = extractMouthROI(resized, region[0], region[1], region[2], region[3])
+        mouthROI = resizeImage(mouthROI, (150, 100))
+        return mouthROI, True
 
 
 # -----------------------------------------------
-img = readFrame()
-# -----------------------------------------------
-resized = resizeImage(img)
-# -----------------------------------------------
-smoothed = smoothImg(resized)
-# -----------------------------------------------
-skin = getSkin(smoothed)
-cv2.imshow("skin", skin)
-cv2.waitKey(0)
-getMouth(smoothed, resized, skin)
-# -----------------------------------------------
+if "__main__" == __name__:
+    # # for i in range(1,300):
+    startTime = time.time()
+    videoPath = "../Prototype-Test-Videos/Colors_2.mp4"
+    # videoPath = "../Prototype-Test-Videos/s1/s1 "+"("+str(i)+")"+".mpg"
+    frames, status = getVideoFrames(videoPath)
+    if status:
+        detected = []
+        for i, frame in enumerate(frames):
+            lips, status = startProcess(frame)
+            if not status:
+                print("failed to get face")
+                detected.append(frame)
+            else:
+                detected.append(lips)
+            cv2.imshow(str(i), detected[-1])
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+    else:
+        print("Failed To Get Video")
+    print(time.time() - startTime)
