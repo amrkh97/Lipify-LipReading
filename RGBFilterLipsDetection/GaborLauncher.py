@@ -1,10 +1,12 @@
+import time
+
 import cv2
 
-from GaborSupportFunctions import readFrame, resizeImage, smoothImg, binaryImage, getVideoFrames
+from GaborSupportFunctions import resizeImage, smoothImg, getVideoFrames
+from MouthModel import extractMouthROI
 from SkinModel import getSkin
 from SkinRegion import extractSkinRegions
-from MouthModel import  extractMouthROI
-import time
+
 
 def startProcess(img):
     # -----------------------------------------------
@@ -23,6 +25,8 @@ def startProcess(img):
         mouthROI = extractMouthROI(resized, region[0], region[1], region[2], region[3])
         mouthROI = resizeImage(mouthROI, (150, 100))
         return mouthROI, True
+
+
 # -----------------------------------------------
 if "__main__" == __name__:
     # # for i in range(1,300):
@@ -42,7 +46,6 @@ if "__main__" == __name__:
             cv2.imshow(str(i), detected[-1])
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-    else: 
+    else:
         print("Failed To Get Video")
-    print(time.time()-startTime)
-
+    print(time.time() - startTime)
