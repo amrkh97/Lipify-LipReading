@@ -52,8 +52,16 @@ def predictOneVideo(classDict, videoPath):
     # print("Starting video preparation operations...")
     haarDetector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     videoFrames = getVideoFrames(videoPath)[:30]
+
+    # Rotate Frames:
+    # videoFrames = [cv2.rotate(x, cv2.ROTATE_90_COUNTERCLOCKWISE) for x in videoFrames]
+
     videoFrames = [extractLipsHaarCascade(haarDetector, x) for x in videoFrames]
     concatenatedImage = stackFramesToImage(videoFrames)
+
+    # cv2.imshow("H", concatenatedImage)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     if concatenatedImage is not None:
         # Image Preparation:
@@ -92,9 +100,9 @@ def createClassLabelsDict():
     return D
 
 
-def prototypeProject(receivedFilesFromServer):
+def prototypeProject(receivedFiles):
     AllClassLabels = createClassLabelsDict()
-    mylist = glob.glob(receivedFilesFromServer)
+    mylist = glob.glob(receivedFiles)
     mylist.sort(key=lambda x: x.split('_')[-1])
     resultString = []
     for video in mylist:
@@ -108,8 +116,8 @@ def prototypeProject(receivedFilesFromServer):
 if __name__ == "__main__":
     start_time = time.time()
     # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
-    # receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
-    receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
+    receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
+    # receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
     result = prototypeProject(receivedFilesFromServer)
 
     predictionFilePath = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/prediction.txt'
