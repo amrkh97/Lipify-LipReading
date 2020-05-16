@@ -8,7 +8,7 @@ from PIL import Image
 def compressOneImage(image):
     data_image = array('B')
 
-    Im = image
+    Im = Image.fromarray(image)
     Im = Im.resize((224, 224), resample=0)
     pixel = Im.load()
 
