@@ -9,14 +9,8 @@ from silence_tensorflow import silence_tensorflow
 
 silence_tensorflow()
 import tensorflow as tf
-
-import AdverbModel
-import CharacterCNN
-import ColorModel
-import CommandModel
-import NumberModel
-import PrepositionModel
-from ConcatenateDataSet import getVideoFrames, extractLipsHaarCascade, stackFramesToImage
+from NN_Models import AdverbModel, CharacterCNN, ColorModel, CommandModel, NumberModel, PrepositionModel
+from CNN_DataPreparation import ConcatenateDataSet
 
 
 def getTrainedModel(modelPath, modelCategory):
@@ -51,13 +45,13 @@ def predictOneVideo(classDict, videoPath):
     # Video Concatenation Operations:
     # print("Starting video preparation operations...")
     haarDetector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    videoFrames = getVideoFrames(videoPath)[:30]
+    videoFrames = ConcatenateDataSet.getVideoFrames(videoPath)[:30]
 
     # Rotate Frames:
     # videoFrames = [cv2.rotate(x, cv2.ROTATE_90_COUNTERCLOCKWISE) for x in videoFrames]
-
-    videoFrames = [extractLipsHaarCascade(haarDetector, x) for x in videoFrames]
-    concatenatedImage = stackFramesToImage(videoFrames)
+    
+    videoFrames = [ConcatenateDataSet.extractLipsHaarCascade(haarDetector, x) for x in videoFrames]
+    concatenatedImage = ConcatenateDataSet.stackFramesToImage(videoFrames)
 
     # cv2.imshow("H", concatenatedImage)
     # cv2.waitKey(0)
@@ -116,8 +110,10 @@ def prototypeProject(receivedFiles):
 if __name__ == "__main__":
     start_time = time.time()
     # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
-    receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
+    # receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads - TEST/*.mp4'
     # receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
+
+    receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
     result = prototypeProject(receivedFilesFromServer)
 
     predictionFilePath = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/prediction.txt'

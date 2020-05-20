@@ -6,12 +6,9 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 import csv
 import subprocess
-import AdverbModel
-import CharacterCNN
-import ColorModel
-import CommandModel
-import NumberModel
-import PrepositionModel
+
+from NN_Models import AdverbModel, PrepositionModel, ColorModel, CommandModel, NumberModel, CharacterCNN
+
 
 modelDict = {'Adverb': AdverbModel.AdverbNet(),
              'Alphabet': CharacterCNN.CharCNN(),

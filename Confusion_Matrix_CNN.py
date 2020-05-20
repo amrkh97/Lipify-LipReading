@@ -2,12 +2,7 @@ import os
 
 from silence_tensorflow import silence_tensorflow
 
-import AdverbModel
-import CharacterCNN
-import ColorModel
-import CommandModel
-import NumberModel
-import PrepositionModel
+from NN_Models import AdverbModel, PrepositionModel, ColorModel, CommandModel, NumberModel, CharacterCNN
 
 silence_tensorflow()
 from tensorflow.keras.preprocessing.image import ImageDataGenerator

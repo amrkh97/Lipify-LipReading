@@ -8,10 +8,10 @@ from tqdm import tqdm
 
 silence_tensorflow()
 import tensorflow as tf
-import AdverbModel
-import Adverb_VGG
+from NN_Models import AdverbModel
+from CNN_VGG import Adverb_VGG
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from utils import extract_labels, extract_data, predict
+from CNN_Implementation import utils
 
 
 def evaluateAdverbCNN_TF(test_set_path, model_path):
@@ -40,8 +40,8 @@ def evaluateAdverbCNN_NP(test_set_path, model_path, number_of_test_images=50):
     testImages_path = test_set_path + 'Adverb-test-images-idx3-ubyte.gz'
     testLabels_path = test_set_path + 'Adverb-test-labels-idx1-ubyte.gz'
 
-    X = extract_data(testImages_path, number_of_test_images, 224)
-    y_dash = extract_labels(testLabels_path, number_of_test_images).reshape(number_of_test_images, 1)
+    X = utils.extract_data(testImages_path, number_of_test_images, 224)
+    y_dash = utils.extract_labels(testLabels_path, number_of_test_images).reshape(number_of_test_images, 1)
     # Normalize the data
     X -= int(np.mean(X))  # subtract mean
     X /= int(np.std(X))  # divide by standard deviation
@@ -55,7 +55,7 @@ def evaluateAdverbCNN_NP(test_set_path, model_path, number_of_test_images=50):
     t = tqdm(range(len(X)), leave=True)
     for i in t:
         x = X[i]
-        pred, prob = predict(x, f1, f2, w3, w4, b1, b2, b3, b4)
+        pred, prob = utils.predict(x, f1, f2, w3, w4, b1, b2, b3, b4)
         if pred == int(y[i]):
             corr += 1
         t.set_description("Acc:%0.2f%%" % (float(corr / (i + 1)) * 100))

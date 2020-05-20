@@ -6,10 +6,7 @@ import numpy as np
 from PIL import Image
 from tqdm import tqdm
 
-from backward import maxpoolBackward, convolutionBackward
-from changeImagesToMnistFormat import compressOneImage
-from forward import categoricalCrossEntropy, convolution, maxpool, softmax
-from utils import initializeFilter, extract_labels, initializeWeight, extract_data, predict
+from CNN_Implementation import backward, changeImagesToMnistFormat, forward, utils
 
 AdverbDict = {0: 'again', 1: 'now', 2: 'please', 3: 'soon'}
 
@@ -17,13 +14,13 @@ AdverbDict = {0: 'again', 1: 'now', 2: 'please', 3: 'soon'}
 def conv(image, label, params, conv_s, pool_f, pool_s):
     [f1, f2, w3, w4, b1, b2, b3, b4] = params
 
-    conv1 = convolution(image, f1, b1, conv_s)
+    conv1 = forward.convolution(image, f1, b1, conv_s)
     conv1[conv1 <= 0] = 0  # ReLU activation
 
-    conv2 = convolution(conv1, f2, b2, conv_s)
+    conv2 = forward.convolution(conv1, f2, b2, conv_s)
     conv2[conv2 <= 0] = 0  # ReLU activation
 
-    pooled = maxpool(conv2, pool_f, pool_s)
+    pooled = forward.maxpool(conv2, pool_f, pool_s)
 
     (nf2, dim2, _) = pooled.shape
     fc = pooled.reshape((nf2 * dim2 * dim2, 1))
@@ -33,9 +30,9 @@ def conv(image, label, params, conv_s, pool_f, pool_s):
 
     out = w4.dot(z) + b4  # Dense layer
 
-    probs = softmax(out)  # Softmax activation
+    probs = forward.softmax(out)  # Softmax activation
     # Loss Calculation:
-    loss = categoricalCrossEntropy(probs, label)
+    loss = forward.categoricalCrossEntropy(probs, label)
     # BackPropagation:
     dout = probs - label
     dw4 = dout.dot(z.T)
@@ -49,14 +46,14 @@ def conv(image, label, params, conv_s, pool_f, pool_s):
     dfc = w3.T.dot(dz)
     dpool = dfc.reshape(pooled.shape)
 
-    dconv2 = maxpoolBackward(dpool, conv2, pool_f, pool_s)
+    dconv2 = backward.maxpoolBackward(dpool, conv2, pool_f, pool_s)
     dconv2[conv2 <= 0] = 0  # ReLU Activation
 
-    dconv1, df2, db2 = convolutionBackward(dconv2, conv1, f2, conv_s)
+    dconv1, df2, db2 = backward.convolutionBackward(dconv2, conv1, f2, conv_s)
 
     dconv1[conv1 <= 0] = 0  # ReLU Activation
 
-    dimage, df1, db1 = convolutionBackward(dconv1, image, f1, conv_s)
+    dimage, df1, db1 = backward.convolutionBackward(dconv1, image, f1, conv_s)
 
     grads = [df1, df2, dw3, dw4, db1, db2, db3, db4]
 
@@ -171,8 +168,8 @@ def checkPreTrained(file_path):
 def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_depth=1, f=5, num_filt1=8, num_filt2=8,
           batch_size=1, num_epochs=10, save_path='params.pkl'):
     m = 250  # Train on 250 examples only.
-    X = extract_data('../Compressed-Dataset/adverb-images-idx3-ubyte.gz', m, img_dim)
-    y_dash = extract_labels('../Compressed-Dataset/adverb-labels-idx1-ubyte.gz', m).reshape(m, 1)
+    X = utils.extract_data('../Compressed-Dataset/adverb-images-idx3-ubyte.gz', m, img_dim)
+    y_dash = utils.extract_labels('../Compressed-Dataset/adverb-labels-idx1-ubyte.gz', m).reshape(m, 1)
     X -= int(np.mean(X))
     X /= int(np.std(X))
     train_data = np.hstack((X, y_dash))
@@ -186,10 +183,10 @@ def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_dept
     params = []
     cost = []
     if not checkPreTrained(save_path):
-        f1 = initializeFilter(f1)
-        f2 = initializeFilter(f2)
-        w3 = initializeWeight(w3)
-        w4 = initializeWeight(w4)
+        f1 = utils.initializeFilter(f1)
+        f2 = utils.initializeFilter(f2)
+        w3 = utils.initializeWeight(w3)
+        w4 = utils.initializeWeight(w4)
 
         b1 = np.zeros((f1.shape[0], 1))
         b2 = np.zeros((f2.shape[0], 1))
@@ -233,9 +230,9 @@ def trainAdverbByHandCNN(parametersSavePath, num_epochs=10):
 
 
 def predictAdverb(image, save_path):
-    compressOneImage(image)
+    changeImagesToMnistFormat.compressOneImage(image)
 
-    X = extract_data('Test-image-idx3-ubyte.gz', 1, 224)
+    X = utils.extract_data('Test-image-idx3-ubyte.gz', 1, 224)
     X -= int(np.mean(X))
     X /= int(np.std(X))
     X = X.reshape(1, 224, 224)
@@ -243,7 +240,7 @@ def predictAdverb(image, save_path):
 
     params, cost = pickle.load(open(save_path, 'rb'))
     [f1, f2, w3, w4, b1, b2, b3, b4] = params
-    pred, prob = predict(X, f1, f2, w3, w4, b1, b2, b3, b4)
+    pred, prob = utils.predict(X, f1, f2, w3, w4, b1, b2, b3, b4)
     return AdverbDict[pred], prob
 
 

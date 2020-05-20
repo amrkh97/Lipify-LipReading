@@ -5,7 +5,7 @@ import time
 import cv2
 import numpy as np
 
-from frameManipulator import FPS, getVideoDataFromPath
+from Pre_Processing import frameManipulator
 
 commands = ['bin', 'lay', 'place', 'set']
 prepositions = ['at', 'by', 'in', 'with']
@@ -30,7 +30,7 @@ def getVideoFrames(videoPath):
 
 def stackFramesToImage(listOfFrames):
     """Function to concat frames into a single picture"""
-    if len(listOfFrames) < FPS:
+    if len(listOfFrames) < frameManipulator.FPS:
         return None
     newList = [np.hstack(listOfFrames[:5]), np.hstack(listOfFrames[5:10]), np.hstack(listOfFrames[10:15]),
                np.hstack(listOfFrames[15:20]), np.hstack(listOfFrames[20:25]), np.hstack(listOfFrames[25:30])]
@@ -96,7 +96,7 @@ def extractLipsHaarCascade(haarDetector, frame):
 
 def prepareSingleVideoForCNN(path, haarDetector):
     """Function to prepare a single video to be redy for CNN training"""
-    vidData = getVideoDataFromPath(path)
+    vidData = frameManipulator.getVideoDataFromPath(path)
     videoFrames = getVideoFrames(path)
     videoFrames = [extractLipsHaarCascade(haarDetector, x) for x in videoFrames]
 

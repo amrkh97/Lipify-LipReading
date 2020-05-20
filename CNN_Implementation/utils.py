@@ -1,8 +1,7 @@
 import gzip
 
 import numpy as np
-
-from forward import convolution, maxpool, softmax
+from CNN_Implementation import forward
 
 
 def extract_data(filename, num_images, IMAGE_WIDTH):
@@ -59,13 +58,13 @@ def predict(image, f1, f2, w3, w4, b1, b2, b3, b4, conv_s=1, pool_f=2, pool_s=2)
     Function to make predictions with trained weights.
     """
 
-    conv1 = convolution(image, f1, b1, conv_s)
+    conv1 = forward.convolution(image, f1, b1, conv_s)
     conv1[conv1 <= 0] = 0  # ReLU activation
 
-    conv2 = convolution(conv1, f2, b2, conv_s)
+    conv2 = forward.convolution(conv1, f2, b2, conv_s)
     conv2[conv2 <= 0] = 0  # ReLU activation
 
-    pooled = maxpool(conv2, pool_f, pool_s)
+    pooled = forward.maxpool(conv2, pool_f, pool_s)
     (nf2, dim2, _) = pooled.shape
     fc = pooled.reshape((nf2 * dim2 * dim2, 1))  # flatten pooled layer
 
@@ -73,5 +72,5 @@ def predict(image, f1, f2, w3, w4, b1, b2, b3, b4, conv_s=1, pool_f=2, pool_s=2)
     z[z <= 0] = 0  # ReLU activation
 
     out = w4.dot(z) + b4  # Dense layer
-    probs = softmax(out)  # softmax activation
+    probs = forward.softmax(out)  # softmax activation
     return np.argmax(probs), np.max(probs)

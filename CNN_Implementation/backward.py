@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import nanargmax
+from CNN_Implementation import utils
 
 
 def convolutionBackward(dconv_prev, conv_in, filt, s):
@@ -39,7 +39,7 @@ def maxpoolBackward(dpool, orig, f, s):
         while curr_y + f <= orig_dim:
             curr_x = out_x = 0
             while curr_x + f <= orig_dim:
-                (a, b) = nanargmax(orig[curr_c, curr_y:curr_y + f, curr_x:curr_x + f])
+                (a, b) = utils.nanargmax(orig[curr_c, curr_y:curr_y + f, curr_x:curr_x + f])
                 dout[curr_c, curr_y + a, curr_x + b] = dpool[curr_c, out_y, out_x]
                 curr_x += s
                 out_x += 1

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import cv2
 
-from frameHandler import getNumberFramesPerVideo
+from Pre_Processing import frameHandler
 
 FPS = 30
 FrameSize = (360, 288)
@@ -55,7 +55,7 @@ def getVideoFrames(videoName):
 
 def isExcess(videoPath):
     """Function that determines if the video has more than specified FPS"""
-    if getNumberFramesPerVideo(videoPath) > FPS:
+    if frameHandler.getNumberFramesPerVideo(videoPath) > FPS:
         return True
     return False
 
