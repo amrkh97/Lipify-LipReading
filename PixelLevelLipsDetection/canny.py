@@ -4,7 +4,10 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-
+# -----------------------------------------------------------------------------------------
+# function that preform second degree convolution (2nd order) 
+# input: image, kernal, average status (True: output values are averged), Verbose (True: to observe output in each step [Testing use only (Removed)])
+# output: convoluved image with kernel
 def convolution(image, kernel, average=False, verbose=False):
     if len(image.shape) == 3:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -28,11 +31,17 @@ def convolution(image, kernel, average=False, verbose=False):
                 output[row, col] /= kernel.shape[0] * kernel.shape[1]
     return output
 
-
+# -----------------------------------------------------------------------------------------
+# function that normalize kernel valuse according to sigma 
+# input: kernel single value, mu (always zero), sigma
+# output: normalized value 
 def dnorm(x, mu, sd):
     return 1 / (np.sqrt(2 * np.pi) * sd) * np.e ** (-np.power((x - mu) / sd, 2) / 2)
 
-
+# -----------------------------------------------------------------------------------------
+# function that applies gaussian blur (averaging) on kernel 
+# input: size of kernel, sigma used for normalizing, Verbose (True: to observe output in each step [Testing use only (Removed)])
+# output: kernel used in the convolution with the image (2D kernel)
 def gaussian_kernel(size, sigma=1, verbose=False):
     kernel_1D = np.linspace(-(size // 2), size // 2, size)
     for i in range(size):
@@ -43,17 +52,26 @@ def gaussian_kernel(size, sigma=1, verbose=False):
 
     return kernel_2D
 
-
+# -----------------------------------------------------------------------------------------
+# function that applies calls gaussian_kernel to create a kernel and then apply the convolution on the image using the created kernel
+# input: image, kernel size (int value), Verbose (True: to observe output in each step [Testing use only (Removed)])
+# output: convoloved image
 def gaussian_blur1(image, kernel_size, verbose=False):
     kernel = gaussian_kernel(kernel_size, sigma=int(math.sqrt(kernel_size)), verbose=verbose)
     return convolution(image, kernel, average=True, verbose=verbose)
 
-
+# -----------------------------------------------------------------------------------------
+# function that applies calls gaussian_kernel to create a kernel and then apply the convolution on the image using the created kernel
+# input: image, kernel size (int value), Verbose (True: to observe output in each step [Testing use only (Removed)])
+# output: convoloved image
 def gaussian_blur2(image, kernel_size, stig, verbose=False):
     kernel = gaussian_kernel(kernel_size, sigma=int(math.sqrt(kernel_size)), verbose=verbose)
     return convolution(image, kernel, average=True, verbose=verbose)
 
-
+# -----------------------------------------------------------------------------------------
+# function that applies Sobel edge detection on image
+# input: image, kernel, convert_to_degree (True: to shift gradiant direction output of sobel to degrees), Verbose (True: to observe output in each step [Testing use only (Removed)])
+# output: gradient_magnitude of image (edges), gradient_direction of image (edges direction)
 def sobel_edge_detection(image, filt, convert_to_degree=False, verbose=False):
     new_image_x = convolution(image, filt, verbose)
 
@@ -87,7 +105,10 @@ def sobel_edge_detection(image, filt, convert_to_degree=False, verbose=False):
     return gradient_magnitude, gradient_direction
 
 
-# ------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
+# function that is used to thin out the edges
+# input: gradient_magnitude of image (edges), gradient_direction of image (edges direction), Verbose (True: to observe output in each step [Testing use only])
+# output: thined edges
 def non_max_suppression(gradient_magnitude, gradient_direction, verbose):
     image_row, image_col = gradient_magnitude.shape
 
@@ -126,7 +147,10 @@ def non_max_suppression(gradient_magnitude, gradient_direction, verbose):
 
     return output
 
-
+# -----------------------------------------------------------------------------------------
+# function that is used to filter out edge pixels with a weak gradient value and preserve edge pixels with a high gradient value
+# input: image, low threshold bound value, high threshold bound value, weak value (for weak edges below low threshold), Verbose (True: to observe output in each step [Testing use only])
+# output: image thresholded
 def threshold(image, low, high, weak, verbose=False):
     output = np.zeros(image.shape)
 
@@ -145,7 +169,10 @@ def threshold(image, low, high, weak, verbose=False):
 
     return output
 
-
+# -----------------------------------------------------------------------------------------
+# function that is used to remove the weak edges caused by the latter reasons
+# input: image, weak value
+# output: final image after removing weak edges
 def hysteresis(image, weak):
     image_row, image_col = image.shape
 
@@ -212,7 +239,10 @@ def hysteresis(image, weak):
 
     return final_image
 
-
+# -----------------------------------------------------------------------------------------
+# function that is used to to extract gray image from original image
+# input: original image
+# output: gray image
 def getGrayImage(img):
     B = img[:, :, 0]
     G = img[:, :, 1]
@@ -221,7 +251,10 @@ def getGrayImage(img):
     gray = np.array(gray, dtype=np.uint8)
     return gray
 
-
+# -----------------------------------------------------------------------------------------
+# function that applies canny edge detection functions in order
+# input: image, lower bound threshold, upper bound threshold
+# output: gradient_magnitude (edges)
 def cannyDetection(img, CANNY_THRESH_1, CANNY_THRESH_2):
     blurred_image = gaussian_blur1(img, kernel_size=9, verbose=False)
     filt1 = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])

@@ -4,8 +4,8 @@ import numpy as np
 
 # ----------------------------------------------------------------------------
 # function used to get box of the face from image
-# input: image
-# output: image
+# input: skin mask, single frame
+# output: bounding boxes list, skin image
 def get_box(img, RGB_img):
     bounding_boxes = []
     masks = np.zeros(img.shape).astype("uint8")
@@ -51,7 +51,10 @@ def get_box(img, RGB_img):
         cv2.waitKey(0)
         return bounding_boxes, img
 
-
+# ----------------------------------------------------------------------------
+# function used to draw face bounding box on frame
+# input: single frame, bounding boxes list, cut place (mask)
+# output: frame with box drawn around face, face bounding coords (y, y+h, x, x+w)
 def draw_RGB_with_Rect(RGB_image, Boundary_boxes, cp):
     ret, thresh = cv2.threshold(cp, 127, 255, 0)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)

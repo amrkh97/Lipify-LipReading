@@ -1,6 +1,9 @@
 import cv2
 
-
+# -----------------------------------------------------------------------------------------
+# function that is used to draw boxes around mouth ROI (extract mouth ROI) from face coords
+# input: single frame, face bounding coords (y, y+h, x, x+w)
+# output: frame with box drawn around face and another box drawn around mouth ROI
 def extractMouthArea(img, y0, y1, x0, x1):
     N = y1 - y0
     M = x1 - x0

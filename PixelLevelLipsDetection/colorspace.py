@@ -1,13 +1,19 @@
 import numpy as np
 
-
+# -----------------------------------------------------------------------------------------
+# function that is used to extract R, G, B channels of image
+# input: image
+# output: R, G, B Channels
 def extractBGRChannels(img):
     B = img[:, :, 0]
     G = img[:, :, 1]
     R = img[:, :, 2]
     return R, G, B
 
-
+# -----------------------------------------------------------------------------------------
+# function that is used to extract h, s, v values from r, g, b
+# input: R, G, B values
+# output: h, s, v values
 def rgb_to_hsv(r, g, b):
     r, g, b = r / 255.0, g / 255.0, b / 255.0
     mx = max(r, g, b)
@@ -28,7 +34,10 @@ def rgb_to_hsv(r, g, b):
     v = mx * 100
     return h, s, v
 
-
+# -----------------------------------------------------------------------------------------
+# function that is used to extract H, S, V channels from R, G, B
+# input: R, G, B Channels
+# output: H, S, V Channels
 def getHSV(img):
     R, G, B = extractBGRChannels(img)
     H = np.zeros((R.shape[0], R.shape[1]))

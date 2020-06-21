@@ -5,6 +5,9 @@ from FaceDetection import get_box, draw_RGB_with_Rect
 from SkinSegmentation import segmentSkin, extractSkin
 from mouthDetection import extractMouthArea
 
+# -----------------------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------------------
 # frames reading
 # function that calls (FR.py) functions that is used to inquire a filter cleared image of frame (preprossesing)
 img = readFrame()
