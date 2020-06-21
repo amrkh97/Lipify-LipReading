@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
 
-
+# ----------------------------------------------------------------------------
+# function used to count number of white pixels in each segment and return region coords after passing test
+# input: Skin mask, Segments coords
+# output: Segment containg face coords, status
 def checkWhitePixelCount(skin_mask, regions):
     maxIndex = 0
     inRatio = 0
@@ -24,7 +27,10 @@ def checkWhitePixelCount(skin_mask, regions):
         checkWhitePixelCount(skin_mask, regions)
     return 0, 0, 0, 0, False
 
-
+# ----------------------------------------------------------------------------
+# function used to check if the segment is face or not by counting number of holes inside it
+# input: skin mask, list of segment, index of current segment 
+# output: status (True: Face, False: Not face), Index of segment
 def checkHolesInPart(skin_mask, regions, index):
     x1, x2, y1, y2 = regions[index]
     part = np.copy(skin_mask[y1:y2, x1:x2])
@@ -47,7 +53,10 @@ def checkHolesInPart(skin_mask, regions, index):
         return False, index
 
 
-# ---------------------------------------------------------
+# ----------------------------------------------------------------------------
+# function used to extract segment the contain face from skin mask
+# input: Single frame, Skin Mask
+# output: Face Coords (y, y+h, x, x+w), status
 def extractSkinRegions(img, skinMask):
     BLUR = 21
     CANNY_THRESH_1 = 10

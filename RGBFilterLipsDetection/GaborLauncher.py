@@ -5,7 +5,10 @@ from MouthModel import extractMouthROI
 from SkinModel import getSkin
 from SkinRegion import extractSkinRegions
 
-
+# ----------------------------------------------------------------------------
+# function used to call algorithm functions to extract mouth ROI
+# input: Single frame
+# output: Mouth ROI, Status
 def startProcess(img):
     # -----------------------------------------------
     # img = readFrame()
@@ -25,7 +28,8 @@ def startProcess(img):
         return mouthROI, True
 
 
-# -----------------------------------------------
+# ----------------------------------------------------------------------------
+# Main
 if __name__ == "__main__":
     startTime = time.time()
     videoPath = "../Prototype-Test-Videos/Colors_2.mp4"
