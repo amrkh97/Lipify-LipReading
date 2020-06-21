@@ -13,7 +13,7 @@ def resizeImage(img, dim=(650, 650)):
 # ----------------------------------------------------------------------------
 # function used to extract frames from video
 # input: video
-# output: frames
+# output: frames, Status
 def getVideoFrames(videoPath):
     """Function to return a video's frames in a list
     :type videoPath: String

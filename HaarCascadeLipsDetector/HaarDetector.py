@@ -1,6 +1,9 @@
 import cv2
 
-
+# ----------------------------------------------------------------------------
+# function used to extract Face, Mouth ROI from frame 
+# input: Haar Cascade Detector, Single Frame
+# output: Mouth ROI, Status (True: Success, False: Failure)
 def extractLipsHaarCascade(haarDetector, frame):
     """Function to extract lips from a frame"""
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
