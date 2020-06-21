@@ -1,6 +1,9 @@
 import cv2
 
-
+# ----------------------------------------------------------------------------
+# function used to detect faces in the frame and extract mouth ROI points
+# input: single Frame, Dlib Detector, Dlib Predictor
+# output: Frame, Mouth ROI points, Face Coords (x,y,h,w)
 def lipDetection(frame, detector, predictor):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = detector(gray)

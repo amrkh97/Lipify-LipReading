@@ -36,7 +36,8 @@ def mouthRegionExtraction(inputFrame, mouthRoi, faceCoords):
     mouthPart = cv2.resize(mouthPart, (150, 100))
     return inputFrame, mouthPart
 
-
+# ----------------------------------------------------------------------------
+# Main
 if "__main__" == __name__:
     videoPath = "../Prototype-Test-Videos/Adverb_1.mp4"
     frames, status = getVideoFrames(videoPath)
