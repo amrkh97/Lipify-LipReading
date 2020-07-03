@@ -41,7 +41,7 @@ class NumbersNet(object):
 
 
 if __name__ == "__main__":
-    common_path = 'C:/Users/amrkh/Desktop/'
+    common_path = 'C:/Users/Amr Khaled/Desktop/'
     C = NumbersNet()
     C.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
     C.Model.summary()

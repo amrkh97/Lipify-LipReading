@@ -4,18 +4,18 @@ import glob
 import time
 import cv2
 import numpy as np
-import GaborLauncher
-import AdverbCNN_ByHand
-from ConcatenateDataSet import getVideoFrames, stackFramesToImage
+from RGBFilterLipsDetection import GaborLauncher
+from CNN_Implementation import AdverbCNN_ByHand
+from CNN_DataPreparation import ConcatenateDataSet as CDS
 
 
 def predictAdverbVGGVideo(videoPath):
-    videoFrames = getVideoFrames(videoPath)
+    videoFrames = CDS.getVideoFrames(videoPath)
     print("Starting Lips Extraction ...")
 
     videoFrames = [GaborLauncher.startProcess(x) for x in videoFrames]
     videoFrames, _ = zip(*videoFrames)
-    concatenatedImage = stackFramesToImage(videoFrames[:30])
+    concatenatedImage = CDS.stackFramesToImage(videoFrames[:30])
     print("Stacked Video into Image for prediction ...")
 
     result = ""

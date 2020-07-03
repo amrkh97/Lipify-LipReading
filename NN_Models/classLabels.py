@@ -13,7 +13,7 @@ def getClassIndex(className):
     :param className: String, Name of
     :return:
     """
-    train_dir = 'C:/Users/amrkh/Desktop/CNN-Training-Images/'
+    train_dir = 'C:/Users/Amr Khaled/Desktop/CNN-Training-Images/'
     trainDirectory = train_dir + className + '/'
     train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
     train_data_gen = train_image_generator.flow_from_directory(batch_size=32,
