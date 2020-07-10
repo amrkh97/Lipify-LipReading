@@ -14,7 +14,7 @@ from CNN_DataPreparation import ConcatenateDataSet
 
 
 def getTrainedModel(modelPath, modelCategory):
-    # print("Fetching model weights...")
+    print("Fetching model weights...")
     modelDict = {'Adverb': AdverbModel.AdverbNet(),
                  'Alphabet': CharacterCNN.CharCNN(),
                  'Colors': ColorModel.ColorsNet(),
@@ -25,7 +25,7 @@ def getTrainedModel(modelPath, modelCategory):
     model = modelDict[modelCategory]
     model.Model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy'])
     model.Model = tf.keras.models.load_model(modelPath + '/')
-    # print("{} Model is loaded...".format(modelCategory))
+    print("{} Model is loaded...".format(modelCategory))
     return model.Model
 
 
@@ -43,7 +43,7 @@ def predictOneVideo(classDict, videoPath):
     cnnModel = getTrainedModel(savedModelPath, categoryCNN)
 
     # Video Concatenation Operations:
-    # print("Starting video preparation operations...")
+    print("Starting video preparation operations...")
     haarDetector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     videoFrames = ConcatenateDataSet.getVideoFrames(videoPath)[:30]
 
@@ -63,7 +63,7 @@ def predictOneVideo(classDict, videoPath):
         img = img / 255
 
         # Model Prediction:
-        # print("Starting Model Prediction...")
+        print("Starting Model Prediction...")
         modelPrediction = cnnModel.predict_classes(img)
         # print(cnnModel.predict(img))
         dictForClass = list(dictForClass.items())

@@ -38,7 +38,7 @@ def predictAdverbVGGVideo(videoPath):
 if __name__ == "__main__":
     start_time = time.time()
 
-    receivedFilesFromServer = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/uploads/*.mp4'
+    receivedFilesFromServer = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/uploads/*.mp4'
     mylist = glob.glob(receivedFilesFromServer)
     mylist.sort(key=lambda x: x.split('_')[-1])
     resultString = []
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     resultString = " ".join(resultString)
     print("Prediction Result: {}".format(resultString))
-    predictionFilePath = 'C:/Users/amrkh/Desktop/Projects/Lipify-server/prediction.txt'
+    predictionFilePath = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/prediction.txt'
 
     predictionFile = open(predictionFilePath, "w")  # write mode
     predictionFile.write(resultString)

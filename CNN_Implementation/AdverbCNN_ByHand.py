@@ -168,8 +168,8 @@ def checkPreTrained(file_path):
 def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_depth=1, f=5, num_filt1=8, num_filt2=8,
           batch_size=1, num_epochs=10, save_path='params.pkl'):
     m = 250  # Train on 250 examples only.
-    X = utils.extract_data('../Compressed-Dataset/adverb-images-idx3-ubyte.gz', m, img_dim)
-    y_dash = utils.extract_labels('../Compressed-Dataset/adverb-labels-idx1-ubyte.gz', m).reshape(m, 1)
+    X = utils.extract_data('adverb-images-idx3-ubyte.gz', m, img_dim)
+    y_dash = utils.extract_labels('adverb-labels-idx3-ubyte.gz', m).reshape(m, 1)
     X -= int(np.mean(X))
     X /= int(np.std(X))
     train_data = np.hstack((X, y_dash))
@@ -177,7 +177,7 @@ def train(num_classes=4, lr=0.001, beta1=0.95, beta2=0.99, img_dim=224, img_dept
     np.random.shuffle(train_data)
 
     # Initialize parameters:
-    # 93312: 8 * 108 * 108 (After MaxPool Layer and Flatten)
+    # 93312: 8 * 108 * 108 (Dimensions After MaxPool Layer and Flatten)
     f1, f2, w3, w4 = (num_filt1, img_depth, f, f), (num_filt2, num_filt1, f, f), (128, 93312), (num_classes, 128)
     b1, b2, b3, b4 = 0, 0, 0, 0
     params = []
@@ -247,7 +247,7 @@ def predictAdverb(image, save_path):
 if __name__ == "__main__":
     trainAdverbByHandCNN('params.pkl', num_epochs=10)
 
-    image_path = 'C:/Users/amrkh/Desktop/CNN-Test-Images/Adverb/please/0.jpg'
+    image_path = 'C:/Users/Amr Khaled/Desktop/CNN-Test-Images/Adverb/please/0.jpg'
     image_path = Image.open(image_path)
 
     print(predictAdverb(image_path, 'params.pkl'))
