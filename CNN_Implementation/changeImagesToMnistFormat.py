@@ -1,7 +1,7 @@
 import os
 from array import array
 from random import shuffle
-
+import gzip
 from PIL import Image
 
 
@@ -33,11 +33,12 @@ def compressOneImage(image):
     header[3] = 3  # Changing MSB for image data (0x00000803)
 
     data_image = header + data_image
-
-    output_file = open('Test-image-idx3-ubyte', 'wb')
-    data_image.tofile(output_file)
-    output_file.close()
-    os.system('gzip ' + 'Test-image-idx3-ubyte')
+    with gzip.open('Test-image-idx3-ubyte.gz', 'wb') as f:
+        f.write(data_image)
+    # output_file = open('Test-image-idx3-ubyte', 'wb')
+    # data_image.tofile(output_file)
+    # output_file.close()
+    # os.system('gzip ' + 'Test-image-idx3-ubyte')
 
 
 def compressTrainData(Names):
@@ -92,17 +93,14 @@ def compressTrainData(Names):
 
         data_image = header + data_image
 
-        output_file = open(name[1] + '-images-idx3-ubyte', 'wb')
-        data_image.tofile(output_file)
-        output_file.close()
+        TrainImagesFileName = name[1] + '-images-idx3-ubyte.gz'
+        TrainLabelsFileName = name[1] + '-labels-idx3-ubyte.gz'
 
-        output_file = open(name[1] + '-labels-idx1-ubyte', 'wb')
-        data_label.tofile(output_file)
-        output_file.close()
+        with gzip.open(TrainImagesFileName, 'wb') as f:
+            f.write(data_image)
 
-    for name in Names:
-        os.system('gzip ' + name[1] + '-images-idx3-ubyte')
-        os.system('gzip ' + name[1] + '-labels-idx1-ubyte')
+        with gzip.open(TrainLabelsFileName, 'wb') as f:
+            f.write(data_label)
 
 
 if __name__ == "__main__":

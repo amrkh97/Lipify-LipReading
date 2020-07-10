@@ -1,27 +1,19 @@
 import time
-
-from GaborSupportFunctions import resizeImage, smoothImg, getVideoFrames
-from MouthModel import extractMouthROI
-from SkinModel import getSkin
-from SkinRegion import extractSkinRegions
+from RGBFilterLipsDetection import GaborSupportFunctions, MouthModel, SkinModel, SkinRegion
 
 
 def startProcess(img):
+    resized = GaborSupportFunctions.resizeImage(img)
+    smoothed = GaborSupportFunctions.smoothImg(resized)
     # -----------------------------------------------
-    # img = readFrame()
-    # -----------------------------------------------
-    resized = resizeImage(img)
-    # -----------------------------------------------
-    smoothed = smoothImg(resized)
-    # -----------------------------------------------
-    skin = getSkin(smoothed)
-    region, status = extractSkinRegions(smoothed, skin)
+    skin = SkinModel.getSkin(smoothed)
+    region, status = SkinRegion.extractSkinRegions(smoothed, skin)
     if not status:
-        frame = resizeImage(resized, (150, 100))
+        frame = GaborSupportFunctions.resizeImage(resized, (150, 100))
         return frame, False
     else:
-        mouthROI = extractMouthROI(resized, region[0], region[1], region[2], region[3])
-        mouthROI = resizeImage(mouthROI, (150, 100))
+        mouthROI = MouthModel.extractMouthROI(resized, region[0], region[1], region[2], region[3])
+        mouthROI = GaborSupportFunctions.resizeImage(mouthROI, (150, 100))
         return mouthROI, True
 
 
@@ -29,7 +21,7 @@ def startProcess(img):
 if __name__ == "__main__":
     startTime = time.time()
     videoPath = "../Prototype-Test-Videos/Colors_2.mp4"
-    frames, status = getVideoFrames(videoPath)
+    frames, status = GaborSupportFunctions.getVideoFrames(videoPath)
     if status:
         detected = []
         for i, frame in enumerate(frames):
@@ -40,9 +32,6 @@ if __name__ == "__main__":
                 detected.append(frame)
             else:
                 detected.append(lips)
-            # cv2.imshow(str(i), detected[-1])
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
     else:
         print("Failed To Get Video")
     print(time.time() - startTime)
