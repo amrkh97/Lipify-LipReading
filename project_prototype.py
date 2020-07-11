@@ -48,7 +48,7 @@ def predictOneVideo(classDict, videoPath):
     videoFrames = ConcatenateDataSet.getVideoFrames(videoPath)[:30]
 
     # Rotate Frames:
-    # videoFrames = [cv2.rotate(x, cv2.ROTATE_90_COUNTERCLOCKWISE) for x in videoFrames]
+    videoFrames = [cv2.rotate(x, cv2.ROTATE_90_COUNTERCLOCKWISE) for x in videoFrames]
 
     videoFrames = [ConcatenateDataSet.extractLipsHaarCascade(haarDetector, x) for x in videoFrames]
     concatenatedImage = ConcatenateDataSet.stackFramesToImage(videoFrames)
@@ -106,14 +106,17 @@ def prototypeProject(receivedFiles):
 if __name__ == "__main__":
     start_time = time.time()
     # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
-    # receivedFilesFromServer = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/uploads - TEST/*.mp4'
-    # receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
 
-    receivedFilesFromServer = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/uploads/*.mp4'
+    ModeOfOperation = 'SERVER'  # Operates normally with the server.
+
+    if ModeOfOperation is 'SERVER':
+        receivedFilesFromServer = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/uploads/*.mp4'
+        predictionFilePath = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/prediction.txt'
+    else:
+        receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
+        predictionFilePath = 'Prototype-Test-Videos/Predictions.txt'
+
     result = prototypeProject(receivedFilesFromServer)
-
-    predictionFilePath = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/prediction.txt'
-    # predictionFilePath = 'Prototype-Test-Videos/Predictions.txt'
 
     predictionFile = open(predictionFilePath, "w")  # write mode
     predictionFile.write(result)
