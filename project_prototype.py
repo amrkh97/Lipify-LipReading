@@ -2,6 +2,7 @@
   only the CNN architectures. """
 import glob
 import time
+import logging
 
 import cv2
 import numpy as np
@@ -29,7 +30,7 @@ def getTrainedModel(modelPath, modelCategory):
     return model.Model
 
 
-def predictOneVideo(classDict, videoPath):
+def predictOneVideo(classDict, videoPath, operationMode):
     # Model Loading:
     savedModelPath = 'C:/Users/Amr Khaled/Desktop/SavedModels/'
     videoPath = videoPath.replace("\\", "/")
@@ -47,8 +48,9 @@ def predictOneVideo(classDict, videoPath):
     haarDetector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     videoFrames = ConcatenateDataSet.getVideoFrames(videoPath)[:30]
 
-    # Rotate Frames:
-    videoFrames = [cv2.rotate(x, cv2.ROTATE_90_COUNTERCLOCKWISE) for x in videoFrames]
+    if operationMode != 'SERVER':
+        # Rotate Frames:
+        videoFrames = [cv2.rotate(x, cv2.ROTATE_90_COUNTERCLOCKWISE) for x in videoFrames]
 
     videoFrames = [ConcatenateDataSet.extractLipsHaarCascade(haarDetector, x) for x in videoFrames]
     concatenatedImage = ConcatenateDataSet.stackFramesToImage(videoFrames)
@@ -65,7 +67,8 @@ def predictOneVideo(classDict, videoPath):
         # Model Prediction:
         print("Starting Model Prediction...")
         modelPrediction = cnnModel.predict_classes(img)
-        # print(cnnModel.predict(img))
+        log.info(modelPrediction)
+        log.info(cnnModel.predict(img))
         dictForClass = list(dictForClass.items())
         prediction = [item for item in dictForClass if modelPrediction[0] in item][0][0]
     else:
@@ -90,34 +93,40 @@ def createClassLabelsDict():
     return D
 
 
-def prototypeProject(receivedFiles):
+def prototypeProject(receivedFiles, operationMode):
     AllClassLabels = createClassLabelsDict()
     mylist = glob.glob(receivedFiles)
     mylist.sort(key=lambda x: x.split('_')[-1])
     resultString = []
     for video in mylist:
-        resultString.append(predictOneVideo(AllClassLabels, video))
+        resultString.append(predictOneVideo(AllClassLabels, video, operationMode))
 
     resultString = " ".join(resultString)
-    print(resultString)
     return resultString
 
 
 if __name__ == "__main__":
     start_time = time.time()
-    # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
 
-    ModeOfOperation = 'SERVER'  # Operates normally with the server.
+    ModeOfOperation = 'NSERVER'  # Operates normally with the server.
 
-    if ModeOfOperation is 'SERVER':
+    if ModeOfOperation == 'SERVER':
         receivedFilesFromServer = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/uploads/*.mp4'
         predictionFilePath = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/prediction.txt'
     else:
         receivedFilesFromServer = "Prototype-Test-Videos/*.mp4"
         predictionFilePath = 'Prototype-Test-Videos/Predictions.txt'
 
-    result = prototypeProject(receivedFilesFromServer)
+    logFilePath = predictionFilePath.split('/')[:-1]
+    logFilePath = "/".join(logFilePath)
+    logging.basicConfig(filename=logFilePath + '/current run.log', filemode='w', level=logging.INFO)
+    log = logging.getLogger("my-logger")
+    log.info("App Start")
+    log.info("Mode Of Operation: {}".format(ModeOfOperation))
 
+    # AllClassLabels = getAllClassLabels() # from classLabels import getAllClassLabels()
+
+    result = prototypeProject(receivedFilesFromServer, ModeOfOperation)
     predictionFile = open(predictionFilePath, "w")  # write mode
     predictionFile.write(result)
     predictionFile.close()
