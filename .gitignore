@@ -6,6 +6,7 @@ DataSet-Trial/
 Compressed-Dataset
 mouth-detection-v3/*.dat
 GP DataSet
+SavedModels
 Videos-After-Extraction/
 CNN-Training-Images/
 .idea
