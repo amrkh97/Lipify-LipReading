@@ -108,7 +108,7 @@ def prototypeProject(receivedFiles, operationMode):
 if __name__ == "__main__":
     start_time = time.time()
 
-    ModeOfOperation = 'NSERVER'  # Operates normally with the server.
+    ModeOfOperation = 'SERVER'  # Operates normally with the server.
 
     if ModeOfOperation == 'SERVER':
         receivedFilesFromServer = 'C:/Users/Amr Khaled/Desktop/Projects/Lipify-server/uploads/*.mp4'
