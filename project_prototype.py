@@ -32,7 +32,7 @@ def getTrainedModel(modelPath, modelCategory):
 
 def predictOneVideo(classDict, videoPath, operationMode):
     # Model Loading:
-    savedModelPath = 'C:/Users/Amr Khaled/Desktop/SavedModels/'
+    savedModelPath = './SavedModels/'
     videoPath = videoPath.replace("\\", "/")
     path = videoPath.split('/')
     categoryCNN = path[-1].split('_')[0]
