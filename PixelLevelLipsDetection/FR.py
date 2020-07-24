@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-
+# ----------------------------------------------------------------------------
 # function used to read a frame from file
 # input: none
 # output: image
@@ -10,7 +10,7 @@ def readFrame():
     cv2.imshow('img', img)
     return img
 
-
+# ----------------------------------------------------------------------------
 # function used to smooth from image
 # input: image
 # output: image
@@ -19,7 +19,7 @@ def smoothImg(img):
     cv2.imshow('blur', blur)
     return blur
 
-
+# ----------------------------------------------------------------------------
 # function used to resize image
 # input: image, dim = (x,y)
 # output: image
@@ -39,7 +39,7 @@ def binaryImage(img):
     return binary_image
 
 
-# -----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # function that add padding to an image
 # input: image, padding, kernal, operation type
 # output: image
@@ -94,7 +94,7 @@ def operation(image, kernel, padding=0, operation=None):
 # -----------------------------------------------------------------------------------------
 # function that extract frames from video
 # input: video path
-# output: List Of Images
+# output: List Of Images, status
 def getVideoFrames(videoPath):
     """Function to return a video's frames in a list
     :type videoPath: String

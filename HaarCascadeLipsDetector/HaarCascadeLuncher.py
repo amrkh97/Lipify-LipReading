@@ -2,6 +2,8 @@ import cv2
 from FramesManipulations import getVideoFrames
 from HaarDetector import extractLipsHaarCascade
 
+# ----------------------------------------------------------------------------
+# Main
 if "__main__" == __name__:
     faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
     videoPath = "../Prototype-Test-Videos/Colors_2.mp4"

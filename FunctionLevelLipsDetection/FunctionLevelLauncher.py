@@ -6,7 +6,10 @@ from LipsBoundry import extractMouthArea, get_box2, mouthExtraction, draw_RGB_wi
 from SkinExtraction import extractSkin, segmentSkin
 from SuportFunctions import resizeImage, smoothImg, binaryImage, getVideoFrames, readFrame
 
-
+# ----------------------------------------------------------------------------
+# Function used to call all module in order
+# input: Single Frame
+# output: Mouth ROI, Status (True: Success, False: Failure)
 def getMouth(img):
     resized = resizeImage(img)
     # smooth image to remove noise
@@ -37,6 +40,8 @@ def getMouth(img):
         return mouth_region, True
 
 
+# ----------------------------------------------------------------------------
+# Main
 if "__main__" == __name__:
     videoPath = "../Prototype-Test-Videos/Adverb_1.mp4"
     frames, status = getVideoFrames(videoPath)

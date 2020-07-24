@@ -5,6 +5,9 @@ from SuportFunctions import binaryImage2
 
 
 # ----------------------------------------------------------------------------
+# function used to extract Mouth ROI from Face Boundries
+# input: Single Frame, Face Coords (y, y+h, x, x+w)
+# output: frame with box drown, coord of box
 def extractMouthArea(img, y0, y1, x0, x1):
     N = y1 - y0
     M = x1 - x0
@@ -17,6 +20,9 @@ def extractMouthArea(img, y0, y1, x0, x1):
 
 
 # ----------------------------------------------------------------------------
+# function used to extract mouth skin mask from Mouth ROI
+# input: Mouth ROI (image)
+# output: Mouth skin mask
 def mouthExtraction(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     R = img[:, :, 0]
@@ -28,12 +34,18 @@ def mouthExtraction(img):
 
 
 # ----------------------------------------------------------------------------
+# function used to draw mouth contours according to the skin mask (testing use only)
+# input: skin mask
+# output: skin mask with box drown around mouth 
 def drawMouthContour(img):
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
 
 
 # ----------------------------------------------------------------------------
+# function used to draw box around mouth in the original Frame
+# input: Single frame, boundry_boxes list (contain coords: x, y, h, w)
+# output: Exact mouth ROI
 def draw_RGB_with_Rect2(RGB_image, Boundary_boxes, cp):
     ret, thresh = cv2.threshold(cp, 127, 255, 0)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)

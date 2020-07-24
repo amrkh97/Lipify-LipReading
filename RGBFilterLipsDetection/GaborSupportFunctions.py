@@ -64,7 +64,9 @@ def binaryImage2(img):
 
 
 # ----------------------------------------------------------------------------
-# dev
+# function used to read single image from file (testing use only)
+# input: None
+# output: Image
 def readFrame():
     img = cv2.imread('DataSet-Trial/face3.jpg')
     return img

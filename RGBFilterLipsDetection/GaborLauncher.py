@@ -1,7 +1,10 @@
 import time
 from RGBFilterLipsDetection import GaborSupportFunctions, MouthModel, SkinModel, SkinRegion
 
-
+# ----------------------------------------------------------------------------
+# function used to call algorithm functions to extract mouth ROI
+# input: Single frame
+# output: Mouth ROI, Status
 def startProcess(img):
     resized = GaborSupportFunctions.resizeImage(img)
     smoothed = GaborSupportFunctions.smoothImg(resized)
@@ -17,7 +20,8 @@ def startProcess(img):
         return mouthROI, True
 
 
-# -----------------------------------------------
+# ----------------------------------------------------------------------------
+# Main
 if __name__ == "__main__":
     startTime = time.time()
     videoPath = "../Prototype-Test-Videos/Colors_2.mp4"

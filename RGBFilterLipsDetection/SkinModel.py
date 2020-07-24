@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
 
-
+# ----------------------------------------------------------------------------
+# function used to extract skin mask from single frame
+# input: Single frame
+# output: Skin mask
 def getSkin(img):
     img_corrected = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     R = img_corrected[:, :, 0]
@@ -30,7 +33,10 @@ def getSkin(img):
     holes_filled_skin_image = cv2.cvtColor(holes_filled_skin_image, cv2.COLOR_RGB2GRAY)
     return holes_filled_skin_image
 
-
+# ----------------------------------------------------------------------------
+# function used to close small holes in the skin mask
+# input: Skin mask
+# output: Skin mask
 def fill_holes(img):
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     res = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
